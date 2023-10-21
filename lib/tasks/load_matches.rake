@@ -2,7 +2,7 @@ require "#{Rails.root}/lib/clients/apifutebol/api_client.rb"
 
 namespace :import do
   desc "Import championship matches"
-  task :matches do
+  task :matches => :environment do
     matches = Client.new.matches
 
     puts "Importing league '#{matches[0]["league_name"]}'(id=#{matches[0]["league_id"]})..."
