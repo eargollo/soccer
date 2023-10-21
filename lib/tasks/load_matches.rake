@@ -9,7 +9,7 @@ namespace :import do
     list = matches[0]["stage"][0]["matches"]
     puts "Matches: #{list.size}"
     list.each do |m|
-      puts "Importing #{m["teams"]["home"]["name"]} x #{m["teams"]["away"]["name"]} at #{m["date"]}..."
+      puts "Importing #{m["teams"]["home"]["name"]} x #{m["teams"]["away"]["name"]} at #{m["date"]} #{m["time"]}..."
       match = Match.find_by(reference: m["id"])
       if !match.nil?
         puts "Match already imported, skipping..."
@@ -18,6 +18,18 @@ namespace :import do
 
       team_home = find_or_create(m["teams"]["home"])
       team_away = find_or_create(m["teams"]["away"])
+
+      date = to_date(m["date"], m["time"])
+      match = Match.create(
+        date: date,
+        team_home: team_home,
+        team_away: team_away,
+        status: m["status"],
+        home_goals: m["goals"]["home_ft_goals"],
+        away_goals: m["goals"]["away_ft_goals"],
+        result: m["winner"],
+        reference: m["id"]
+      )
     end
   end
 end
@@ -29,4 +41,10 @@ def find_or_create(data)
     team = Team.create(name: data["name"], reference: data["id"])
   end
   team
+end
+
+def to_date(date, time)
+  day, month, year = date.split("/")
+  hour, minute = time.split(":")
+  DateTime.new(year.to_i, month.to_i, day.to_i, hour.to_i, minute.to_i, 0, '-03:00')
 end

@@ -33,6 +33,6 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_21_005047) do
     t.datetime "updated_at", null: false
   end
 
-  add_foreign_key "matches", "team_aways"
-  add_foreign_key "matches", "team_homes"
+  add_foreign_key "matches", "teams", column: "team_away_id"
+  add_foreign_key "matches", "teams", column: "team_home_id"
 end
