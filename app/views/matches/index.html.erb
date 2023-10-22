@@ -1,0 +1,26 @@
+<h1>All Matches</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Home Team</th>
+            <th>Score</th>
+            <th>Away Team</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% @matches.each do |match| %>
+            <tr>
+                <td><%= match.date %></td>
+                <td><%= match.team_home.name %></td>
+                <% if match.status == "finished" %>
+                    <td><%= match.home_goals %> x <%= match.away_goals %></td>
+                <% else %>
+                    <td></td>
+                <% end %>
+                <td><%= match.team_away.name %></td>
+            </tr>
+        <% end %>
+    </tbody>
+</table>
