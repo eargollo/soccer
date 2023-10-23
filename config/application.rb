@@ -16,6 +16,12 @@ module Soccer
     # Common ones are `templates`, `generators`, or `middleware`, for example.
     config.autoload_lib(ignore: %w(assets tasks))
 
+    # Job interface
+    config.active_job.queue_adapter = :async
+    config.active_job.queue_adapter = ActiveJob::QueueAdapters::AsyncAdapter.new \
+        min_threads: 1,
+        max_threads: 2 * Concurrent.processor_count,
+        idletime: 600.seconds
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files
