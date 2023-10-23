@@ -1,24 +1,17 @@
-# README
+# Soccer
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Stochastic Simulation for Soccer championships results analysis. 
 
-Things you may want to cover:
+## Getting started
 
-* Ruby version
+Very early stages in development.
 
-* System dependencies
+So far:
+* Loading a simple championship directly from a file
+* Show standings
 
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+To look at the current progress:
+```
+rake import:matches
+rails server
+```
