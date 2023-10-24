@@ -2,5 +2,14 @@ require:
   - rubocop-performance
   - rubocop-rails
 
+AllCops:
+ NewCops: enable
+
 Style/StringLiterals:
   Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Metrics/MethodLength:
+  Max: 30

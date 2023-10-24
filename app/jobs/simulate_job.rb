@@ -33,7 +33,7 @@ class SimulateJob < ApplicationJob
     result = []
     sim_result.each do |team_id, team_result|
       result << { team_id:, wins: team_result[:wins], draws: team_result[:draws],
-                  points: team_result[:wins] * 3 + team_result[:draws] }
+                  points: (team_result[:wins] * 3) + team_result[:draws] }
     end
     result.sort_by! { |team| [team[:points], team[:wins]] }.reverse!
     puts "Sim end: #{result.inspect}"
