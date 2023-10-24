@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Match < ApplicationRecord
   after_commit :compute_points_commit, on: [:create, :update, :destroy]
 

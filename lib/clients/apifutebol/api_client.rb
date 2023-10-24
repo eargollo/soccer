@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Client
   def matches
     filename = "#{Rails.root}/lib/clients/apifutebol/matches.json"

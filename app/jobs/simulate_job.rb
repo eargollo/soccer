@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 class SimulateJob < ApplicationJob
   queue_as :default
 
-  def perform(*args)
+  def perform(*_args)
     matches = []
     Match.where.not(status: 'finished').each do |match|
       matches << { team_home_id: match.team_home_id, team_away_id: match.team_away_id }
@@ -30,7 +32,8 @@ class SimulateJob < ApplicationJob
     end
     result = []
     sim_result.each do |team_id, team_result|
-      result << { team_id: team_id, wins: team_result[:wins], draws: team_result[:draws], points: team_result[:wins] * 3 + team_result[:draws]}
+      result << { team_id:, wins: team_result[:wins], draws: team_result[:draws],
+                  points: team_result[:wins] * 3 + team_result[:draws] }
     end
     result.sort_by! { |team| [team[:points], team[:wins]] }.reverse!
     puts "Sim end: #{result.inspect}"

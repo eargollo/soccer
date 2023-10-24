@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require "#{Rails.root}/lib/clients/apifutebol/api_client.rb"
 
 namespace :import do
