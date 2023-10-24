@@ -15,6 +15,10 @@ class Match < ApplicationRecord
     self.status == "finished"
   end
 
+  def self.pending
+    Match.where.not(status: "finished")
+  end
+
   private
   def compute_points_commit
     Standing.compute(self.team_home)
