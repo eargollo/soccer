@@ -15,9 +15,7 @@ class Match < ApplicationRecord
     self.status == "finished"
   end
 
-  def self.pending
-    Match.where.not(status: "finished")
-  end
+  scope :pending, -> { where.not(status: "finished }
 
   private
   def compute_points_commit
