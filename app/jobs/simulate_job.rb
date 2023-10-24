@@ -8,9 +8,7 @@ class SimulateJob < ApplicationJob
     matches = Match.pending
 
     # Define a baseline for simulation
-    standing_start = {}
-    standings = Standing.all
-    standings.each do |standing|
+    standings = Standing.all.each_with_object({}) do |standing, standing_start|
       standing_start[standing.team_id] = { wins: standing.wins, draws: standing.draws }
       result[standing.team_id] = Array.new(20, 0)
       puts "#{standing.team.name} has #{standing.wins} wins and #{standing.draws} draws"
