@@ -17,7 +17,7 @@
                 <% if match.status == "finished" %>
                     <td><%= match.home_goals %> x <%= match.away_goals %></td>
                 <% else %>
-                    <td></td>
+                    <td><%= (match.probability[0]*100).round(2) %>% | <%= (match.probability[1]*100).round(2) %>% | <%= (match.probability[2]*100).round(2) %>%</td>
                 <% end %>
                 <td><%= match.team_away.name %></td>
             </tr>
