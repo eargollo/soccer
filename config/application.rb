@@ -2,7 +2,7 @@
 
 require_relative "boot"
 
-require "rails/all"
+require 'rails/all'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -16,14 +16,15 @@ module Soccer
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
     # Common ones are `templates`, `generators`, or `middleware`, for example.
-    config.autoload_lib(ignore: %w(assets tasks))
+    config.autoload_lib(ignore: %w[assets tasks])
 
     # Job interface
     config.active_job.queue_adapter = :async
-    config.active_job.queue_adapter = ActiveJob::QueueAdapters::AsyncAdapter.new \
-        min_threads: 1,
-        max_threads: 2 * Concurrent.processor_count,
-        idletime: 600.seconds
+    config.active_job.queue_adapter = ActiveJob::QueueAdapters::AsyncAdapter.new(
+      min_threads: 1,
+      max_threads: 2 * Concurrent.processor_count,
+      idletime: 600.seconds
+    )
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files

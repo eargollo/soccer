@@ -1,21 +1,21 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  date: 2023-10-20 17:50:47
-  team_home: one
-  team_away: one
-  status: MyString
-  home_goals: 1
-  away_goals: 1
-  result: MyString
-  reference: 1
+# one:
+#   date: 2023-10-20 17:50:47
+#   team_home: one
+#   team_away: one
+#   status: MyString
+#   home_goals: 1
+#   away_goals: 1
+#   result: MyString
+#   reference: 1
 
-two:
-  date: 2023-10-20 17:50:47
-  team_home: two
-  team_away: two
-  status: MyString
-  home_goals: 1
-  away_goals: 1
-  result: MyString
-  reference: 1
+# two:
+#   date: 2023-10-20 17:50:47
+#   team_home: two
+#   team_away: two
+#   status: MyString
+#   home_goals: 1
+#   away_goals: 1
+#   result: MyString
+#   reference: 1
