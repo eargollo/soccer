@@ -19,8 +19,34 @@ class Match < ApplicationRecord
   # to enqueue a team computation if there is one already at the queue.
   after_commit :compute_points_commit, on: %i[create update destroy]
 
+  PROB_WIN = 0.45
+  PROB_DRAW = 0.30
+  PROB_LOSS = 1 - PROB_WIN - PROB_DRAW
+
   def finished?
     status == 'finished'
+  end
+
+  def probability # rubocop:disable Metrics/AbcSize
+    return [PROB_WIN, PROB_DRAW, PROB_LOSS] if team_away.nil? || team_home.nil?
+
+    prob_home = [PROB_WIN, PROB_DRAW, PROB_LOSS]
+    if team_home.home_matches.finished.count.positive?
+      prob_home[0] = team_home.home_matches.won_home.count.to_f / team_home.home_matches.finished.count
+      prob_home[1] = team_home.home_matches.draw.count.to_f / team_home.home_matches.finished.count
+      prob_home[2] = team_home.home_matches.won_away.count.to_f / team_home.home_matches.finished.count
+    end
+
+    prob_away = [PROB_LOSS, PROB_DRAW, PROB_WIN]
+    if team_away.away_matches.finished.count.positive?
+      prob_away[0] = team_away.away_matches.won_home.count.to_f / team_away.away_matches.finished.count
+      prob_away[1] = team_away.away_matches.draw.count.to_f / team_away.away_matches.finished.count
+      prob_away[2] = team_away.away_matches.won_away.count.to_f / team_away.away_matches.finished.count
+    end
+
+    [(PROB_WIN + (4.5 * prob_home[0]) + (4.5 * prob_away[0])) / 10,
+     (PROB_DRAW + (4.5 * prob_home[1]) + (4.5 * prob_away[1])) / 10,
+     (PROB_LOSS + (4.5 * prob_home[2]) + (4.5 * prob_away[2])) / 10]
   end
 
   private

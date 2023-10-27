@@ -7,3 +7,7 @@ barcelona:
 madrid:
   name: Real Madrid
   reference: 2
+
+espanyol:
+  name: Espanyol
+  reference: 3

@@ -10,4 +10,5 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
   root "standings#index"
+  get "/matches", to: "matches#index"
 end
