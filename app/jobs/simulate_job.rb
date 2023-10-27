@@ -3,13 +3,14 @@
 class SimulateJob < ApplicationJob
   queue_as :default
 
-  def perform(options) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
+  def perform(id) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
+    sim = Simulation.find(id)
+    sim.start = Time.zone.now
+
     result = {}
 
     # Get matches to simulate
-    matches = Match.pending.map do |match|
-      { team_home_id: match.team_home_id, team_away_id: match.team_away_id, probability: match.probability }
-    end
+    matches = Match.pending
 
     # Define a baseline for simulation
     standing_start = Standing.all.map do |standing|
@@ -20,21 +21,18 @@ class SimulateJob < ApplicationJob
     standing_start = Standing.all.each_with_object({}) do |standing, ss|
       ss[standing.team_id] = { wins: standing.wins, draws: standing.draws }
       result[standing.team_id] = Array.new(20, 0)
-      puts "#{standing.team.name} has #{standing.wins} wins and #{standing.draws} draws"
     end
 
-    puts "There are #{matches.count} matches to simulate"
-
     # Simulate
-    options[:runs].times do
+    sim.runs.times do
       sim_result = standing_start.deep_dup
       matches.each do |match|
         value = SecureRandom.random_number
-        if value < match[:probability][0]
-          sim_result[match[:team_home_id]][:wins] += 1
-        elsif value < match[:probability][0] + match[:probability][1]
-          sim_result[match[:team_home_id]][:draws] += 1
-          sim_result[match[:team_away_id]][:draws] += 1
+        if value < match.prob_win
+          sim_result[match.team_home_id][:wins] += 1
+        elsif value < match.prob_not_loss
+          sim_result[match.team_home_id][:draws] += 1
+          sim_result[match.team_away_id][:draws] += 1
         else
           sim_result[match[:team_away_id]][:wins] += 1
         end
@@ -50,7 +48,17 @@ class SimulateJob < ApplicationJob
       end
     end
     result.each do |team_id, team_result|
-      puts "#{Team.find(team_id).name}: #{team_result}"
+      sim.standings.create(
+        team_id:,
+        champion: (team_result[0].to_f * 100) / sim.runs,
+        promotion: (team_result[0] + team_result[1] + team_result[2] + team_result[4]).to_f * 100 / sim.runs,
+        relegation: (team_result[16] + team_result[17] + team_result[18] + team_result[19]).to_f * 100 / sim.runs
+      )
+      team_result.each_with_index do |count, position|
+        sim.standing_positions.create(team_id:, position: position + 1, count:)
+      end
     end
+    sim.finish = Time.zone.now
+    sim.save
   end
 end
