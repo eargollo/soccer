@@ -1,0 +1,9 @@
+<%= form_for @simulation do |f| %>
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+
+    <%= f.label :runs %>
+    <%= f.number_field :runs %>
+
+    <%= f.submit %>
+<% end %>
