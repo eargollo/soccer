@@ -1,4 +1,4 @@
-<% if @simulation.standings.size == 0 %>
+<% if @simulation.simulation_standings.size == 0 %>
     <p>Simulating still. Come back later!</p>
 <% else %>
     <h2><%= @simulation.name %> (<%= @simulation.runs %> runs)</h2>
@@ -12,7 +12,7 @@
             </tr>
         </thead>
         <tbody>
-            <% @simulation.standings.order("champion DESC, promotion DESC, relegation").each do |standing| %>
+            <% @simulation.simulation_standings.order("champion DESC, promotion DESC, relegation").each do |standing| %>
                 <tr>
                     <td><%= standing.team.name %></td>
                     <td><%= standing.champion %></td>
