@@ -1,15 +1,1 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-one:
-  simulation: one
-  team: one
-  champion: 1.5
-  promotion: 1.5
-  relegation: 1.5
-
-two:
-  simulation: two
-  team: two
-  champion: 1.5
-  promotion: 1.5
-  relegation: 1.5
