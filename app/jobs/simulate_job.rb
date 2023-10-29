@@ -4,8 +4,7 @@ class SimulateJob < ApplicationJob
   queue_as :default
 
   def perform(id) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
-    sim = Simulation.find(id)
-    sim.start = Time.zone.now
+    sim = Simulation.find(id).tap{ |s| s.start = Time.zone.now }
 
     result = {}
 
