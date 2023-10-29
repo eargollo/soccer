@@ -34,7 +34,7 @@ class SimulateJob < ApplicationJob
           sim_result[match.team_home_id][:draws] += 1
           sim_result[match.team_away_id][:draws] += 1
         else
-          sim_result[match[:team_away_id]][:wins] += 1
+          sim_result[match.team_away_id][:wins] += 1
         end
       end
       srt_standing = []
