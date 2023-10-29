@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_10_22_040457) do
+ActiveRecord::Schema[7.1].define(version: 2023_10_26_051343) do
   create_table "matches", force: :cascade do |t|
     t.datetime "date"
     t.integer "team_home_id", null: false
@@ -24,6 +24,38 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_22_040457) do
     t.datetime "updated_at", null: false
     t.index ["team_away_id"], name: "index_matches_on_team_away_id"
     t.index ["team_home_id"], name: "index_matches_on_team_home_id"
+  end
+
+  create_table "simulation_standing_positions", force: :cascade do |t|
+    t.integer "simulation_id", null: false
+    t.integer "team_id", null: false
+    t.integer "position"
+    t.integer "count"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["simulation_id"], name: "index_simulation_standing_positions_on_simulation_id"
+    t.index ["team_id"], name: "index_simulation_standing_positions_on_team_id"
+  end
+
+  create_table "simulation_standings", force: :cascade do |t|
+    t.integer "simulation_id", null: false
+    t.integer "team_id", null: false
+    t.float "champion"
+    t.float "promotion"
+    t.float "relegation"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["simulation_id"], name: "index_simulation_standings_on_simulation_id"
+    t.index ["team_id"], name: "index_simulation_standings_on_team_id"
+  end
+
+  create_table "simulations", force: :cascade do |t|
+    t.string "name"
+    t.integer "runs"
+    t.datetime "start"
+    t.datetime "finish"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "standings", force: :cascade do |t|
@@ -49,5 +81,9 @@ ActiveRecord::Schema[7.1].define(version: 2023_10_22_040457) do
 
   add_foreign_key "matches", "teams", column: "team_away_id"
   add_foreign_key "matches", "teams", column: "team_home_id"
+  add_foreign_key "simulation_standing_positions", "simulations"
+  add_foreign_key "simulation_standing_positions", "teams"
+  add_foreign_key "simulation_standings", "simulations"
+  add_foreign_key "simulation_standings", "teams"
   add_foreign_key "standings", "teams"
 end

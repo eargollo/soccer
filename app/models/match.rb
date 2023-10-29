@@ -27,7 +27,24 @@ class Match < ApplicationRecord
     status == 'finished'
   end
 
+  def prob_win
+    probability[0]
+  end
+
+  def prob_draw
+    probability[1]
+  end
+
+  def prob_loss
+    probability[2]
+  end
+
+  def prob_not_loss
+    prob_win + prob_draw
+  end
+
   def probability # rubocop:disable Metrics/AbcSize
+    return @probability unless @probability.nil?
     return [PROB_WIN, PROB_DRAW, PROB_LOSS] if team_away.nil? || team_home.nil?
 
     prob_home = [PROB_WIN, PROB_DRAW, PROB_LOSS]
@@ -44,9 +61,9 @@ class Match < ApplicationRecord
       prob_away[2] = team_away.away_matches.won_away.count.to_f / team_away.away_matches.finished.count
     end
 
-    [(PROB_WIN + (4.5 * prob_home[0]) + (4.5 * prob_away[0])) / 10,
-     (PROB_DRAW + (4.5 * prob_home[1]) + (4.5 * prob_away[1])) / 10,
-     (PROB_LOSS + (4.5 * prob_home[2]) + (4.5 * prob_away[2])) / 10]
+    @probability = [(PROB_WIN + (4.5 * prob_home[0]) + (4.5 * prob_away[0])) / 10,
+                    (PROB_DRAW + (4.5 * prob_home[1]) + (4.5 * prob_away[1])) / 10,
+                    (PROB_LOSS + (4.5 * prob_home[2]) + (4.5 * prob_away[2])) / 10]
   end
 
   private
