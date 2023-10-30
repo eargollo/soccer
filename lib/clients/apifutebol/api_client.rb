@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'net/http'
+
 # Soccer API Client
 class Client
   def league
@@ -7,6 +9,33 @@ class Client
     file = File.read(filename)
     data = JSON.parse(file)
     ImportLeague.new(data)
+  end
+
+  # https://api.soccerdataapi.com/match/?match_id=[id]&auth_token=[AUTH]
+  def match(id) # rubocop:disable Metrics/AbcSize
+    auth_token = ENV.fetch('SOCCER_AUTH_TOKEN', nil)
+    raise "SOCCER_AUTH_TOKEN is required" if auth_token.nil?
+
+    base_url = 'https://api.soccerdataapi.com/match/'
+
+    uri = URI("#{base_url}?match_id=#{id}&auth_token=#{auth_token}")
+    # puts "URI is #{uri}"
+
+    Net::HTTP.start(uri.host, uri.port,
+                    use_ssl: uri.scheme == 'https') do |http|
+      request = Net::HTTP::Get.new uri
+
+      response = http.request request # Net::HTTPResponse object
+      if response.is_a?(Net::HTTPSuccess)
+        # Parse the JSON response
+        parsed_response = JSON.parse(response.body)
+        return ImportMatch.new(parsed_response)
+
+      else
+        puts "Request failed with HTTP status code: #{response.code}"
+        puts "Response Body: #{response.body}"
+      end
+    end
   end
 end
 

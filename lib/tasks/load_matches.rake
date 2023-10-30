@@ -2,9 +2,9 @@
 
 require Rails.root.join("lib/clients/apifutebol/api_client.rb")
 
-namespace :import do
-  desc "Import championship matches"
-  task matches: :environment do
+namespace :import do # rubocop:disable all
+  desc "Import entire league data"
+  task league: :environment do
     league = Client.new.league
 
     puts "Importing league '#{league.name}'(id=#{league.id})..."
@@ -14,6 +14,27 @@ namespace :import do
 
     puts "Matches: #{league.matches.size}"
     import_matches(league.matches, teams)
+  end
+
+  desc "Import newly played matches"
+  task matches: :environment do
+    cli = Client.new
+    # Get matches that have been played but don't have results updated
+    matches = Match.pending.played
+    matches.each do |match|
+      puts "Importing #{match.team_home.name} x #{match.team_away.name} at #{match.date}"
+      m = cli.match(match.reference)
+      match.update(
+        status: m.status,
+        home_goals: m.home_goals,
+        away_goals: m.away_goals,
+        result: m.result
+      )
+      if match.changed?
+        puts "Updating #{match.team_home.name} x #{match.team_away.name}..."
+        match.save
+      end
+    end
   end
 end
 
