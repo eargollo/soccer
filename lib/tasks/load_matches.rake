@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require Rails.root.join("lib/clients/apifutebol/api_client.rb")
-
 namespace :import do # rubocop:disable all
   desc "Import entire league data"
   task league: :environment do
