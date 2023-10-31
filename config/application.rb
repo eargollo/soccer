@@ -18,6 +18,9 @@ module Soccer
     # Common ones are `templates`, `generators`, or `middleware`, for example.
     config.autoload_lib(ignore: %w[assets tasks])
 
+    config.autoload_paths += %W(#{config.root}/lib/clients/apifutebol)
+    config.eager_load_paths += %W(#{config.root}/lib/clients/apifutebol)
+
     # Job interface
     config.active_job.queue_adapter = :async
     config.active_job.queue_adapter = ActiveJob::QueueAdapters::AsyncAdapter.new(
