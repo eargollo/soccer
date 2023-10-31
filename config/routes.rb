@@ -11,4 +11,8 @@ Rails.application.routes.draw do
   # root "posts#index"
   root "standings#index"
   get "/matches", to: "matches#index"
+  get "/simulations", to: "simulations#index"
+  post "/simulations", to: "simulations#create"
+  get "/simulations/new", to: "simulations#new", as: :new_simulation
+  get "/simulations/:id", to: "simulations#show", as: :simulation
 end

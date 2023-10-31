@@ -1,0 +1,25 @@
+<% if @simulation.simulation_standings.size == 0 %>
+    <p>Simulating still. Come back later!</p>
+<% else %>
+    <h2><%= @simulation.name %> (<%= @simulation.runs %> runs)</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Team</th>
+                <th>Champion</th>
+                <th>Promotion</th>
+                <th>Relegation</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% @simulation.simulation_standings.order("champion DESC, promotion DESC, relegation").each do |standing| %>
+                <tr>
+                    <td><%= standing.team.name %></td>
+                    <td><%= standing.champion %></td>
+                    <td><%= standing.promotion %></td>
+                    <td><%= standing.relegation %></td>
+                </tr>
+            <% end %>
+        </tbody>
+    </table>
+<% end %>

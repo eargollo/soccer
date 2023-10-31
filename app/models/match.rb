@@ -9,6 +9,7 @@ class Match < ApplicationRecord
   scope :won_home, -> { finished.where(result: 'home') }
   scope :won_away, -> { finished.where(result: 'away') }
   scope :draw, -> { finished.where(result: 'draw') }
+  scope :played, -> { where('date < :now', now: Time.zone.now) }
 
   before_save :determine_result, if: :finished?
 

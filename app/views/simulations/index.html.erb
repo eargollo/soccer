@@ -1,0 +1,22 @@
+<table>
+    <thead>
+        <tr>
+            <th>Simulation</th>
+            <th>Name</th>
+            <th>Runs</th>
+            <th>Started</th>
+            <th>Finished</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% @simulations.each do |simulation| %>
+            <tr>
+                <td><%= simulation.id %></td>
+                <td><%= link_to(simulation.name, simulation) %></td>
+                <td><%= simulation.runs %></td>
+                <td><%= simulation.start %></td>
+                <td><%= simulation.finish %></td>
+            </tr>
+        <% end %>
+    </tbody>
+</table>

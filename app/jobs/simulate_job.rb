@@ -3,7 +3,7 @@
 class SimulateJob < ApplicationJob
   queue_as :default
 
-  def perform(sim)
-    sim.run
+  def perform(id)
+    Simulation.find(id).run
   end
 end
