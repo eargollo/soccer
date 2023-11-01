@@ -5,12 +5,12 @@ namespace :import do # rubocop:disable all
   task league: :environment do
     league = Client.new.league
 
-    puts "Importing league '#{league.name}'(id=#{league.id})..."
+    Rails.logger.info "Importing league '#{league.name}'(id=#{league.id})..."
 
-    puts "Teams: #{league.teams.size}"
+    Rails.logger.info "Teams: #{league.teams.size}"
     teams = import_teams(league.teams)
 
-    puts "Matches: #{league.matches.size}"
+    Rails.logger.info "Matches: #{league.matches.size}"
     import_matches(league.matches, teams)
   end
 
@@ -20,16 +20,17 @@ namespace :import do # rubocop:disable all
     # Get matches that have been played but don't have results updated
     matches = Match.pending.played
     matches.each do |match|
-      puts "Importing #{match.team_home.name} x #{match.team_away.name} at #{match.date}"
+      Rails.logger.info "Importing #{match.team_home.name} x #{match.team_away.name} at #{match.date}"
       m = cli.match(match.reference)
       match.update(
         status: m.status,
+        date: m.date,
         home_goals: m.home_goals,
         away_goals: m.away_goals,
         result: m.result
       )
       if match.changed?
-        puts "Updating #{match.team_home.name} x #{match.team_away.name}..."
+        Rails.logger.info "Updating #{match.team_home.name} x #{match.team_away.name}..."
         match.save
       end
     end
@@ -48,7 +49,7 @@ end
 def import_team(import)
   team = Team.find_by(reference: import.id)
   if team.nil?
-    puts "Creating team #{import.name}..."
+    Rails.logger.info "Creating team #{import.name}..."
     team = Team.create(name: import.name, reference: import.id)
   end
   team
@@ -59,7 +60,7 @@ def import_matches(matches, teams) # rubocop:disable Metrics/AbcSize, Metrics/Me
     match = Match.find_by(reference: m.id)
 
     if match.nil?
-      puts "Importing #{m.home_team} x #{m.away_team} at #{m.date}..."
+      Rails.logger.info "Importing #{m.home_team} x #{m.away_team} at #{m.date}..."
       Match.create(
         date: m.date,
         team_home: teams[m.home_team_id],
@@ -71,20 +72,21 @@ def import_matches(matches, teams) # rubocop:disable Metrics/AbcSize, Metrics/Me
         reference: m.id
       )
     else
-      Match.find_by(reference: m.id)
-      match.update(
-        date: m.date,
-        team_home: teams[m.home_team_id],
-        team_away: teams[m.away_team_id],
-        status: m.status,
-        home_goals: m.home_goals,
-        away_goals: m.away_goals,
-        result: m.result
-      )
-      if match.changed?
-        puts "Updating #{match.team_home.name} x #{match.team_away.name}..."
-        match.save
-      end
+      Rails.logger.info "Skipping. Match #{m.home_team} x #{m.away_team} at #{m.date} already exists."
+      # Match.find_by(reference: m.id)
+      # match.update(
+      #   date: m.date,
+      #   team_home: teams[m.home_team_id],
+      #   team_away: teams[m.away_team_id],
+      #   status: m.status,
+      #   home_goals: m.home_goals,
+      #   away_goals: m.away_goals,
+      #   result: m.result
+      # )
+      # if match.changed?
+      #   Rails.logger.info "Updating #{match.team_home.name} x #{match.team_away.name}..."
+      #   match.save
+      # end
     end
   end
 end
