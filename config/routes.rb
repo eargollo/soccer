@@ -15,4 +15,6 @@ Rails.application.routes.draw do
   post "/simulations", to: "simulations#create"
   get "/simulations/new", to: "simulations#new", as: :new_simulation
   get "/simulations/:id", to: "simulations#show", as: :simulation
+
+  get "/leagues/:id", to: "leagues#show"
 end
