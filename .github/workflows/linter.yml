@@ -14,9 +14,11 @@ jobs:
         with:
           bundler-cache: true
 
-      - name: Run linters
+      - name: Rubocop
         run: bundle exec rubocop
 
+      - name: Zeitwerk
+        run: bundle exec rails zeitwerk:check
       # - name: Run linters
       #   run: |
       #     bundle exec rubocop
