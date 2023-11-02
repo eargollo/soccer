@@ -25,15 +25,13 @@ class Client
       request = Net::HTTP::Get.new uri
 
       response = http.request request # Net::HTTPResponse object
-      if response.is_a?(Net::HTTPSuccess)
-        # Parse the JSON response
-        parsed_response = JSON.parse(response.body)
-        return ImportMatch.new(parsed_response)
-
-      else
-        puts "Request failed with HTTP status code: #{response.code}"
-        puts "Response Body: #{response.body}"
+      unless response.is_a?(Net::HTTPSuccess)
+        raise "Request failed with HTTP status code: #{response.code}\nResponse Body: #{response.body}"
       end
+
+      # Parse the JSON response
+      parsed_response = JSON.parse(response.body)
+      return ImportMatch.new(parsed_response)
     end
   end
 end

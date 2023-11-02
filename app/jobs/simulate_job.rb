@@ -4,6 +4,6 @@ class SimulateJob < ApplicationJob
   queue_as :default
 
   def perform(id)
-    Simulation.find(id).run
+    Simulation.find_by(id:)&.run
   end
 end
