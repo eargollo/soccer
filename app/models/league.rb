@@ -28,7 +28,7 @@ class League
     # Get matches that have been played but don't have results updated
     matches = Match.pending.played
     matches.each do |match|
-      Rails.logger.info "Importing #{match.team_home.name} x #{match.team_away.name} at #{match.date}"
+      Rails.logger.info "Updating #{match.team_home.name} x #{match.team_away.name} at #{match.date}"
       m = cli.match(match.reference)
       match.update(
         status: m.status,
@@ -37,10 +37,6 @@ class League
         away_goals: m.away_goals,
         result: m.result
       )
-      if match.changed?
-        Rails.logger.info "Updating #{match.team_home.name} x #{match.team_away.name}..."
-        match.save
-      end
     end
   end
   # def initialize(attributes = {})
