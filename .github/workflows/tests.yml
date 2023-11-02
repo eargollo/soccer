@@ -15,4 +15,4 @@ jobs:
           bundler-cache: true
 
       - name: Run tests
-        run: rails test
+        run: bundle exec rails test
