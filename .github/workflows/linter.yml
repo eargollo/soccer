@@ -67,4 +67,3 @@ jobs:
 
       - name: Run tests
         run: bin/rspec
-A fe
