@@ -12,8 +12,6 @@ Rails.application.routes.draw do
   root "standings#index"
 
   resources :simulations, only: %i[index create new show]
-
-  get "/matches", to: "matches#index"
-
-  get "/leagues/:id", to: "leagues#show"
+  resources :matches, only: %i[index]
+  resources :leagues, only: %i[show]
 end
