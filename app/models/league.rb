@@ -30,13 +30,19 @@ class League
     matches.each do |match|
       Rails.logger.info "Updating #{match.team_home.name} x #{match.team_away.name} at #{match.date}"
       m = cli.match(match.reference)
-      match.update(
+      updated = match.update(
         status: m.status,
         date: m.date,
         home_goals: m.home_goals,
         away_goals: m.away_goals,
         result: m.result
       )
+
+      if updated
+        Rails.logger.info "Match #{match.team_home.name} x #{match.team_away.name} updated."
+      else
+        Rails.logger.info "Failed to update Match #{match.id}(#{match.team_home.name} x #{match.team_away.name}):\n\t#{e.errors.full_messages.join("\n")}" # rubocop:disable Layout/LineLength
+      end
     end
   end
   # def initialize(attributes = {})

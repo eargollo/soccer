@@ -31,7 +31,7 @@ class Client
 
       # Parse the JSON response
       parsed_response = JSON.parse(response.body)
-      return ImportMatch.new(parsed_response)
+      ImportMatch.new(parsed_response)
     end
   end
 end
