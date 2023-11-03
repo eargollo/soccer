@@ -1,22 +1,29 @@
-<table>
-    <thead>
-        <tr>
-            <th>Simulation</th>
-            <th>Name</th>
-            <th>Runs</th>
-            <th>Started</th>
-            <th>Finished</th>
-        </tr>
-    </thead>
-    <tbody>
-        <% @simulations.each do |simulation| %>
-            <tr>
-                <td><%= simulation.id %></td>
-                <td><%= link_to(simulation.name, simulation) %></td>
-                <td><%= simulation.runs %></td>
-                <td><%= simulation.start %></td>
-                <td><%= simulation.finish %></td>
-            </tr>
-        <% end %>
-    </tbody>
-</table>
+<div >
+    <div class="py-4">
+        <%= link_to "New simulation", new_simulation_path, class: "bg-blue-800 text-white px-5 py-2 rounded-full hover:bg-blue-400" %>
+    </div>
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Simulation</th>
+                    <th>Name</th>
+                    <th>Runs</th>
+                    <th>Started</th>
+                    <th>Finished</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% @simulations.each do |simulation| %>
+                    <tr>
+                        <td><%= simulation.id %></td>
+                        <td><%= link_to(simulation.name, simulation, class:"underline hover:font-semibold") %></td>
+                        <td><%= simulation.runs %></td>
+                        <td><%= simulation.start %></td>
+                        <td><%= simulation.finish %></td>
+                    </tr>
+                <% end %>
+            </tbody>
+        </table>
+    </div>
+</div>

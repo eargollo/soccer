@@ -36,3 +36,5 @@
 
 # Igonore mac files
 .DS_Store
+/app/assets/builds/*
+!/app/assets/builds/.keep
