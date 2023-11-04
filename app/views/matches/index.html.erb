@@ -21,7 +21,7 @@
                 <% end %>
                 <td>
                     <%= match.team_away.name %> 
-                    <% if match.date > Time.now %>
+                    <% if match.date.present? && match.date > Time.now %>
                         TBP
                     <% end %>
                 </td>
