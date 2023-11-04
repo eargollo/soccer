@@ -3,7 +3,7 @@
 class LeaguesController < ApplicationController
   def show
     @league = League.new
-    result = ""
+    results = nil
     if params[:id] == "seed"
       @league.seed
     elsif params[:id] == "matches"
