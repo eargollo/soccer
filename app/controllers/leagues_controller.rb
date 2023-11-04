@@ -3,15 +3,16 @@
 class LeaguesController < ApplicationController
   def show
     @league = League.new
+    result = ""
     if params[:id] == "seed"
       @league.seed
     elsif params[:id] == "matches"
-      @league.update_matches
+      results = @league.update_matches
     else
       redirect_to root_path
       return
     end
 
-    render json: { param: params[:id] }
+    render json: { param: params[:id], results: }
   end
 end
