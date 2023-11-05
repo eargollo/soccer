@@ -36,15 +36,16 @@ RUN bundle exec bootsnap precompile app/ lib/
 # Precompiling assets for production without requiring secret RAILS_MASTER_KEY
 RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 
-# Precompiling tailwindcss
-RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails tailwindcss:build
+# Generating self signed certificate for development
+RUN openssl req -x509 -nodes -newkey rsa:2048 -keyout /rails/localhost.key -out /rails/localhost.crt -days 365 -subj "/C=US/ST=Denial/L=Springfield/O=Dis/CN=localhost"
+RUN chmod +r /rails/localhost.key
 
 # Final stage for app image
 FROM base
 
 # Install packages needed for deployment
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y curl libsqlite3-0 libvips libpq-dev && \
+    apt-get install --no-install-recommends -y curl libsqlite3-0 libvips libpq-dev curl && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Copy built artifacts: gems, application
@@ -60,5 +61,5 @@ USER rails:rails
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
 # Start the server by default, this can be overwritten at runtime
-EXPOSE 3000
-CMD ["./bin/rails", "server"]
+EXPOSE 443
+CMD ["./bin/rails", "server", "-b", "ssl://0.0.0.0:443?key=localhost.key&cert=localhost.crt"]

@@ -1,8 +1,15 @@
 #!/bin/bash -e
 
+echo "Running entrypoint script"
+
 # If running the rails server then create or migrate existing database
 if [ "${1}" == "./bin/rails" ] && [ "${2}" == "server" ]; then
+  # Preparing database
+  echo "Preparing database"
   ./bin/rails db:prepare
+  # Precompiling tailwindcss
+  echo "Precompiling tailwindcss"
+  ./bin/rails tailwindcss:build
 fi
 
 exec "${@}"
