@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class LeaguesController < ApplicationController
+  before_action :authenticate_user!
+
   def show
     @league = League.new
     results = nil
