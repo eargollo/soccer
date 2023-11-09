@@ -3,6 +3,7 @@
 class Simulation < ApplicationRecord
   has_many :simulation_standings, dependent: :destroy
   has_many :simulation_standing_positions, dependent: :destroy
+  has_many :simulation_match_presets, dependent: :destroy
 
   after_commit -> { SimulateJob.perform_later(id) }, on: :create
 
