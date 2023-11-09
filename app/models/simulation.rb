@@ -48,6 +48,26 @@ class Simulation < ApplicationRecord
       ss[standing.team_id] = { wins: standing.wins, draws: standing.draws }
       result[standing.team_id] = Array.new(20, 0)
     end
+    # Apply match presets
+    simulation_match_presets.each do |preset|
+      if preset.match.finished?
+        # Take out original result if match was finished
+        standing_start[preset.match.team_home_id][:wins] -= 1 if preset.match.result == "home"
+        standing_start[preset.match.team_away_id][:wins] -= 1 if preset.match.result == "away"
+        if preset.match.result == "draw"
+          standing_start[preset.match.team_home_id][:draws] -= 1
+          standing_start[preset.match.team_away_id][:draws] -= 1
+        end
+      end
+
+      # Apply preset
+      standing_start[preset.match.team_home_id][:wins] += 1 if preset.result == "home"
+      standing_start[preset.match.team_away_id][:wins] += 1 if preset.result == "away"
+      if preset.result == "draw"
+        standing_start[preset.match.team_home_id][:draws] += 1
+        standing_start[preset.match.team_away_id][:draws] += 1
+      end
+    end
     [result, standing_start]
   end
 
