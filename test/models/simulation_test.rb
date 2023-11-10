@@ -38,7 +38,7 @@ class SimulationTest < ActiveSupport::TestCase
     @simulation.simulation_match_presets.create(match: Match.first, result: "away")
     @simulation.simulation_match_presets.create(match: Match.last, result: "home")
 
-    result, standing_start = @simulation.send(:baseline)
+    _, standing_start = @simulation.send(:baseline)
 
     # B x [M]
     # [B] x E

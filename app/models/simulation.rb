@@ -42,7 +42,7 @@ class Simulation < ApplicationRecord
     update!(start: Time.zone.now)
   end
 
-  def baseline
+  def baseline # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     result = {}
     standing_start = Standing.all.each_with_object({}) do |standing, ss|
       ss[standing.team_id] = { wins: standing.wins, draws: standing.draws }

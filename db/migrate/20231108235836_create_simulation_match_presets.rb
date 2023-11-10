@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateSimulationMatchPresets < ActiveRecord::Migration[7.1]
   def change
     create_table :simulation_match_presets do |t|
