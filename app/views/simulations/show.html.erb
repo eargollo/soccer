@@ -1,39 +1,46 @@
 <% if @simulation.simulation_standings.size == 0 %>
     <p>Simulating still. Come back later!</p>
 <% else %>
-    <h2><%= @simulation.name %> (<%= @simulation.runs %> runs)</h2>
     <div>
-        <table>
-            <thead>
-                <tr>
-                    <th>Team</th>
-                    <th>Champion</th>
-                    <th>Promotion</th>
-                    <th>Relegation</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% @simulation.simulation_standings.order("champion DESC, promotion DESC, relegation").each do |standing| %>
-                    <tr>
-                        <td><%= standing.team.name %></td>
-                        <td><%= standing.champion %></td>
-                        <td><%= standing.promotion %></td>
-                        <td><%= standing.relegation %></td>
-                    </tr>
-                <% end %>
-            </tbody>
-        </table>
-    </div>
-    <div>
-        <h3>Matches</h3>
-        <% @matches.each do |m| %>
+        <h2><%= @simulation.name %> (<%= @simulation.runs %> runs)</h2>
+        <div>
             <div>
-                <span><%= m.match.team_home.name%></span> 
-                <span>
-                    <%= m.result%>
-                </span>
-                <span><%= m.match.team_away.name%></span>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Team</th>
+                            <th>Champion</th>
+                            <th>Promotion</th>
+                            <th>Relegation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% @simulation.simulation_standings.order("champion DESC, promotion DESC, relegation").each do |standing| %>
+                            <tr>
+                                <td><%= standing.team.name %></td>
+                                <td><%= standing.champion %></td>
+                                <td><%= standing.promotion %></td>
+                                <td><%= standing.relegation %></td>
+                            </tr>
+                        <% end %>
+                    </tbody>
+                </table>
             </div>
-        <% end %>
+            <div>
+                <br>
+                <h3>Matches</h3>
+                <% @matches.each do |m| %>
+                    <div>
+                        <span><%= m.match.team_home.name%></span> 
+                        <span>
+                            <input type="radio" value="home" <%= m.result == "home" ? "checked" : "" %> disabled name="matches[<%=m.id%>]">
+                            <input type="radio" value="draw" <%= m.result == "draw" ? "checked" : "" %> disabled= name="matches[<%=m.id%>]">
+                            <input type="radio" value="away" <%= m.result == "away" ? "checked" : "" %> disabled= name="matches[<%=m.id%>]">
+                        </span>
+                        <span><%= m.match.team_away.name%></span>
+                    </div>
+                <% end %>
+            </div>
+        </div>
     </div>
 <% end %>
