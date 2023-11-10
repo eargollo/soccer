@@ -2,24 +2,38 @@
     <p>Simulating still. Come back later!</p>
 <% else %>
     <h2><%= @simulation.name %> (<%= @simulation.runs %> runs)</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Team</th>
-                <th>Champion</th>
-                <th>Promotion</th>
-                <th>Relegation</th>
-            </tr>
-        </thead>
-        <tbody>
-            <% @simulation.simulation_standings.order("champion DESC, promotion DESC, relegation").each do |standing| %>
+    <div>
+        <table>
+            <thead>
                 <tr>
-                    <td><%= standing.team.name %></td>
-                    <td><%= standing.champion %></td>
-                    <td><%= standing.promotion %></td>
-                    <td><%= standing.relegation %></td>
+                    <th>Team</th>
+                    <th>Champion</th>
+                    <th>Promotion</th>
+                    <th>Relegation</th>
                 </tr>
-            <% end %>
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                <% @simulation.simulation_standings.order("champion DESC, promotion DESC, relegation").each do |standing| %>
+                    <tr>
+                        <td><%= standing.team.name %></td>
+                        <td><%= standing.champion %></td>
+                        <td><%= standing.promotion %></td>
+                        <td><%= standing.relegation %></td>
+                    </tr>
+                <% end %>
+            </tbody>
+        </table>
+    </div>
+    <div>
+        <h3>Matches</h3>
+        <% @matches.each do |m| %>
+            <div>
+                <span><%= m.match.team_home.name%></span> 
+                <span>
+                    <%= m.result%>
+                </span>
+                <span><%= m.match.team_away.name%></span>
+            </div>
+        <% end %>
+    </div>
 <% end %>
