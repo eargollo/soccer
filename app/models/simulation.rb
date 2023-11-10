@@ -14,7 +14,8 @@ class Simulation < ApplicationRecord
     result, standing_start = baseline
 
     # Get matches to simulate
-    matches = Match.pending
+    excluded = simulation_match_presets.map(&:match_id)
+    matches = Match.pending.where.not(id: excluded)
 
     # Simulate
     runs.times do
