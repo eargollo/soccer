@@ -19,7 +19,7 @@ class SimulationsController < ApplicationController
     matches = params[:matches]
     @simulation = Simulation.new(simulation_params)
     if @simulation.save
-      matches.each do |match_id, result|
+      matches&.each do |match_id, result|
         @simulation.simulation_match_presets.create(match_id:, result:)
       end
       redirect_to @simulation
