@@ -7,12 +7,14 @@ class League
 
   attr_accessor :reference
 
+  def self.client = SoccerAPI::SoccerDataAPI::Client.new
+
   def initialize
     @reference = 216
   end
 
   def seed # rubocop:disable Metrics/AbcSize
-    league = Client.new.league
+    league = League.client
 
     Rails.logger.info "Importing league '#{league.name}'(id=#{league.id})..."
 
@@ -24,7 +26,7 @@ class League
   end
 
   def update_matches # rubocop:disable Metrics/AbcSize
-    cli = Client.new
+    cli = League.client
     # Get matches that have been played but don't have results updated
     matches = Match.pending.played
     Rails.logger.info "Retrieved #{matches.size} matches to update."

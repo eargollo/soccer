@@ -1,0 +1,78 @@
+# frozen_string_literal: true
+
+require Rails.root.join('lib/clients/api/interface').to_s
+require 'uri'
+require 'net/http'
+require 'openssl'
+
+module SoccerAPI
+  module APIFootball
+    class Client
+      include SoccerAPI::ClientInterface
+
+      URL = "https://v3.football.api-sports.io"
+      SERIEB = 72
+      SEASON = 2023
+      SERIEB_2023_V2 = 5082
+      VITORIA = 136
+
+      def initialize(api_key)
+        @api_key = api_key
+
+        url = URI(URL)
+        @http = Net::HTTP.new(url.host, url.port)
+        @http.use_ssl = true
+        @http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+      end
+
+      def matches(league_id:, season:)
+        url = URI("#{URL}/fixtures?season=#{season}&league=#{league_id}")
+
+        response = @http.request(request(url))
+
+        if response.code != "200"
+          raise "Request failed with HTTP status code: #{response.code}\nResponse Body: #{response.body}"
+        end
+
+        data = JSON.parse(response.read_body)
+        raise "Request failed with errors: #{data['errors']}" if data["errors"].size != 0
+
+        convert_matches(data)
+      end
+
+      # https://v3.football.api-sports.io/teams?id=136
+      private
+
+      # Needs of a match:
+      # - date
+      # - round
+      # - home_team_reference
+      # - away_team_reference
+      # - home_goals
+      # - away_goals
+      # - status
+      # - reference
+      def convert_matches(data) # rubocop:disable Metrics/AbcSize
+        data['response'].map do |m|
+          {
+            reference: m['fixture']['id'],
+            date: DateTime.parse(m['fixture']['date']),
+            round: m['league']['round'][/(\d+)/].to_i,
+            home_team_reference: m['teams']['home']['id'],
+            away_team_reference: m['teams']['away']['id'],
+            home_goals: m['goals']['home'],
+            away_goals: m['goals']['away'],
+            status: m['fixture']['status']['short']
+          }
+        end
+      end
+
+      def request(url)
+        request = Net::HTTP::Get.new(url)
+        request["x-rapidapi-host"] = 'v3.football.api-sports.io'
+        request["x-rapidapi-key"] = @api_key
+        request
+      end
+    end
+  end
+end
