@@ -9,7 +9,6 @@ class LoadLeagueJobTest < ActiveJob::TestCase
   TEST_LEAGUE_SEASON = 2023
 
   def setup
-    # @client = ::SoccerAPI::SoccerDataAPI::Client.new
     @client = SoccerAPI::APIFootball::Client.new(ENV.fetch("APIFOOTBALL_TOKEN", nil))
   end
 

@@ -11,10 +11,6 @@ module SoccerAPI
       include SoccerAPI::ClientInterface
 
       URL = "https://v3.football.api-sports.io"
-      SERIEB = 72
-      SEASON = 2023
-      SERIEB_2023_V2 = 5082
-      VITORIA = 136
 
       def initialize(api_key)
         @api_key = api_key
@@ -35,12 +31,11 @@ module SoccerAPI
         end
 
         data = JSON.parse(response.read_body)
-        raise "Request failed with errors: #{data['errors']}" if data["errors"].size != 0
+        raise "Request failed with errors: #{data['errors']}" unless data["errors"].empty?
 
         convert_matches(data)
       end
 
-      # https://v3.football.api-sports.io/teams?id=136
       private
 
       # Needs of a match:
