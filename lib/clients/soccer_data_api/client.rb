@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 require 'net/http'
-module SoccerAPI
-  module SoccerDataAPI
+module Clients
+  module SoccerDataApi
     class Client
       def league
         filename = File.expand_path('matches.json', File.dirname(__FILE__))

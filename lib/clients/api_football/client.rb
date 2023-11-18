@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-require Rails.root.join('lib/clients/api/interface').to_s
+require Rails.root.join('lib/clients/interface').to_s
 require 'uri'
 require 'net/http'
 require 'openssl'
 
-module SoccerAPI
-  module APIFootball
+module Clients
+  module ApiFootball
     class Client
-      include SoccerAPI::ClientInterface
+      include Clients::Interface
 
       URL = "https://v3.football.api-sports.io"
 

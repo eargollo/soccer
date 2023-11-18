@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-module SoccerAPI
-  module ClientInterface
+module Clients
+  module Interface
     def matches(*)
       raise "Not implemented"
     end

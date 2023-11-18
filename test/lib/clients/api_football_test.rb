@@ -1,19 +1,19 @@
 # frozen_string_literal: true
 
 require "test_helper"
-require Rails.root.join('lib/clients/apifootball/client').to_s
-require Rails.root.join('lib/clients/soccerdataapi/client').to_s
+require Rails.root.join('lib/clients/api_football/client').to_s
+require Rails.root.join('lib/clients/soccer_data_api/client').to_s
 
 class LoadLeagueJobTest < ActiveJob::TestCase
   TEST_LEAGUE_ID = 72
   TEST_LEAGUE_SEASON = 2023
 
   def setup
-    @client = SoccerAPI::APIFootball::Client.new(ENV.fetch("APIFOOTBALL_TOKEN", nil))
+    @client = Clients::ApiFootball::Client.new(ENV.fetch("APIFOOTBALL_TOKEN", nil))
   end
 
   test "raises error if not autheticated" do
-    client = SoccerAPI::APIFootball::Client.new("")
+    client = Clients::ApiFootball::Client.new("")
     VCR.use_cassette("error") do
       assert_raises RuntimeError do
         client.matches(league_id: TEST_LEAGUE_ID, season: TEST_LEAGUE_SEASON)
