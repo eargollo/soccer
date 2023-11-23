@@ -10,9 +10,12 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
-User.create(
-  name: ENV.fetch('DEFAULT_USER_NAME', nil),
-  email: ENV.fetch('DEFAULT_USER_EMAIL', nil),
-  password: ENV.fetch('DEFAULT_USER_PASSWORD', nil),
-  password_confirmation: ENV.fetch('DEFAULT_USER_PASSWORD', nil)
-)
+# Seed admin user
+if User.find_by(email: ENV.fetch('ADMIN_USER_EMAIL', nil)).nil?
+  User.create(
+    name: ENV.fetch('ADMIN_USER_NAME', nil),
+    email: ENV.fetch('ADMIN_USER_EMAIL', nil),
+    password: ENV.fetch('ADMIN_USER_PASSWORD', nil),
+    password_confirmation: ENV.fetch('ADMIN_USER_PASSWORD', nil)
+  )
+end
