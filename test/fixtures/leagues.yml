@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: Serie A
+  logo: "https://media-4.api-sports.io/football/leagues/71.png"
+  model: League
+  reference: 71
+
+two:
+  name: Serie B
+  logo: "https://media-4.api-sports.io/football/leagues/72.png"
+  model: League
+  reference: 72

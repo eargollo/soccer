@@ -10,7 +10,16 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_11_08_235836) do
+ActiveRecord::Schema[7.1].define(version: 2023_11_25_015630) do
+  create_table "leagues", force: :cascade do |t|
+    t.string "name"
+    t.string "logo"
+    t.string "model"
+    t.integer "reference"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "matches", force: :cascade do |t|
     t.datetime "date"
     t.integer "team_home_id", null: false
@@ -24,6 +33,14 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_08_235836) do
     t.datetime "updated_at", null: false
     t.index ["team_away_id"], name: "index_matches_on_team_away_id"
     t.index ["team_home_id"], name: "index_matches_on_team_home_id"
+  end
+
+  create_table "seasons", force: :cascade do |t|
+    t.integer "year"
+    t.integer "league_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["league_id"], name: "index_seasons_on_league_id"
   end
 
   create_table "simulation_match_presets", force: :cascade do |t|
@@ -109,6 +126,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_08_235836) do
 
   add_foreign_key "matches", "teams", column: "team_away_id"
   add_foreign_key "matches", "teams", column: "team_home_id"
+  add_foreign_key "seasons", "leagues"
   add_foreign_key "simulation_match_presets", "matches"
   add_foreign_key "simulation_match_presets", "simulations"
   add_foreign_key "simulation_standing_positions", "simulations"
