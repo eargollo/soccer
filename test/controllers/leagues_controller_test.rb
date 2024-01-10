@@ -3,13 +3,17 @@
 require "test_helper"
 
 class LeaguesControllerTest < ActionDispatch::IntegrationTest
+  include Devise::Test::IntegrationHelpers
   setup do
+    sign_in users(:one)
     @league = leagues(:one)
   end
 
   test "should get index" do
     get leagues_url
     assert_response :success
+    assert(response.body.include?('Serie A'))
+    assert(response.body.include?('Serie B'))
   end
 
   test "should get new" do
@@ -30,6 +34,7 @@ class LeaguesControllerTest < ActionDispatch::IntegrationTest
   test "should show league" do
     get league_url(@league)
     assert_response :success
+    assert(response.body.include?('Serie A'))
   end
 
   test "should get edit" do

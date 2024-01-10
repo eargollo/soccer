@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_11_25_015630) do
+ActiveRecord::Schema[7.1].define(version: 2023_11_25_021002) do
   create_table "leagues", force: :cascade do |t|
     t.string "name"
     t.string "logo"
@@ -31,6 +31,8 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_25_015630) do
     t.integer "reference"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "season_id"
+    t.index ["season_id"], name: "index_matches_on_season_id"
     t.index ["team_away_id"], name: "index_matches_on_team_away_id"
     t.index ["team_home_id"], name: "index_matches_on_team_home_id"
   end
@@ -124,6 +126,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_11_25_015630) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "matches", "seasons"
   add_foreign_key "matches", "teams", column: "team_away_id"
   add_foreign_key "matches", "teams", column: "team_home_id"
   add_foreign_key "seasons", "leagues"

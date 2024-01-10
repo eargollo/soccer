@@ -12,6 +12,11 @@
             <li class="">
             <%= link_to "Simulations", simulations_path, class: "hover:text-orange-300" %>
             </li>
+            <% if user_signed_in? %>
+                <li class="">
+                    <%= link_to "Leagues", leagues_path, class: "hover:text-orange-300" %>
+                </li>
+            <% end %>
         </ul>
         </div>
         <div class="">
