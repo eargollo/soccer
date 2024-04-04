@@ -27,6 +27,7 @@ class League
     cli = Client.new
     # Get matches that have been played but don't have results updated
     matches = Match.pending.played
+    Rails.logger.info "Retrieved #{matches.size} matches to update."
     matches.each do |match|
       Rails.logger.info "Updating #{match.team_home.name} x #{match.team_away.name} at #{match.date}"
       m = cli.match(match.reference)
@@ -44,6 +45,7 @@ class League
         Rails.logger.info "Failed to update Match #{match.id}(#{match.team_home.name} x #{match.team_away.name}):\n\t#{e.errors.full_messages.join("\n")}" # rubocop:disable Layout/LineLength
       end
     end
+    matches
   end
   # def initialize(attributes = {})
   #   attributes.each do |name, value|

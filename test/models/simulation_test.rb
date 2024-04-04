@@ -30,6 +30,28 @@ class SimulationTest < ActiveSupport::TestCase
     assert_equal({ wins: 0, draws: 0 }, standing_start[@teams[2].id])
   end
 
+  test "stablishes a simulation baseline with match presets" do
+    Match.first.update(status: "finished", home_goals: 2, away_goals: 1)
+    Match.second.update(status: "finished", home_goals: 2, away_goals: 0)
+    Match.third.update(status: "finished", home_goals: 1, away_goals: 1)
+    @simulation.save
+    @simulation.simulation_match_presets.create(match: Match.first, result: "away")
+    @simulation.simulation_match_presets.create(match: Match.last, result: "home")
+
+    _, standing_start = @simulation.send(:baseline)
+
+    # B x [M]
+    # [B] x E
+    # M [x] B
+    # M x E
+    # E X B
+    # [E] x M
+
+    assert_equal({ wins: 1, draws: 1 }, standing_start[@teams[0].id])
+    assert_equal({ wins: 1, draws: 1 }, standing_start[@teams[1].id])
+    assert_equal({ wins: 1, draws: 0 }, standing_start[@teams[2].id])
+  end
+
   test "properly aggregates results" do
     ss = {
       Team.second.id => { wins: 1, draws: 1, points: 4 },

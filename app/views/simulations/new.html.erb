@@ -5,5 +5,17 @@
     <%= f.label :runs %>
     <%= f.number_field :runs %>
 
-    <%= f.submit class: button_class%>
+    <%= f.submit class: "rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"%>
+
+    <% @matches.each do |match| %>
+        <div>
+            <span><%= match.team_home.name%></span> 
+            <span>
+                <input type="radio" value="home" name="matches[<%=match.id%>]">
+                <input type="radio" value="draw" name="matches[<%=match.id%>]">
+                <input type="radio" value="away" name="matches[<%=match.id%>]">
+            </span>
+            <span><%= match.team_away.name%></span>
+        </div>
+    <% end %>
 <% end %>

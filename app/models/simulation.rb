@@ -3,6 +3,7 @@
 class Simulation < ApplicationRecord
   has_many :simulation_standings, dependent: :destroy
   has_many :simulation_standing_positions, dependent: :destroy
+  has_many :simulation_match_presets, dependent: :destroy
 
   after_commit -> { SimulateJob.perform_later(id) }, on: :create
 
@@ -13,7 +14,8 @@ class Simulation < ApplicationRecord
     result, standing_start = baseline
 
     # Get matches to simulate
-    matches = Match.pending
+    excluded = simulation_match_presets.map(&:match_id)
+    matches = Match.pending.where.not(id: excluded)
 
     # Simulate
     runs.times do
@@ -41,11 +43,31 @@ class Simulation < ApplicationRecord
     update!(start: Time.zone.now)
   end
 
-  def baseline
+  def baseline # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     result = {}
     standing_start = Standing.all.each_with_object({}) do |standing, ss|
       ss[standing.team_id] = { wins: standing.wins, draws: standing.draws }
       result[standing.team_id] = Array.new(20, 0)
+    end
+    # Apply match presets
+    simulation_match_presets.each do |preset|
+      if preset.match.finished?
+        # Take out original result if match was finished
+        standing_start[preset.match.team_home_id][:wins] -= 1 if preset.match.result == "home"
+        standing_start[preset.match.team_away_id][:wins] -= 1 if preset.match.result == "away"
+        if preset.match.result == "draw"
+          standing_start[preset.match.team_home_id][:draws] -= 1
+          standing_start[preset.match.team_away_id][:draws] -= 1
+        end
+      end
+
+      # Apply preset
+      standing_start[preset.match.team_home_id][:wins] += 1 if preset.result == "home"
+      standing_start[preset.match.team_away_id][:wins] += 1 if preset.result == "away"
+      if preset.result == "draw"
+        standing_start[preset.match.team_home_id][:draws] += 1
+        standing_start[preset.match.team_away_id][:draws] += 1
+      end
     end
     [result, standing_start]
   end
