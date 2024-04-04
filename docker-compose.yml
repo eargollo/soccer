@@ -12,7 +12,7 @@ services:
     networks:
       - postgres-network
     env_file:
-      - .env
+      - .env.PROD
 
   database:
     image: 'postgres:latest'
@@ -30,7 +30,7 @@ services:
     ports:
       - 15433:80
     env_file:
-      - .env
+      - .env.PROD
     depends_on:
       - database
     networks:

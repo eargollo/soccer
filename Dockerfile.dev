@@ -1,0 +1,21 @@
+FROM ruby:3.2.2
+
+WORKDIR /home/app
+
+ENV PORT 3000
+
+EXPOSE $PORT
+
+RUN gem install rails bundler
+RUN gem install rails
+
+COPY Gemfile Gemfile.lock ./
+
+RUN bundle install
+
+COPY . .
+
+RUN ./bin/rails db:prepare
+RUN ./bin/rails tailwindcss:build
+
+ENTRYPOINT [ "./bin/rails", "server", "--binding=0.0.0.0"]
