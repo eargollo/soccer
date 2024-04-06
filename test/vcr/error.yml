@@ -1,0 +1,56 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://v3.football.api-sports.io/fixtures?league=72&season=2023
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+      Host:
+      - v3.football.api-sports.io
+      X-Rapidapi-Host:
+      - v3.football.api-sports.io
+      X-Rapidapi-Key:
+      - ''
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Thu, 16 Nov 2023 21:57:31 GMT
+      Content-Type:
+      - application/json
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      X-Request-Id:
+      - 6497576e-1e9c-4e6b-8cdc-43ec2640d83e
+      - 6497576e-1e9c-4e6b-8cdc-43ec2640d83e
+      Strict-Transport-Security:
+      - max-age=31536000
+      Vary:
+      - Accept-Encoding
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Credentials:
+      - 'True'
+      Access-Control-Allow-Methods:
+      - GET, OPTIONS
+      Access-Control-Allow-Headers:
+      - x-rapidapi-key, x-apisports-key, x-rapidapi-host
+    body:
+      encoding: ASCII-8BIT
+      string: '{"get":"fixtures","parameters":{"season":"2023","league":"72"},"errors":{"token":"Error\/Missing
+        application key. Go to https:\/\/www.api-football.com\/documentation-v3 to
+        learn how to get your API application key."},"results":0,"paging":{"current":1,"total":1},"response":[]}'
+  recorded_at: Thu, 16 Nov 2023 21:57:31 GMT
+recorded_with: VCR 6.2.0

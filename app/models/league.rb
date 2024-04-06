@@ -7,24 +7,26 @@ class League
 
   attr_accessor :reference
 
+  def self.client = Clients::ApiFootball::Client.new(ENV.fetch('APIFOOTBALL_TOKEN'))
+
   def initialize
-    @reference = 216
+    @league_id = ENV.fetch('LEAGUE_ID')
+    @season_id = ENV.fetch('SEASON_ID')
   end
 
-  def seed # rubocop:disable Metrics/AbcSize
-    league = Client.new.league
+  def seed
+    Rails.logger.info "Importing league #{@league_id} season #{@season_id}"
+    matches = League.client.matches(league_id: @league_id, season: @season_id)
 
-    Rails.logger.info "Importing league '#{league.name}'(id=#{league.id})..."
+    Rails.logger.info "Matches: #{matches.size}"
 
-    Rails.logger.info "Teams: #{league.teams.size}"
-    teams = import_teams(league.teams)
-
-    Rails.logger.info "Matches: #{league.matches.size}"
-    import_matches(league.matches, teams)
+    matches.each do |m|
+      import_match(m)
+    end
   end
 
   def update_matches # rubocop:disable Metrics/AbcSize
-    cli = Client.new
+    cli = League.client
     # Get matches that have been played but don't have results updated
     matches = Match.pending.played
     Rails.logger.info "Retrieved #{matches.size} matches to update."
@@ -47,11 +49,6 @@ class League
     end
     matches
   end
-  # def initialize(attributes = {})
-  #   attributes.each do |name, value|
-  #     send("#{name}=", value)
-  #   end
-  # end
 
   def persisted?
     false
@@ -59,43 +56,29 @@ class League
 
   private
 
-  def import_teams(teams)
-    list = {}
-    teams.each do |t|
-      team = import_team(t)
-      list[team.reference] = team
-    end
-    list
-  end
+  def import_match(match) # rubocop:disable Metrics/AbcSize
+    raise "Match #{match[:reference]} has no home team." if match[:home_team].nil? || match[:home_team]["id"].nil?
 
-  def import_team(import)
-    team = Team.find_by(reference: import.id)
-    if team.nil?
-      Rails.logger.info "Creating team #{import.name}..."
-      team = Team.create(name: import.name, reference: import.id)
-    end
-    team
-  end
+    home_team = Team.create_with(
+      name: match[:home_team]["name"],
+      logo: match[:home_team]["logo"]
+    ).find_or_create_by(reference: match[:home_team]["id"])
 
-  def import_matches(matches, teams) # rubocop:disable Metrics/AbcSize, cs/MethodLength
-    matches.each do |m|
-      match = Match.find_by(reference: m.id)
+    away_team = Team.create_with(
+      name: match[:away_team]["name"],
+      logo: match[:away_team]["logo"]
+    ).find_or_create_by(reference: match[:away_team]["id"])
 
-      if match.nil?
-        Rails.logger.info "Importing #{m.home_team} x #{m.away_team} at #{m.date}..."
-        Match.create(
-          date: m.date,
-          team_home: teams[m.home_team_id],
-          team_away: teams[m.away_team_id],
-          status: m.status,
-          home_goals: m.home_goals,
-          away_goals: m.away_goals,
-          result: m.result,
-          reference: m.id
-        )
-      else
-        Rails.logger.info "Skipping. Match #{m.home_team} x #{m.away_team} at #{m.date} already exists."
-      end
-    end
+    Match.where(reference: match[:reference]).first_or_create(reference: match[:reference]).update(
+      date: match[:date],
+      round: match[:round],
+      round_name: match[:round_name],
+      team_home: home_team,
+      team_away: away_team,
+      home_goals: match[:home_goals],
+      away_goals: match[:away_goals],
+      status: match[:status],
+      result: match[:result]
+    )
   end
 end
