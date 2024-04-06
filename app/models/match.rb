@@ -3,6 +3,7 @@
 class Match < ApplicationRecord
   belongs_to :team_home, class_name: 'Team'
   belongs_to :team_away, class_name: 'Team'
+  belongs_to :season
 
   scope :pending, -> { where.not(status: 'finished') }
   scope :finished, -> { where(status: 'finished') }

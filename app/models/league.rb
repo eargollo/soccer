@@ -1,20 +1,14 @@
 # frozen_string_literal: true
 
-class League
-  include ActiveModel::Validations
-  include ActiveModel::Conversion
-  extend ActiveModel::Naming
-
-  attr_accessor :reference
+class League < ApplicationRecord
+  has_many :seasons, dependent: :destroy
 
   def self.client = Clients::ApiFootball::Client.new(ENV.fetch('APIFOOTBALL_TOKEN'))
 
-  def initialize
+  def seed
     @league_id = ENV.fetch('LEAGUE_ID')
     @season_id = ENV.fetch('SEASON_ID')
-  end
 
-  def seed
     Rails.logger.info "Importing league #{@league_id} season #{@season_id}"
     matches = League.client.matches(league_id: @league_id, season: @season_id)
 
@@ -48,10 +42,6 @@ class League
       end
     end
     matches
-  end
-
-  def persisted?
-    false
   end
 
   private

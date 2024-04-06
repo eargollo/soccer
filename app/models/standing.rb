@@ -2,6 +2,7 @@
 
 class Standing < ApplicationRecord
   belongs_to :team
+  belongs_to :season
 
   def self.compute(team)
     Standing.find_or_initialize_by(team:).update(
