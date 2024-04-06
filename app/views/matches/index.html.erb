@@ -12,6 +12,7 @@
           <thead>
             <tr>
               <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">Date</th>
+              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Round</th>
               <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Home Team</th>
               <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Score</th>
               <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Away Team</th>
@@ -21,13 +22,15 @@
             <% @matches.each do |match| %>
                 <tr>
                     <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0"><%= match.date.strftime("%F %H:%M") %></td>
-                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= match.team_home.name %></td>
+                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= match.round %></td>
+                    <td class="whitespace-nowrap flex px-3 py-4 text-sm text-gray-500"><img class="w-5" src="<%= match.team_home.logo %>" alt=""><%= match.team_home.name %></td>
                     <% if match.status == "finished" %>
                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= match.home_goals %> x <%= match.away_goals %></td>
                     <% else %>
                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= (match.probability[0]*100).round(2) %>% | <%= (match.probability[1]*100).round(2) %>% | <%= (match.probability[2]*100).round(2) %>%</td>
                     <% end %>
-                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                    <td class="whitespace-nowrap flex px-3 py-4 text-sm text-gray-500">
+                        <img class="w-5" src="<%= match.team_away.logo %>" alt="">
                         <%= match.team_away.name %> 
                         <% if match.date.present? && match.date > Time.now %>
                             TBP

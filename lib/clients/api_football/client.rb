@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# API Football has the advantage of giving the round of the match
+
 require Rails.root.join('lib/clients/interface').to_s
 require 'uri'
 require 'net/http'
@@ -40,12 +42,14 @@ module Clients
 
       # Needs of a match:
       # - date
-      # - round
-      # - home_team_reference
-      # - away_team_reference
+      # - round_name - name as in payload
+      # - round - number of the round (attept to extract from the round name)
+      # - home_team (id,name,logo)
+      # - away_team (id,name,logo)
       # - home_goals
       # - away_goals
       # - status
+      # - result
       # - reference
       def convert_matches(data) # rubocop:disable Metrics/AbcSize
         data['response'].map do |m|
@@ -53,13 +57,23 @@ module Clients
             reference: m['fixture']['id'],
             date: DateTime.parse(m['fixture']['date']),
             round: m['league']['round'][/(\d+)/].to_i,
-            home_team_reference: m['teams']['home']['id'],
-            away_team_reference: m['teams']['away']['id'],
+            round_name: m['league']['round'],
+            home_team: m['teams']['home'],
+            away_team: m['teams']['away'],
             home_goals: m['goals']['home'],
             away_goals: m['goals']['away'],
-            status: m['fixture']['status']['short']
+            status: m['fixture']['status']['short'] == 'FT' ? 'finished' : 'pre-match',
+            result: result(m)
           }
         end
+      end
+
+      def result(match)
+        return "tbd" unless match['fixture']['status']['short'] == 'FT'
+
+        return 'draw' if match['goals']['home'] == match['goals']['away']
+
+        match['goals']['home'] > match['goals']['away'] ? 'home' : 'away'
       end
 
       def request(url)

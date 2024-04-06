@@ -65,6 +65,9 @@ group :development do
 
   gem 'bundler-audit', require: false
 
+  # Generate entity relationship diagrams
+  gem "rails-erd"
+
   # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
   # gem "rack-mini-profiler"
 
