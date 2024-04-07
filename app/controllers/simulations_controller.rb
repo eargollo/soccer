@@ -13,8 +13,8 @@ class SimulationsController < ApplicationController
   end
 
   def new
-    @simulation = Simulation.new
-    @matches = Match.pending.all
+    @simulation = Season.target_season.simulations.new
+    @matches = Season.target_season.matches.pending.all
   end
 
   def create

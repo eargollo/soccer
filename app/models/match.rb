@@ -71,8 +71,8 @@ class Match < ApplicationRecord
   private
 
   def compute_points_commit
-    Standing.compute(team_home)
-    Standing.compute(team_away)
+    Standing.compute(season:, team: team_home)
+    Standing.compute(season:, team: team_away)
   end
 
   def determine_result

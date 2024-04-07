@@ -4,15 +4,29 @@ class Standing < ApplicationRecord
   belongs_to :team
   belongs_to :season
 
-  def self.compute(team)
-    Standing.find_or_initialize_by(team:).update(
-      wins: team.wins,
-      draws: team.draws,
-      losses: team.losses,
-      goals_pro: team.goals_pro,
-      goals_against: team.goals_against,
-      points: (team.wins * 3) + team.draws,
-      matches: team.wins + team.draws + team.losses
+  def compute # rubocop:disable Metrics/AbcSize
+    season = self
+
+    find_or_initialize_by(team:).update(
+      wins: team.wins(season:),
+      draws: team.draws(season:),
+      losses: team.losses(season:),
+      goals_pro: team.goals_pro(season:),
+      goals_against: team.goals_against(season:),
+      points: (team.wins(season:) * 3) + team.draws(season:),
+      matches: team.wins(season:) + team.draws(season:) + team.losses(season:)
+    )
+  end
+
+  def self.compute(season:, team:)
+    Standing.find_or_initialize_by(team:, season:).update(
+      wins: team.wins(season:),
+      draws: team.draws(season:),
+      losses: team.losses(season:),
+      goals_pro: team.goals_pro(season:),
+      goals_against: team.goals_against(season:),
+      points: (team.wins(season:) * 3) + team.draws(season:),
+      matches: team.wins(season:) + team.draws(season:) + team.losses(season:)
     )
   end
 end

@@ -6,23 +6,36 @@ class Team < ApplicationRecord
   has_many :away_matches, class_name: 'Match', foreign_key: 'team_away_id', dependent: :restrict_with_exception,
                           inverse_of: :team_away
 
-  def wins
-    home_matches.won_home.count + away_matches.won_away.count
+  def wins(season: nil) # rubocop:disable Metrics/AbcSize
+    return home_matches.won_home.count + away_matches.won_away.count if season.nil?
+
+    home_matches.won_home.where(season:).count + away_matches.won_away.where(season:).count
   end
 
-  def losses
-    home_matches.won_away.count + away_matches.won_home.count
+  def losses(season: nil) # rubocop:disable Metrics/AbcSize
+    return home_matches.won_away.count + away_matches.won_home.count if season.nil?
+
+    home_matches.won_away.where(season:).count + away_matches.won_home.where(season:).count unless season.nil?
   end
 
-  def draws
-    home_matches.draw.count + away_matches.draw.count
+  def draws(season: nil) # rubocop:disable Metrics/AbcSize
+    return home_matches.draw.count + away_matches.draw.count if season.nil?
+
+    home_matches.draw.where(season:).count + away_matches.draw.where(season:).count unless season.nil?
   end
 
-  def goals_pro
-    home_matches.finished.sum(:home_goals) + away_matches.finished.sum(:away_goals)
+  def goals_pro(season: nil) # rubocop:disable Metrics/AbcSize
+    return home_matches.finished.sum(:home_goals) + away_matches.finished.sum(:away_goals) if season.nil?
+
+    home_matches.where(season:).finished.sum(:home_goals) + away_matches.where(season:).finished.sum(:away_goals)
   end
 
-  def goals_against
-    home_matches.where(status: 'finished').sum(:away_goals) + away_matches.where(status: 'finished').sum(:home_goals)
+  def goals_against(season: nil) # rubocop:disable Metrics/AbcSize
+    if season.nil?
+      return home_matches.where(status: 'finished').sum(:away_goals) +
+             away_matches.where(status: 'finished').sum(:home_goals)
+    end
+
+    home_matches.where(season:).finished.sum(:away_goals) + away_matches.where(season:).finished.sum(:home_goals)
   end
 end

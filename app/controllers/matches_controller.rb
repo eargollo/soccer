@@ -2,6 +2,6 @@
 
 class MatchesController < ApplicationController
   def index
-    @matches = Match.all
+    @matches = Season.target_season.matches
   end
 end

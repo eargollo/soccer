@@ -6,6 +6,13 @@ class Season < ApplicationRecord
   has_many :standings, dependent: :destroy
   has_many :simulations, dependent: :destroy
 
+  def self.target_season
+    season = Season.where(active: true).order(:year).last
+    return season unless season.nil?
+
+    Season.order(year: :desc, updated_at: :desc).first
+  end
+
   def self.apifootball_seed(league_id:, season_id:)
     client = Clients::ApiFootball::Client.new(ENV.fetch('APIFOOTBALL_TOKEN'))
 
@@ -55,5 +62,12 @@ class Season < ApplicationRecord
       status: match[:status],
       result: match[:result]
     )
+  end
+
+  def compute_standings
+    Rails.logger.info('Computing standings')
+    matches.each do |match|
+      match.send(:compute_points_commit)
+    end
   end
 end
