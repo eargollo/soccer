@@ -4,7 +4,7 @@ require "test_helper"
 
 class StandingTest < ActiveSupport::TestCase
   def setup
-    @season = seasons(:season_23)
+    @season = seasons(:season1)
 
     @bcn = teams(:barcelona)
     @rmd = teams(:madrid)

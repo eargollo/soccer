@@ -4,7 +4,7 @@ require "test_helper"
 
 class SimulationTest < ActiveSupport::TestCase
   def setup
-    @season = seasons(:season_23)
+    @season = seasons(:season1)
     @simulation = @season.simulations.new(name: "Simulation 1", runs: 1000)
 
     @teams = [teams(:barcelona), teams(:madrid), teams(:espanyol)]

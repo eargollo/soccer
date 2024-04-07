@@ -9,7 +9,7 @@ class MatchTest < ActiveSupport::TestCase
     @mad = teams(:madrid)
     @esp = teams(:espanyol)
 
-    @season = seasons(:season_23)
+    @season = seasons(:season1)
   end
   test "standard probability with no matches" do
     assert_equal([0.45, 0.30, 0.25], Match.new.probability.map { |f| f.round(2) })
