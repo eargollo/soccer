@@ -1,5 +1,5 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-season_23:
-  year: 2023
-  league: a_league
+a_league:
+  name: A League
+  reference: 1
