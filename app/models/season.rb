@@ -25,6 +25,7 @@ class Season < ApplicationRecord
     matches.each do |m|
       season.import_match(m)
     end
+    season
   end
 
   def self.season_from_match(match) # rubocop:disable Metrics/AbcSize
