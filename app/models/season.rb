@@ -38,6 +38,11 @@ class Season < ApplicationRecord
     league.seasons.find_or_create_by(year: match[:league]["season"])
   end
 
+  def seed
+    Rails.logger.info('Seeding season')
+    Season.apifootball_seed(league_id: league.reference, season_id: year)
+  end
+
   def import_match(match) # rubocop:disable Metrics/AbcSize
     raise "Match #{match[:reference]} has no home team." if match[:home_team].nil? || match[:home_team]["id"].nil?
 
