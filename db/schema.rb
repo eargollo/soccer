@@ -10,12 +10,13 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_04_06_174813) do
+ActiveRecord::Schema[7.1].define(version: 2024_04_06_212947) do
   create_table "leagues", force: :cascade do |t|
-    t.string "name"
+    t.string "name", null: false
+    t.integer "reference", null: false
+    t.string "country"
     t.string "logo"
-    t.string "model"
-    t.integer "reference"
+    t.string "flag"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -31,17 +32,18 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_06_174813) do
     t.integer "reference"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "season_id"
     t.integer "round"
     t.string "round_name"
+    t.integer "season_id", default: 1, null: false
     t.index ["season_id"], name: "index_matches_on_season_id"
     t.index ["team_away_id"], name: "index_matches_on_team_away_id"
     t.index ["team_home_id"], name: "index_matches_on_team_home_id"
   end
 
   create_table "seasons", force: :cascade do |t|
-    t.integer "year"
+    t.integer "year", null: false
     t.integer "league_id", null: false
+    t.boolean "active", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["league_id"], name: "index_seasons_on_league_id"
@@ -87,6 +89,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_06_174813) do
     t.datetime "finish"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "season_id", default: 1, null: false
+    t.index ["season_id"], name: "index_simulations_on_season_id"
   end
 
   create_table "standings", force: :cascade do |t|
@@ -100,6 +104,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_06_174813) do
     t.integer "goals_against"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "season_id", default: 1, null: false
+    t.index ["season_id"], name: "index_standings_on_season_id"
     t.index ["team_id"], name: "index_standings_on_team_id"
   end
 
@@ -139,5 +145,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_06_174813) do
   add_foreign_key "simulation_standing_positions", "teams"
   add_foreign_key "simulation_standings", "simulations"
   add_foreign_key "simulation_standings", "teams"
+  add_foreign_key "simulations", "seasons"
+  add_foreign_key "standings", "seasons"
   add_foreign_key "standings", "teams"
 end

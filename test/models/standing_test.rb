@@ -4,18 +4,20 @@ require "test_helper"
 
 class StandingTest < ActiveSupport::TestCase
   def setup
+    @season = seasons(:season1)
+
     @bcn = teams(:barcelona)
     @rmd = teams(:madrid)
   end
 
   test "calculate wins, draws, losses and points" do
-    Match.create(team_home: @bcn, team_away: @rmd, home_goals: 2, away_goals: 1, status: 'finished')
-    Match.create(team_home: @bcn, team_away: @rmd, home_goals: 4, away_goals: 2, status: 'finished')
-    Match.create(team_home: @bcn, team_away: @rmd, home_goals: 3, away_goals: 3, status: 'finished')
-    Match.create(team_home: @rmd, team_away: @bcn, home_goals: 3, away_goals: 0, status: 'finished')
-    Match.create(team_home: @rmd, team_away: @bcn, home_goals: 0, away_goals: 0, status: 'finished')
-    Match.create(team_home: @rmd, team_away: @bcn, home_goals: 0, away_goals: 1, status: 'finished')
-    Match.create(team_home: @rmd, team_away: @bcn, home_goals: 8, away_goals: 8, status: 'pending')
+    @season.matches.create(team_home: @bcn, team_away: @rmd, home_goals: 2, away_goals: 1, status: 'finished')
+    @season.matches.create(team_home: @bcn, team_away: @rmd, home_goals: 4, away_goals: 2, status: 'finished')
+    @season.matches.create(team_home: @bcn, team_away: @rmd, home_goals: 3, away_goals: 3, status: 'finished')
+    @season.matches.create(team_home: @rmd, team_away: @bcn, home_goals: 3, away_goals: 0, status: 'finished')
+    @season.matches.create(team_home: @rmd, team_away: @bcn, home_goals: 0, away_goals: 0, status: 'finished')
+    @season.matches.create(team_home: @rmd, team_away: @bcn, home_goals: 0, away_goals: 1, status: 'finished')
+    @season.matches.create(team_home: @rmd, team_away: @bcn, home_goals: 8, away_goals: 8, status: 'pending')
 
     # Standing.compute(@bcn)
     std_bcn = Standing.find_by(team: @bcn)

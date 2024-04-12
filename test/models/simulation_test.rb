@@ -4,21 +4,22 @@ require "test_helper"
 
 class SimulationTest < ActiveSupport::TestCase
   def setup
-    @simulation = Simulation.new(name: "Simulation 1", runs: 1000)
+    @season = seasons(:season1)
+    @simulation = @season.simulations.new(name: "Simulation 1", runs: 1000)
 
     @teams = [teams(:barcelona), teams(:madrid), teams(:espanyol)]
 
     @teams.each do |home|
       @teams.each do |away|
-        Match.create(team_home: home, team_away: away) if home != away
+        @season.matches.create(team_home: home, team_away: away) if home != away
       end
     end
   end
 
   test "stablished a simulation baseline" do
-    Match.first.update(status: "finished", home_goals: 2, away_goals: 1)
-    Match.second.update(status: "finished", home_goals: 2, away_goals: 0)
-    Match.third.update(status: "finished", home_goals: 1, away_goals: 1)
+    @season.matches.first.update(status: "finished", home_goals: 2, away_goals: 1)
+    @season.matches.second.update(status: "finished", home_goals: 2, away_goals: 0)
+    @season.matches.third.update(status: "finished", home_goals: 1, away_goals: 1)
     result, standing_start = @simulation.send(:baseline)
 
     @teams.each do |team|
@@ -31,12 +32,12 @@ class SimulationTest < ActiveSupport::TestCase
   end
 
   test "stablishes a simulation baseline with match presets" do
-    Match.first.update(status: "finished", home_goals: 2, away_goals: 1)
-    Match.second.update(status: "finished", home_goals: 2, away_goals: 0)
-    Match.third.update(status: "finished", home_goals: 1, away_goals: 1)
+    @season.matches.first.update(status: "finished", home_goals: 2, away_goals: 1)
+    @season.matches.second.update(status: "finished", home_goals: 2, away_goals: 0)
+    @season.matches.third.update(status: "finished", home_goals: 1, away_goals: 1)
     @simulation.save
-    @simulation.simulation_match_presets.create(match: Match.first, result: "away")
-    @simulation.simulation_match_presets.create(match: Match.last, result: "home")
+    @simulation.simulation_match_presets.create(match: @season.matches.first, result: "away")
+    @simulation.simulation_match_presets.create(match: @season.matches.last, result: "home")
 
     _, standing_start = @simulation.send(:baseline)
 

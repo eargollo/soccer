@@ -3,6 +3,8 @@
 class Match < ApplicationRecord
   belongs_to :team_home, class_name: 'Team'
   belongs_to :team_away, class_name: 'Team'
+  belongs_to :season
+  has_one :league, through: :season
 
   scope :pending, -> { where.not(status: 'finished') }
   scope :finished, -> { where(status: 'finished') }
@@ -49,17 +51,23 @@ class Match < ApplicationRecord
     return [PROB_WIN, PROB_DRAW, PROB_LOSS] if team_away.nil? || team_home.nil?
 
     prob_home = [PROB_WIN, PROB_DRAW, PROB_LOSS]
-    if team_home.home_matches.finished.count.positive?
-      prob_home[0] = team_home.home_matches.won_home.count.to_f / team_home.home_matches.finished.count
-      prob_home[1] = team_home.home_matches.draw.count.to_f / team_home.home_matches.finished.count
-      prob_home[2] = team_home.home_matches.won_away.count.to_f / team_home.home_matches.finished.count
+    if team_home.home_matches.where(season:).finished.count.positive?
+      prob_home[0] = team_home.home_matches.won_home.where(season:).count.to_f /
+                     team_home.home_matches.where(season:).finished.count
+      prob_home[1] = team_home.home_matches.draw.where(season:).count.to_f /
+                     team_home.home_matches.where(season:).finished.count
+      prob_home[2] = team_home.home_matches.won_away.where(season:).count.to_f /
+                     team_home.home_matches.where(season:).finished.count
     end
 
     prob_away = [PROB_LOSS, PROB_DRAW, PROB_WIN]
-    if team_away.away_matches.finished.count.positive?
-      prob_away[0] = team_away.away_matches.won_home.count.to_f / team_away.away_matches.finished.count
-      prob_away[1] = team_away.away_matches.draw.count.to_f / team_away.away_matches.finished.count
-      prob_away[2] = team_away.away_matches.won_away.count.to_f / team_away.away_matches.finished.count
+    if team_away.away_matches.where(season:).finished.count.positive?
+      prob_away[0] = team_away.away_matches.where(season:).won_home.count.to_f /
+                     team_away.away_matches.where(season:).finished.count
+      prob_away[1] = team_away.away_matches.where(season:).draw.count.to_f /
+                     team_away.away_matches.where(season:).finished.count
+      prob_away[2] = team_away.away_matches.where(season:).won_away.count.to_f /
+                     team_away.away_matches.where(season:).finished.count
     end
 
     @probability = [(PROB_WIN + (4.5 * prob_home[0]) + (4.5 * prob_away[0])) / 10,
@@ -70,8 +78,8 @@ class Match < ApplicationRecord
   private
 
   def compute_points_commit
-    Standing.compute(team_home)
-    Standing.compute(team_away)
+    Standing.compute(season:, team: team_home)
+    Standing.compute(season:, team: team_away)
   end
 
   def determine_result

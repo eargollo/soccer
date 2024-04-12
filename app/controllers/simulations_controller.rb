@@ -13,8 +13,8 @@ class SimulationsController < ApplicationController
   end
 
   def new
-    @simulation = Simulation.new
-    @matches = Match.pending.all
+    @simulation = Season.target_season.simulations.new
+    @matches = Season.target_season.matches.pending.all
   end
 
   def create
@@ -33,6 +33,6 @@ class SimulationsController < ApplicationController
   private
 
   def simulation_params
-    params.require(:simulation).permit(:name, :runs, :matches)
+    params.require(:simulation).permit(:season_id, :name, :runs, :matches)
   end
 end

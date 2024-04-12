@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Simulation < ApplicationRecord
+  belongs_to :season
   has_many :simulation_standings, dependent: :destroy
   has_many :simulation_standing_positions, dependent: :destroy
   has_many :simulation_match_presets, dependent: :destroy
@@ -15,7 +16,7 @@ class Simulation < ApplicationRecord
 
     # Get matches to simulate
     excluded = simulation_match_presets.map(&:match_id)
-    matches = Match.pending.where.not(id: excluded)
+    matches = season.matches.pending.where.not(id: excluded)
 
     # Simulate
     runs.times do
@@ -45,7 +46,7 @@ class Simulation < ApplicationRecord
 
   def baseline # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     result = {}
-    standing_start = Standing.all.each_with_object({}) do |standing, ss|
+    standing_start = season.standings.each_with_object({}) do |standing, ss|
       ss[standing.team_id] = { wins: standing.wins, draws: standing.draws }
       result[standing.team_id] = Array.new(20, 0)
     end

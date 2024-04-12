@@ -58,6 +58,7 @@ module Clients
             date: DateTime.parse(m['fixture']['date']),
             round: m['league']['round'][/(\d+)/].to_i,
             round_name: m['league']['round'],
+            league: m['league'],
             home_team: m['teams']['home'],
             away_team: m['teams']['away'],
             home_goals: m['goals']['home'],

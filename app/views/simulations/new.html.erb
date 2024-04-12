@@ -1,4 +1,7 @@
 <%= form_for @simulation do |f| %>
+    <h1> <%= @simulation.season.league.name %>  <%= @simulation.season.year %> </h1>
+    <%= f.hidden_field :season_id %>
+
     <%= f.label :name %>
     <%= f.text_field :name %>
 

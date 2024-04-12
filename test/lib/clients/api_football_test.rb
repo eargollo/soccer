@@ -22,11 +22,21 @@ class LoadLeagueJobTest < ActiveJob::TestCase
   end
 
   test "league has 380 matches" do # rubocop:disable Metrics/BlockLength
+    league = {
+      "id" => 72,
+      "name" => "Serie B",
+      "country" => "Brazil",
+      "logo" => "https://media-4.api-sports.io/football/leagues/72.png",
+      "flag" => "https://media-4.api-sports.io/flags/br.svg",
+      "season" => 2023,
+      "round" => "Regular Season - 1"
+    }
     expected_firsts = [
       { reference: 1_006_447,
         date: DateTime.parse("2023-04-14T22:00:00+00:00"),
         round: 1,
         round_name: "Regular Season - 1",
+        league:,
         home_team: {
           "id" => 138,
           "name" => "Guarani Campinas",
@@ -47,6 +57,7 @@ class LoadLeagueJobTest < ActiveJob::TestCase
         date: DateTime.parse("2023-04-15T19:00:00+00:00"),
         round: 1,
         round_name: "Regular Season - 1",
+        league:,
         home_team: {
           "id" => 142,
           "name" => "Vila Nova",
