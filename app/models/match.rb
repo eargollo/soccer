@@ -46,33 +46,30 @@ class Match < ApplicationRecord
     prob_win + prob_draw
   end
 
-  def probability # rubocop:disable Metrics/AbcSize
+  def probability # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     return @probability unless @probability.nil?
     return [PROB_WIN, PROB_DRAW, PROB_LOSS] if team_away.nil? || team_home.nil?
 
-    prob_home = [PROB_WIN, PROB_DRAW, PROB_LOSS]
-    if team_home.home_matches.where(season:).finished.count.positive?
-      prob_home[0] = team_home.home_matches.won_home.where(season:).count.to_f /
-                     team_home.home_matches.where(season:).finished.count
-      prob_home[1] = team_home.home_matches.draw.where(season:).count.to_f /
-                     team_home.home_matches.where(season:).finished.count
-      prob_home[2] = team_home.home_matches.won_away.where(season:).count.to_f /
-                     team_home.home_matches.where(season:).finished.count
-    end
+    # Match probability calculation:
+    # League all matches: 5 (league matches >= 500)
+    # Team at league Home/Away: 15 (team matches at league > 80)
+    # Team last 50 at league Home/Away: 30
+    # Team last 15 at leagye Home/Away: 50
 
-    prob_away = [PROB_LOSS, PROB_DRAW, PROB_WIN]
-    if team_away.away_matches.where(season:).finished.count.positive?
-      prob_away[0] = team_away.away_matches.where(season:).won_home.count.to_f /
-                     team_away.away_matches.where(season:).finished.count
-      prob_away[1] = team_away.away_matches.where(season:).draw.count.to_f /
-                     team_away.away_matches.where(season:).finished.count
-      prob_away[2] = team_away.away_matches.where(season:).won_away.count.to_f /
-                     team_away.away_matches.where(season:).finished.count
-    end
+    prob_home = [
+      league.probability.collect { |n| n * 5 },
+      league.team_home_probability(team: team_home, minimum: 80).collect { |n| n * 15 },
+      league.team_home_probability(team: team_home, limit: 50, minimum: 50).collect { |n| n * 30 },
+      league.team_home_probability(team: team_home, limit: 15, minimum: 15).collect { |n| n * 50 }
+    ].transpose.map { |x| x.reduce(:+) }
 
-    @probability = [(PROB_WIN + (4.5 * prob_home[0]) + (4.5 * prob_away[0])) / 10,
-                    (PROB_DRAW + (4.5 * prob_home[1]) + (4.5 * prob_away[1])) / 10,
-                    (PROB_LOSS + (4.5 * prob_home[2]) + (4.5 * prob_away[2])) / 10]
+    prob_away = [ league.probability.collect { |n| n * 5 },
+                  league.team_away_probability(team: team_away, minimum: 80).collect { |n| n * 15 },
+                  league.team_away_probability(team: team_away, limit: 50, minimum: 50).collect { |n| n * 30 },
+                  league.team_away_probability(team: team_away, limit: 15, minimum: 15).collect { |n| n * 50 }
+              ].transpose.map {|x| x.reduce(:+)}
+
+    @probability = [prob_home, prob_away].transpose.map {|x| x.reduce(:+)}.collect { |n| n / 200 }
   end
 
   private
