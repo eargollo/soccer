@@ -21,5 +21,4 @@ class MatchTest < ActiveSupport::TestCase
   def round_array(array)
     array.map { |f| f.round(2) }
   end
-
 end
