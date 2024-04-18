@@ -61,15 +61,16 @@ class Match < ApplicationRecord
       league.team_home_probability(team: team_home, minimum: 80).collect { |n| n * 15 },
       league.team_home_probability(team: team_home, limit: 50, minimum: 50).collect { |n| n * 30 },
       league.team_home_probability(team: team_home, limit: 15, minimum: 15).collect { |n| n * 50 }
-    ].transpose.map { |x| x.reduce(:+) }
+    ].transpose.map { |x| x.reduce(:+) } # rubocop:disable Performance/Sum
 
-    prob_away = [ league.probability.collect { |n| n * 5 },
-                  league.team_away_probability(team: team_away, minimum: 80).collect { |n| n * 15 },
-                  league.team_away_probability(team: team_away, limit: 50, minimum: 50).collect { |n| n * 30 },
-                  league.team_away_probability(team: team_away, limit: 15, minimum: 15).collect { |n| n * 50 }
-              ].transpose.map {|x| x.reduce(:+)}
+    prob_away = [
+      league.probability.collect { |n| n * 5 },
+      league.team_away_probability(team: team_away, minimum: 80).collect { |n| n * 15 },
+      league.team_away_probability(team: team_away, limit: 50, minimum: 50).collect { |n| n * 30 },
+      league.team_away_probability(team: team_away, limit: 15, minimum: 15).collect { |n| n * 50 }
+    ].transpose.map { |x| x.reduce(:+) } # rubocop:disable Performance/Sum
 
-    @probability = [prob_home, prob_away].transpose.map {|x| x.reduce(:+)}.collect { |n| n / 200 }
+    @probability = [prob_home, prob_away].transpose.map { |x| x.reduce(:+) }.collect { |n| n / 200 } # rubocop:disable Performance/Sum
   end
 
   private
