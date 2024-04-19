@@ -11,11 +11,11 @@
 #   end
 
 # Seed admin user
-if User.find_by(email: ENV.fetch('ADMIN_USER_EMAIL', nil)).nil?
+if User.find_by(email: Rails.application.credentials.admin_user.email).nil?
   User.create(
-    name: ENV.fetch('ADMIN_USER_NAME', nil),
-    email: ENV.fetch('ADMIN_USER_EMAIL', nil),
-    password: ENV.fetch('ADMIN_USER_PASSWORD', nil),
-    password_confirmation: ENV.fetch('ADMIN_USER_PASSWORD', nil)
+    name: Rails.application.credentials.admin_user.name,
+    email: Rails.application.credentials.admin_user.email,
+    password: Rails.application.credentials.admin_user.password,
+    password_confirmation: Rails.application.credentials.admin_user.password
   )
 end
