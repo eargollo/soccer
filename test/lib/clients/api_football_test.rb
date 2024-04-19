@@ -9,7 +9,7 @@ class LoadLeagueJobTest < ActiveJob::TestCase
   TEST_LEAGUE_SEASON = 2023
 
   def setup
-    @client = Clients::ApiFootball::Client.new(ENV.fetch("APIFOOTBALL_TOKEN", nil))
+    @client = Clients::ApiFootball::Client.new(Rails.application.credentials.api_football.token)
   end
 
   test "raises error if not autheticated" do

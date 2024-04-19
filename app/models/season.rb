@@ -14,7 +14,7 @@ class Season < ApplicationRecord
   end
 
   def self.apifootball_seed(league_id:, season_id:)
-    client = Clients::ApiFootball::Client.new(ENV.fetch('APIFOOTBALL_TOKEN'))
+    client = Clients::ApiFootball::Client.new(Rails.application.credentials.api_football.token)
 
     Rails.logger.info "Importing league #{league_id} season #{season_id}"
     matches = client.matches(league_id:, season: season_id)
