@@ -88,3 +88,6 @@ end
 gem "tailwindcss-rails", "~> 2.0"
 
 gem "devise", "~> 4.9"
+
+# Helio Host
+gem "base64", "= 0.1.1"
