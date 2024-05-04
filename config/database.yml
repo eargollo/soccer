@@ -26,8 +26,9 @@ test:
   database: storage/test.sqlite3
 
 production:
-  <<: *default
-  database: <%= ENV['SOCCER_DATABASE_NAME'] %>
+  <<: *devtest
+  database: storage/production.sqlite3
+  # database: <%= ENV['SOCCER_DATABASE_NAME'] %>
   # url: <%= ENV['DATABASE_URL'] %>
   # password: <%= ENV['MYSITE_DATABASE_PASSWORD'] %>
   
