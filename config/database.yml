@@ -26,6 +26,7 @@ test:
 
 production:
   <<: *default
-  url: <%= ENV['DATABASE_URL'] %>
-  password: <%= ENV['MYSITE_DATABASE_PASSWORD'] %>
+  database: <%= ENV['SOCCER_DATABASE_NAME'] %>
+  # url: <%= ENV['DATABASE_URL'] %>
+  # password: <%= ENV['MYSITE_DATABASE_PASSWORD'] %>
   
