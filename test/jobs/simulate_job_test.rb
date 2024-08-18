@@ -3,6 +3,14 @@
 require "test_helper"
 
 class SimulateJobTest < ActiveJob::TestCase
+  setup do
+    @original_queue_adapter = ActiveJob::Base.queue_adapter
+    ActiveJob::Base.queue_adapter = :test
+  end
+
+  teardown do
+    ActiveJob::Base.queue_adapter = @original_queue_adapter
+  end
   test 'should enqueue job' do
     season = seasons(:season1)
     season.matches.create(date: DateTime.now, team_home: Team.first, team_away: Team.last, status: 'pending')
