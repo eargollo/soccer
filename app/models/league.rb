@@ -25,7 +25,7 @@ class League < ApplicationRecord
     limit ||= 100_000
 
     @team_home_probability ||= {}
-    @team_home_probability[minimum:, limit:] ||= {}
+    @team_home_probability[{ minimum:, limit: }] ||= {}
 
     return @team_home_probability[minimum:, limit:][team] if @team_home_probability[minimum:, limit:][team]
     return probability if matches.where(team_home: team).where.not(result: "tbd").count < minimum
@@ -69,7 +69,7 @@ class League < ApplicationRecord
     limit ||= 100_000
 
     @team_away_probability ||= {}
-    @team_away_probability[minimum:, limit:] ||= {}
+    @team_away_probability[{ minimum:, limit: }] ||= {}
 
     return @team_away_probability[minimum:, limit:][team] if @team_away_probability[minimum:, limit:][team]
     return probability if matches.where(team_away: team).where.not(result: "tbd").count < minimum
