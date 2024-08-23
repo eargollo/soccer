@@ -1,5 +1,3 @@
-version: '3'
-
 services:
   rails:
     build:
@@ -19,20 +17,32 @@ services:
     ports:
       - 15432:5432
     env_file:
-      - .env
+      - .env.PROD
     networks:
       - postgres-network
     volumes:
       - ./storage/postgress/data/:/var/lib/postgresql/data/
   
+  init-pgadmin:
+    image: ubuntu
+    command: >
+      sh -c "mkdir -p /var/lib/postgress/pgadmin-data ; chown -R 5050:5050 /var/lib/postgress/pgadmin-data"
+    env_file:
+      - .env.PROD
+    networks:
+      - postgres-network
+    volumes:
+      - ./storage/postgress/:/var/lib/postgress
+
   pgadmin:
     image: dpage/pgadmin4
     ports:
-      - 15433:80
+      - 80:8081
     env_file:
       - .env.PROD
     depends_on:
       - database
+      - init-pgadmin
     networks:
       - postgres-network
     volumes:

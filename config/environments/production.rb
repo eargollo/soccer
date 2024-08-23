@@ -99,4 +99,7 @@ Rails.application.configure do
 
   # Render
   config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present? || ENV['RENDER'].present?
+
+  # Not tied to a host name for now
+  config.hosts.clear
 end
