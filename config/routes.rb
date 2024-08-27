@@ -12,6 +12,11 @@ Rails.application.routes.draw do
   # root "posts#index"
   root "standings#index"
 
+  resources :standings, only: %i[index] do
+    collection do
+      get :list
+    end
+  end
   resources :simulations, only: %i[index create new show]
   resources :matches, only: %i[index]
   resources :leagues, only: %i[show]

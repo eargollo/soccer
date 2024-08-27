@@ -17,4 +17,22 @@ class StandingsController < ApplicationController
     season.compute_standings
     @standings = season.standings.order(points: :desc, wins: :desc)
   end
+
+  def list # rubocop:disable Metrics/AbcSize
+    season = Season.target_season
+    @standings = case params[:column]
+                 when "name"
+                   season.standings.joins(:team).order(name: :desc)
+                 when "goals_difference"
+                   season.standings.select("standings.*, goals_pro - goals_against AS goals_difference")
+                         .order("goals_difference DESC")
+                 when "rate"
+                   season.standings.select("standings.*, ((wins*30000+draws*10000))/(3*matches) AS rate")
+                         .order(rate: :desc)
+                 else
+                   season.standings.order(params[:column] => :desc)
+                 end
+
+    render(partial: "standings", locals: { standings: @standings })
+  end
 end
