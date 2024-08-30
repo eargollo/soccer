@@ -5,37 +5,47 @@
             <%= turbo_frame_tag "standings", class: "shadow overflow-hidden sm:rounded-lg" do %>
                 <table class="min-w-full text-sm text-gray-600">
                     <thead class="bg-gray-100 text-xs uppercase font-medium">
-                        <tr>
+                        <tr class="">
                             <th></th>
-                            <th scope="col" class="px-6 py-3 text-left tracking-wider">
+                            <th scope="col" class="grid grid-cols-2 px-6 py-3 text-left tracking-wider">
                                 <%= sort_link(column: "name", label: "Club") %>
+                                <%= sort_indicator if params[:column] == "name" %>
                             </th>
                             <th scope="col" class="px-6 py-3 text-left tracking-wider">
                                 <%= sort_link(column: "points", label: "Pts") %>
+                                <%= sort_indicator if params[:column] == "points" %>
                             </th>
-                            <th scope="col" class="px-6 py-3 text-left tracking-wider">
+                            <th scope="col" class=" px-6 py-3 text-left tracking-wider">
                                 <%= sort_link(column: "matches", label: "MP") %>
+                                <%= sort_indicator if params[:column] == "matches" %>
                             </th>
-                            <th scope="col" class="px-6 py-3 text-left tracking-wider">
+                            <th scope="col" class=" px-6 py-3 text-left tracking-wider">
                                 <%= sort_link(column: "wins", label: "W") %>
+                                <%= sort_indicator if params[:column] == "wins" %>
                             </th>
-                            <th scope="col" class="px-6 py-3 text-left tracking-wider">
+                            <th scope="col" class=" px-6 py-3 text-left tracking-wider">
                                 <%= sort_link(column: "draws", label: "D") %>
+                                <%= sort_indicator if params[:column] == "draws" %>
                             </th>
-                            <th scope="col" class="px-6 py-3 text-left tracking-wider">
+                            <th scope="col" class=" px-6 py-3 text-left tracking-wider">
                                 <%= sort_link(column: "losses", label: "L") %>
+                                <%= sort_indicator if params[:column] == "losses" %>
                             </th>
-                            <th scope="col" class="px-6 py-3 text-left tracking-wider">
+                            <th scope="col" class=" px-6 py-3 text-left tracking-wider">
                                 <%= sort_link(column: "goals_pro", label: "GF") %>
+                                <%= sort_indicator if params[:column] == "goals_pro" %>
                             </th>
-                            <th scope="col" class="px-6 py-3 text-left tracking-wider">
+                            <th scope="col" class=" px-6 py-3 text-left tracking-wider">
                                 <%= sort_link(column: "goals_against", label: "GA") %>
+                                <%= sort_indicator if params[:column] == "goals_against" %>
                             </th>
-                            <th scope="col" class="px-6 py-3 text-left tracking-wider">
+                            <th scope="col" class=" px-6 py-3 text-left tracking-wider">
                                 <%= sort_link(column: "goals_difference", label: "GD") %>
+                                <%= sort_indicator if params[:column] == "goals_difference" %>
                             </th>
-                            <th scope="col" class="px-6 py-3 text-left tracking-wider">
+                            <th scope="col" class=" px-6 py-3 text-left tracking-wider">
                                 <%= sort_link(column: "rate", label: "R") %>
+                                <%= sort_indicator if params[:column] == "rate" %>
                             </th>
                             <!--
                             <th scope="col" class="px-6 py-3 text-left tracking-wider">
@@ -79,7 +89,7 @@
                                     <%= standing.goals_pro - standing.goals_against %>
                                 </td>
                                 <td class="px-6 py-2 whitespace-nowrap">
-                                    <%= number_with_precision(((standing.wins * 300.00 + standing.draws)/(standing.matches * 3.00)), precision: 2) %>%
+                                    <%= number_with_precision(((standing.wins * 300.00 + standing.draws * 100)/(standing.matches * 3.00)), precision: 2) %>%
                                 </td>
                                 <!--
                                 <td class="flex px-6 py-4 whitespace-nowrap">
