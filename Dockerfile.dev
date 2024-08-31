@@ -1,4 +1,4 @@
-FROM ruby:3.2.2
+FROM ruby:3.3.4
 
 WORKDIR /home/app
 
@@ -6,8 +6,14 @@ ENV PORT 3000
 
 EXPOSE $PORT
 
+RUN apt-get update -qq && apt-get install -y nodejs npm
+RUN npm install -g yarn
+
 RUN gem install rails bundler
 RUN gem install rails
+
+COPY yarn.lock package.json package-lock.json ./
+RUN yarn install --check-files
 
 COPY Gemfile Gemfile.lock ./
 
