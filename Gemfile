@@ -90,3 +90,7 @@ gem 'simplecov', require: false, group: :test
 gem "tailwindcss-rails", "~> 2.0"
 
 gem "devise", "~> 4.9"
+
+gem "hotwire-rails", "~> 0.1.3"
+
+gem "jsbundling-rails", "~> 1.3"

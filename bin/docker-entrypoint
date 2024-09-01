@@ -10,6 +10,8 @@ if [ "${1}" == "./bin/rails" ] && [ "${2}" == "server" ]; then
   # Precompiling tailwindcss
   echo "Precompiling tailwindcss"
   ./bin/rails tailwindcss:build
+  # JS
+  # yarn build
   # Seed database
   echo "Seeding database"
   ./bin/rails db:seed
