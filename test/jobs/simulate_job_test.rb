@@ -13,7 +13,7 @@ class SimulateJobTest < ActiveJob::TestCase
   end
   test 'should enqueue job' do
     season = seasons(:season1)
-    season.matches.create(date: DateTime.now, team_home: Team.first, team_away: Team.last, status: 'pending')
+    season.matches.create(date: DateTime.now, team_home: Team.first, team_away: Team.last, status: 'Not Started')
     season.simulations.create(runs: 1000)
     assert_enqueued_with(job: SimulateJob)
     perform_enqueued_jobs

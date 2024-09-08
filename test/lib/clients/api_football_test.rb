@@ -51,7 +51,7 @@ class LoadLeagueJobTest < ActiveJob::TestCase
         },
         home_goals: 4,
         away_goals: 1,
-        status: "finished",
+        status: 'Match Finished',
         result: "home" },
       { reference: 1_006_448,
         date: DateTime.parse("2023-04-15T19:00:00+00:00"),
@@ -72,7 +72,7 @@ class LoadLeagueJobTest < ActiveJob::TestCase
         },
         home_goals: 2,
         away_goals: 1,
-        status: "finished",
+        status: "Match Finished",
         result: "home" }
     ]
     VCR.use_cassette("league") do

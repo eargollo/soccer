@@ -16,6 +16,7 @@
               <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Home Team</th>
               <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Score</th>
               <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Away Team</th>
+              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Status</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-200">
@@ -24,7 +25,7 @@
                     <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0"><%= match.date.strftime("%F %H:%M") %></td>
                     <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= match.round %></td>
                     <td class="whitespace-nowrap flex px-3 py-4 text-sm text-gray-500"><img class="w-5" src="<%= match.team_home.logo %>" alt=""><%= match.team_home.name %></td>
-                    <% if match.status == "finished" %>
+                    <% if match.finished? %>
                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= match.home_goals %> x <%= match.away_goals %></td>
                     <% else %>
                         <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= (match.probability[0]*100).round(2) %>% | <%= (match.probability[1]*100).round(2) %>% | <%= (match.probability[2]*100).round(2) %>%</td>
@@ -36,6 +37,7 @@
                             TBP
                         <% end %>
                     </td>
+                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= match.status %></td>
                 </tr>
             <% end %>
           </tbody>

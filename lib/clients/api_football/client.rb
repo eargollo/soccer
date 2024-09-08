@@ -63,7 +63,7 @@ module Clients
             away_team: m['teams']['away'],
             home_goals: m['goals']['home'],
             away_goals: m['goals']['away'],
-            status: m['fixture']['status']['short'] == 'FT' ? 'finished' : 'pre-match',
+            status: m['fixture']['status']['long'],
             result: result(m)
           }
         end
