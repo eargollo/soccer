@@ -6,8 +6,9 @@ class Match < ApplicationRecord
   belongs_to :season
   has_one :league, through: :season
 
-  scope :pending, -> { where.not(status: 'finished') }
-  scope :finished, -> { where(status: 'finished') }
+  scope :pending, -> { where.not(status: 'Match Finished') }
+  scope :not_started, -> { where(status: 'Not Started') }
+  scope :finished, -> { where(status: 'Match Finished') }
   scope :won_home, -> { finished.where(result: 'home') }
   scope :won_away, -> { finished.where(result: 'away') }
   scope :draw, -> { finished.where(result: 'draw') }
@@ -27,7 +28,7 @@ class Match < ApplicationRecord
   PROB_LOSS = 1 - PROB_WIN - PROB_DRAW
 
   def finished?
-    status == 'finished'
+    status == 'Match Finished'
   end
 
   def prob_win

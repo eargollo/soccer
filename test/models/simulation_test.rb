@@ -17,9 +17,9 @@ class SimulationTest < ActiveSupport::TestCase
   end
 
   test "stablished a simulation baseline" do
-    @season.matches.first.update(status: "finished", home_goals: 2, away_goals: 1)
-    @season.matches.second.update(status: "finished", home_goals: 2, away_goals: 0)
-    @season.matches.third.update(status: "finished", home_goals: 1, away_goals: 1)
+    @season.matches.first.update(status: 'Match Finished', home_goals: 2, away_goals: 1)
+    @season.matches.second.update(status: 'Match Finished', home_goals: 2, away_goals: 0)
+    @season.matches.third.update(status: 'Match Finished', home_goals: 1, away_goals: 1)
     result, standing_start = @simulation.send(:baseline)
 
     @teams.each do |team|
@@ -32,9 +32,9 @@ class SimulationTest < ActiveSupport::TestCase
   end
 
   test "stablishes a simulation baseline with match presets" do
-    @season.matches.first.update(status: "finished", home_goals: 2, away_goals: 1)
-    @season.matches.second.update(status: "finished", home_goals: 2, away_goals: 0)
-    @season.matches.third.update(status: "finished", home_goals: 1, away_goals: 1)
+    @season.matches.first.update(status: 'Match Finished', home_goals: 2, away_goals: 1)
+    @season.matches.second.update(status: 'Match Finished', home_goals: 2, away_goals: 0)
+    @season.matches.third.update(status: 'Match Finished', home_goals: 1, away_goals: 1)
     @simulation.save
     @simulation.simulation_match_presets.create(match: @season.matches.first, result: "away")
     @simulation.simulation_match_presets.create(match: @season.matches.last, result: "home")

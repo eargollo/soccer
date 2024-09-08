@@ -32,8 +32,8 @@ class Team < ApplicationRecord
 
   def goals_against(season: nil) # rubocop:disable Metrics/AbcSize
     if season.nil?
-      return home_matches.where(status: 'finished').sum(:away_goals) +
-             away_matches.where(status: 'finished').sum(:home_goals)
+      return home_matches.where(status: 'Match Finished').sum(:away_goals) +
+             away_matches.where(status: 'Match Finished').sum(:home_goals)
     end
 
     home_matches.where(season:).finished.sum(:away_goals) + away_matches.where(season:).finished.sum(:home_goals)

@@ -13,7 +13,7 @@ class LeaguesController < ApplicationController
         results = "Error: no target season. Try with league and season id ?league=71&&season=2024 for instance"
       else
         results = "seeded target season #{Season.target_season.league.name} #{Season.target_season&.year}"
-        Season.target_season&.seed
+        UpdateLeagueJob.perform_later(nil)
       end
     end
 
