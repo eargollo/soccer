@@ -7,7 +7,7 @@ class Match < ApplicationRecord
   has_one :league, through: :season
 
   scope :pending, -> { where.not(status: 'Match Finished') }
-  scope :not_started, -> { where(status: 'Not Started') }
+  scope :scheduled, -> { where.not(status: ['Match Postponed', 'Match Finished', 'Time To Be Defined']) }
   scope :finished, -> { where(status: 'Match Finished') }
   scope :won_home, -> { finished.where(result: 'home') }
   scope :won_away, -> { finished.where(result: 'away') }
