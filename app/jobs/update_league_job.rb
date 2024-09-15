@@ -21,7 +21,7 @@ class UpdateLeagueJob < ApplicationJob
     
     schedule_simulation if new_next_match_time != next_match_time
     
-    schedule_next_update(new_nesxt_match_time)
+    schedule_next_update(new_next_match_time)
   end
 
   private
