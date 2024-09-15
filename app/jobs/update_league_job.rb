@@ -42,7 +42,7 @@ class UpdateLeagueJob < ApplicationJob
     else
       expected_finish_time(match_time)
     end
-  
+
     Rails.logger.info("Next match at #{match_time} scheduling to #{update_time}")
     UpdateLeagueJob.set(wait_until: update_time).perform_later(@id)
   end
