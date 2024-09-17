@@ -8,7 +8,7 @@ class SimulateJob < ApplicationJob
     raise "Simulation #{id} does not exist" if simulation.nil?
 
     unless simulation.start.nil?
-      Rails.logger.warn("Simulation #{id} is already executing since #{simulation.start}. Skipping this job.") 
+      Rails.logger.warn("Simulation #{id} is already executing since #{simulation.start}. Skipping this job.")
       return
     end
     simulation.run
