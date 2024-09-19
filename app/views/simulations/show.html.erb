@@ -17,7 +17,7 @@
                                 </tr>
                             </thead>
                             <tbody class="bg-gray-100">
-                                <% @simulation.simulation_standings.order("champion DESC, promotion DESC, relegation").each_with_index do |standing, i| %>
+                                <% @simulation.simulation_standings.order("champion DESC, relegation").each_with_index do |standing, i| %>
                                     <tr class="<%= (i%2)==0 ? "bg-white" : "bg-gray-100" %>">
                                         <td class="flex px-6 py-2 whitespace-nowrap"><%= standing.team.name %></td>
                                         <td class="px-6 py-2 whitespace-nowrap"><%= standing.champion %>%</td>

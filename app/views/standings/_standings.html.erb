@@ -86,10 +86,10 @@
                                     <%= standing.goals_against %>
                                 </td>
                                 <td class="px-6 py-2 whitespace-nowrap">
-                                    <%= standing.goals_pro - standing.goals_against %>
+                                    <%= standing.goals_difference %>
                                 </td>
                                 <td class="px-6 py-2 whitespace-nowrap">
-                                    <%= number_with_precision(((standing.wins * 300.00 + standing.draws * 100)/(standing.matches * 3.00)), precision: 2) %>%
+                                    <%= number_with_precision(standing.rate, precision: 2) %>%
                                 </td>
                                 <!--
                                 <td class="flex px-6 py-4 whitespace-nowrap">
