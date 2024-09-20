@@ -6,7 +6,7 @@ class Team < ApplicationRecord
   has_many :away_matches, class_name: 'Match', foreign_key: 'team_away_id', dependent: :restrict_with_exception,
                           inverse_of: :team_away
 
-  has_many :simulation_standings
+  has_many :simulation_standings, dependent: restrict_with_exception
 
   def wins(season: nil) # rubocop:disable Metrics/AbcSize
     return home_matches.won_home.count + away_matches.won_away.count if season.nil?

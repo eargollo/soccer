@@ -18,7 +18,7 @@ class StandingsController < ApplicationController
     @standings = season.standings.order(points: :desc, wins: :desc)
   end
 
-  def list # rubocop:disable Metrics/AbcSize
+  def list # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     season = Season.target_season
     direction = params[:direction] || "desc"
 
