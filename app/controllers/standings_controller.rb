@@ -29,11 +29,17 @@ class StandingsController < ApplicationController
                  when "name"
                    @standings.sort_by { |standing| standing.team.name }
                  when "champion"
-                   @standings.sort_by { |standing| standing.last_simulation&.champion || 0 }
+                   @standings.sort_by do |standing|
+                     [standing.last_simulation&.champion || 0, -standing.last_simulation&.relegation || 0]
+                   end
                  when "relegation"
-                   @standings.sort_by { |standing| standing.last_simulation&.relegation || 0 }
+                   @standings.sort_by do |standing|
+                     [standing.last_simulation&.relegation || 0, -standing.last_simulation&.champion || 0]
+                   end
                  else
-                   @standings.sort_by { |standing| standing.send(params[:column]) }
+                   @standings.sort_by do |standing|
+                     [standing.send(params[:column]), standing.points, standing.wins, standing.goals_difference]
+                   end
                  end
 
     @standings.reverse! if direction == "desc"
