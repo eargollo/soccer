@@ -12,6 +12,14 @@
                                 <%= sort_indicator if params[:column] == "name" %>
                             </th>
                             <th scope="col" class="px-6 py-3 text-left tracking-wider">
+                                <%= sort_link(column: "champion", label: "C") %>
+                                <%= sort_indicator if params[:column] == "champion" %>
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-left tracking-wider">
+                                <%= sort_link(column: "relegation", label: "Re") %>
+                                <%= sort_indicator if params[:column] == "relegation" %>
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-left tracking-wider">
                                 <%= sort_link(column: "points", label: "Pts") %>
                                 <%= sort_indicator if params[:column] == "points" %>
                             </th>
@@ -65,6 +73,12 @@
                                     <span class="ml-2 font-medium"><%= standing.team.name %></span>
                                 </td>
                                 <td class="px-6 py-2 whitespace-nowrap">
+                                    <%= number_with_precision(standing.last_simulation&.champion, precision: 2) %>%
+                                </td>
+                                <td class="px-6 py-2 whitespace-nowrap">
+                                    <%= number_with_precision(standing.last_simulation&.relegation, precision: 2) %>%
+                                </td>
+                                <td class="px-6 py-2 whitespace-nowrap">
                                     <%= standing.points %>
                                 </td>
                                 <td class="px-6 py-2 whitespace-nowrap">
@@ -86,10 +100,10 @@
                                     <%= standing.goals_against %>
                                 </td>
                                 <td class="px-6 py-2 whitespace-nowrap">
-                                    <%= standing.goals_pro - standing.goals_against %>
+                                    <%= standing.goals_difference %>
                                 </td>
                                 <td class="px-6 py-2 whitespace-nowrap">
-                                    <%= number_with_precision(((standing.wins * 300.00 + standing.draws * 100)/(standing.matches * 3.00)), precision: 2) %>%
+                                    <%= number_with_precision(standing.rate, precision: 2) %>%
                                 </td>
                                 <!--
                                 <td class="flex px-6 py-4 whitespace-nowrap">

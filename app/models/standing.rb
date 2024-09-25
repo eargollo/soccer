@@ -4,6 +4,18 @@ class Standing < ApplicationRecord
   belongs_to :team
   belongs_to :season
 
+  def rate
+    100 * ((wins * 3) + draws) / (matches * 3.00)
+  end
+
+  def goals_difference
+    goals_pro - goals_against
+  end
+
+  def last_simulation
+    season.simulations.where.not(finish: nil).last.simulation_standings.find_by(team:)
+  end
+
   def compute # rubocop:disable Metrics/AbcSize
     season = self
 

@@ -1,5 +1,10 @@
 VERSION=$(shell git describe --tags)
 
+.PHONY: check
+check:
+	rubocop
+	bundle-audit check --update
+
 .PHONY: release
 release:
 	# Requires containerd for pulling and storing images (Settings/General in Docker Desktop)

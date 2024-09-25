@@ -6,7 +6,7 @@ class League < ApplicationRecord
 
   def probability # rubocop:disable Metrics/AbcSize
     return @probability unless @probability.nil?
-    return [0.45, 0.30, 0.25] if matches.count < 500
+    return [0.45, 0.30, 0.25] if matches.finished.count < 500
 
     home_wins = matches.won_home.count
     home_draws = matches.draw.count

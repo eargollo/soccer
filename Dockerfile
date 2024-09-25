@@ -17,6 +17,10 @@ ENV RAILS_ENV="production" \
 # Throw-away build stage to reduce size of final image
 FROM base as build
 
+# Generating self signed certificate for development
+RUN openssl req -x509 -nodes -newkey rsa:2048 -keyout /rails/localhost.key -out /rails/localhost.crt -days 365 -subj "/C=US/ST=Denial/L=Springfield/O=Dis/CN=localhost"
+RUN chmod +r /rails/localhost.key
+
 # Install packages needed to build gems
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y build-essential git libvips pkg-config libpq-dev nodejs npm
@@ -42,10 +46,6 @@ RUN bundle exec bootsnap precompile app/ lib/
 
 # Precompiling assets for production without requiring secret RAILS_MASTER_KEY
 RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
-
-# Generating self signed certificate for development
-RUN openssl req -x509 -nodes -newkey rsa:2048 -keyout /rails/localhost.key -out /rails/localhost.crt -days 365 -subj "/C=US/ST=Denial/L=Springfield/O=Dis/CN=localhost"
-RUN chmod +r /rails/localhost.key
 
 # Final stage for app image
 FROM base
