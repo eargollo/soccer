@@ -1,8 +1,8 @@
 services:
-  database:
+  database-test:
     image: 'postgres:latest'
     ports:
-      - 5435:5432
+      - 5432:5432
     environment:
       POSTGRES_PASSWORD: password
       POSTGRESS_DB: test

@@ -1,5 +1,5 @@
 web: env RUBY_DEBUG_OPEN=true bin/rails server -p 3000
 css: bin/rails tailwindcss:watch
 js: yarn build --watch
-db: docker run -p 5432:5432 -v ./storage/postgress-dev/data/:/var/lib/postgresql/data/ -e POSTGRESS_DB=development -e POSTGRES_PASSWORD=password postgres
+db: docker run -p 5435:5432 -v ./storage/postgress-dev/data/:/var/lib/postgresql/data/ -e POSTGRESS_DB=development -e POSTGRES_PASSWORD=password postgres
 test-db: docker-compose -f docker-compose.testing.yml up
