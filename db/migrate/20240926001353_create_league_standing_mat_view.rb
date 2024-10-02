@@ -12,7 +12,8 @@ class CreateLeagueStandingMatView < ActiveRecord::Migration[7.2]
                 sum(standings.draws) as draws,
                 sum(standings.losses) as losses,
                 sum(standings.goals_pro) as goals_pro,
-                sum(standings.goals_against) as goals_against
+                sum(standings.goals_against) as goals_against,
+                count(seasons.id) as seasons
           FROM teams, standings, seasons
           WHERE teams.id = standings.team_id AND standings.season_id = seasons.id
           GROUP BY teams.id, seasons.league_id
