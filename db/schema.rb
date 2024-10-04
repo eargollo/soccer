@@ -10,7 +10,10 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_04_06_212947) do
+ActiveRecord::Schema[7.2].define(version: 2024_09_26_001353) do
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "leagues", force: :cascade do |t|
     t.string "name", null: false
     t.integer "reference", null: false
@@ -23,8 +26,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_06_212947) do
 
   create_table "matches", force: :cascade do |t|
     t.datetime "date"
-    t.integer "team_home_id", null: false
-    t.integer "team_away_id", null: false
+    t.bigint "team_home_id", null: false
+    t.bigint "team_away_id", null: false
     t.string "status"
     t.integer "home_goals"
     t.integer "away_goals"
@@ -34,7 +37,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_06_212947) do
     t.datetime "updated_at", null: false
     t.integer "round"
     t.string "round_name"
-    t.integer "season_id", default: 1, null: false
+    t.bigint "season_id", default: 1, null: false
     t.index ["season_id"], name: "index_matches_on_season_id"
     t.index ["team_away_id"], name: "index_matches_on_team_away_id"
     t.index ["team_home_id"], name: "index_matches_on_team_home_id"
@@ -42,7 +45,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_06_212947) do
 
   create_table "seasons", force: :cascade do |t|
     t.integer "year", null: false
-    t.integer "league_id", null: false
+    t.bigint "league_id", null: false
     t.boolean "active", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -50,8 +53,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_06_212947) do
   end
 
   create_table "simulation_match_presets", force: :cascade do |t|
-    t.integer "match_id", null: false
-    t.integer "simulation_id", null: false
+    t.bigint "match_id", null: false
+    t.bigint "simulation_id", null: false
     t.string "result"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -60,8 +63,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_06_212947) do
   end
 
   create_table "simulation_standing_positions", force: :cascade do |t|
-    t.integer "simulation_id", null: false
-    t.integer "team_id", null: false
+    t.bigint "simulation_id", null: false
+    t.bigint "team_id", null: false
     t.integer "position"
     t.integer "count"
     t.datetime "created_at", null: false
@@ -71,8 +74,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_06_212947) do
   end
 
   create_table "simulation_standings", force: :cascade do |t|
-    t.integer "simulation_id", null: false
-    t.integer "team_id", null: false
+    t.bigint "simulation_id", null: false
+    t.bigint "team_id", null: false
     t.float "champion"
     t.float "promotion"
     t.float "relegation"
@@ -89,12 +92,12 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_06_212947) do
     t.datetime "finish"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "season_id", default: 1, null: false
+    t.bigint "season_id", default: 1, null: false
     t.index ["season_id"], name: "index_simulations_on_season_id"
   end
 
   create_table "standings", force: :cascade do |t|
-    t.integer "team_id", null: false
+    t.bigint "team_id", null: false
     t.integer "points"
     t.integer "matches"
     t.integer "wins"
@@ -104,7 +107,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_06_212947) do
     t.integer "goals_against"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "season_id", default: 1, null: false
+    t.bigint "season_id", default: 1, null: false
     t.index ["season_id"], name: "index_standings_on_season_id"
     t.index ["team_id"], name: "index_standings_on_team_id"
   end
