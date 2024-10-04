@@ -5,4 +5,12 @@ class LeagueStanding < ApplicationRecord
 
   belongs_to :league
   belongs_to :team
+
+  def rate
+    100 * ((wins * 3) + draws) / (matches * 3.00)
+  end
+
+  def goals_difference
+    goals_pro - goals_against
+  end
 end

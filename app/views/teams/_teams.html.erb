@@ -50,17 +50,17 @@
                         </tr>
                     </thead>
                     <tbody class="bg-gray-100">
-                        <% @teams.each_with_index do |team, i| %>
+                        <% @standings.each_with_index do |standing, i| %>
                             <tr class="<%= (i%2)==0 ? "bg-white" : "bg-gray-100" %>">
                                 <td class="pl-4">
                                     <%= i + 1 %>
                                 </td>
                                 <td class="flex px-6 py-2 whitespace-nowrap">
-                                    <img class="w-5" src="<%= team.logo %>" alt="">
-                                    <span class="ml-2 font-medium"><%= team.name %></span>
+                                    <img class="w-5" src="<%= standing.team.logo %>" alt="">
+                                    <span class="ml-2 font-medium"><%= standing.team.name %></span>
                                 </td>
                                 <td class="px-6 py-2 whitespace-nowrap">
-                                    <%= team.standings.sum(:points) %>
+                                    <%= standing.points %>
                                 </td>
                                 <td class="px-6 py-2 whitespace-nowrap">
                                     <%= standing.matches %>

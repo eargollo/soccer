@@ -2,6 +2,6 @@
 
 class TeamsController < ApplicationController
   def index
-    @teams = Team.all.sort_by(&:name)
+    @standings = LeagueStanding.all.sort_by(&:rate)
   end
 end
