@@ -1,8 +1,6 @@
 services:
   rails:
-    build:
-      dockerfile: Dockerfile
-      context: .
+    image: 'ghcr.io/eargollo/soccer:latest'
     ports:
       - "443:443"
     depends_on:
@@ -14,9 +12,7 @@ services:
       - .env.PROD
 
   sidekiq:
-    build:
-      dockerfile: Dockerfile
-      context: .
+    image: 'ghcr.io/eargollo/soccer:latest'
     command: bundle exec sidekiq
     depends_on:
       - database
