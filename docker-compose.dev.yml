@@ -4,6 +4,6 @@ services:
       dockerfile: Dockerfile.dev
       context: .
     ports:
-      - "3000:3000"
+      - "3000:${PORT}"
     env_file:
       - .env

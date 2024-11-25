@@ -2,7 +2,7 @@ FROM ruby:3.3.4
 
 WORKDIR /home/app
 
-ENV PORT 3000
+ARG PORT=3000
 
 EXPOSE $PORT
 

@@ -49,6 +49,8 @@ RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 
 # Final stage for app image
 FROM base
+# Serving port
+ARG PORT=443
 
 # Install packages needed for deployment
 RUN apt-get update -qq && \
@@ -68,5 +70,5 @@ USER rails:rails
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
 # Start the server by default, this can be overwritten at runtime
-EXPOSE 443
-CMD ["./bin/rails", "server", "-b", "ssl://0.0.0.0:443?key=localhost.key&cert=localhost.crt"]
+EXPOSE ${PORT}
+CMD ["./bin/rails", "server", "-b", "ssl://0.0.0.0:${PORT}?key=localhost.key&cert=localhost.crt"]
