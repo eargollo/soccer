@@ -71,4 +71,4 @@ ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
 # Start the server by default, this can be overwritten at runtime
 EXPOSE ${PORT}
-CMD ["./bin/rails", "server", "-b", "ssl://0.0.0.0:${PORT}?key=localhost.key&cert=localhost.crt"]
+CMD ["./bin/rails", "server", "-b", "ssl://0.0.0.0?key=localhost.key&cert=localhost.crt"]
