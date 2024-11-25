@@ -1,8 +1,7 @@
 services:
   rails:
     build:
-      dockerfile: Dockerfile
-      context: .
+    image: 'ghcr.io/eargollo/soccer:latest'
     ports:
       - 443:${PORT}
     depends_on:
