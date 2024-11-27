@@ -5,6 +5,16 @@ jobs:
   tests:
     name: Tests
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: password
+          POSTGRESS_DB: test
+        ports:
+          - 5434:5432
+        # needed because the postgres container does not provide a healthcheck
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -17,4 +27,7 @@ jobs:
       - name: Run tests
         env:
           RAILS_MASTER_KEY: ${{ secrets.RAILSTESTKEY }}
-        run: bundle exec rails test
+        run: |
+          RAILS_ENV=test bundle exec rails db:create
+          RAILS_ENV=test bundle exec rails db:migrate
+          bundle exec rails test

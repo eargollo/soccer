@@ -22,6 +22,7 @@ Rails.application.routes.draw do
   resources :simulations, only: %i[index create new show]
   resources :matches, only: %i[index]
   resources :leagues, only: %i[show]
+  resources :teams, only: %i[index show]
 
   mount Sidekiq::Web => '/sidekiq'
 end
