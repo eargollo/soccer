@@ -8,7 +8,7 @@ ruby '3.3.4'
 gem 'pg'
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem 'rails', '~> 7.2.0'
+gem 'rails', '~> 8.0.0'
 
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem 'sprockets-rails'
@@ -95,4 +95,6 @@ gem "hotwire-rails", "~> 0.1.3"
 
 gem "jsbundling-rails", "~> 1.3"
 
-gem "sidekiq"
+# Solid Queue
+gem "mission_control-jobs"
+gem "solid_queue"

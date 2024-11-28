@@ -21,13 +21,16 @@ module Soccer
     config.autoload_paths += %W[#{config.root}/lib/clients/**/]
     config.eager_load_paths += %W[#{config.root}/lib/clients/**/]
 
+    config.active_support.to_time_preserves_timezone = :zone
+
     # Job interface
-    config.active_job.queue_adapter = :async
-    config.active_job.queue_adapter = ActiveJob::QueueAdapters::AsyncAdapter.new(
-      min_threads: 1,
-      max_threads: 2 * Concurrent.processor_count,
-      idletime: 600.seconds
-    )
+    config.active_job.queue_adapter = :solid_queue
+    # config.active_job.queue_adapter = ActiveJob::QueueAdapters::AsyncAdapter.new(
+    #   min_threads: 1,
+    #   max_threads: 2 * Concurrent.processor_count,
+    #   idletime: 600.seconds
+    # )
+
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files

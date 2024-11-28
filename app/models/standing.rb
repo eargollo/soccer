@@ -13,7 +13,7 @@ class Standing < ApplicationRecord
   end
 
   def last_simulation
-    season.simulations.where.not(finish: nil)&.last&.simulation_standings&.find_by(team:)
+    season.simulations.where.not(finish: nil)&.last&.simulation_standings&.find_by(team:) # rubocop:disable Style/SafeNavigationChainLength
   end
 
   def compute # rubocop:disable Metrics/AbcSize

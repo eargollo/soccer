@@ -1,75 +1,64 @@
 services:
   rails:
     build:
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
       context: .
     ports:
-      - 443:${PORT}
+      - 3000:${PORT}
     depends_on:
       - database
-      - redis
     networks:
       - postgres-network
     env_file:
-      - .env.PROD
+      - .env.DEV
 
-  sidekiq:
-    image: 'ghcr.io/eargollo/soccer:latest'
-    command: bundle exec sidekiq
+  solidqueue:
+    build:
+      dockerfile: Dockerfile.dev
+      context: .
+    command: bundle exec rake solid_queue:start
     depends_on:
       - database
-      - redis
     networks:
       - postgres-network
     env_file:
-      - .env.PROD
+      - .env.DEV
 
   database:
-    image: 'postgres:latest'
-    ports:
-      - 15432:5432
+    image: 'postgres:17.2'
+    # ports:
+      # - 15432:5435
     env_file:
-      - .env.PROD
+      - .env.DEV
     networks:
       - postgres-network
     volumes:
-      - ./storage/postgress/data/:/var/lib/postgresql/data/
+      - ./storage/postgress-dev/data/:/var/lib/postgresql/data/
   
-  redis:
-    image: 'redis:latest'
-    ports:
-      - 6379:6379
-    env_file:
-      - .env.PROD
-    networks:
-      - postgres-network
-    volumes:
-      - ./storage/redis/data/:/var/lib/redis/data/
-  
-  init-pgadmin:
-    image: ubuntu
-    command: >
-      sh -c "mkdir -p /var/lib/postgress/pgadmin-data ; chown -R 5050:5050 /var/lib/postgress/pgadmin-data"
-    env_file:
-      - .env.PROD
-    networks:
-      - postgres-network
-    volumes:
-      - ./storage/postgress/:/var/lib/postgress
+  # init-pgadmin:
+  #   image: ubuntu
+  #   command: >
+  #     sh -c "mkdir -p /var/lib/postgress/pgadmin-data ; chown -R 5050:5050 /var/lib/postgress/pgadmin-data"
+  #   env_file:
+  #     - .env.DEV
+  #   networks:
+  #     - postgres-network
+  #   volumes:
+  #     - ./storage/postgress/:/var/lib/postgress
 
-  pgadmin:
-    image: dpage/pgadmin4
-    ports:
-      - 8080:8080
-    env_file:
-      - .env.PROD
-    depends_on:
-      - database
-      - init-pgadmin
-    networks:
-      - postgres-network
-    volumes:
-      - ./storage/postgress/pgadmin-data/:/var/lib/pgadmin/
+  # pgadmin:
+  #   image: dpage/pgadmin4
+  #   ports:
+  #     - 8080:8080
+  #   env_file:
+  #     - .env.DEV
+  #   depends_on:
+  #     - database
+  #     - init-pgadmin
+  #   networks:
+  #     - postgres-network
+  #   volumes:
+  #     - ./storage/postgress/pgadmin-data/:/var/lib/pgadmin/
 
 networks: 
   postgres-network:
