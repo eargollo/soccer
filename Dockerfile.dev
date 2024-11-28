@@ -2,6 +2,7 @@ FROM ruby:3.3.4
 
 WORKDIR /home/app
 
+ENV RAILS_ENV="development"
 ARG PORT=3000
 
 EXPOSE $PORT
@@ -20,6 +21,9 @@ COPY Gemfile Gemfile.lock ./
 RUN bundle install
 
 COPY . .
+
+# Precompiling assets for production without requiring secret RAILS_MASTER_KEY
+RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 
 ENTRYPOINT ["/home/app/bin/docker-entrypoint"]
 CMD [ "./bin/rails", "server", "--binding=0.0.0.0"]

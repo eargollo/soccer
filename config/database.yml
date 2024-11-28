@@ -15,7 +15,7 @@ devtest: &devtest
 
 development:
   <<: *devtest
-  url: postgres://postgres@localhost:5435/development
+  url: <%= ENV['DATABASE_URL'] || 'postgres://postgres@localhost:5435/development' %>
   password: password
   # database: storage/development.sqlite3
 

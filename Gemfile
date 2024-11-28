@@ -95,4 +95,6 @@ gem "hotwire-rails", "~> 0.1.3"
 
 gem "jsbundling-rails", "~> 1.3"
 
-gem "sidekiq"
+# Solid Queue
+gem "mission_control-jobs"
+gem "solid_queue"
