@@ -7,8 +7,6 @@
 - Show different probabilities for different milestones on standings
 
 # Extra
-- Upgrade to Rails 8
-- Take out Sidekick
 - Take out node and yarn and use importmaps
 - Deployment with Kamal
 
