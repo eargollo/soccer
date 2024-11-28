@@ -2,5 +2,4 @@ web: env RUBY_DEBUG_OPEN=true bin/rails server -p 3000
 solidqueueworker: bundle exec rake solid_queue:start
 css: bin/rails tailwindcss:watch
 js: yarn build --watch
-db: docker run -p 5435:5432 -v ./storage/postgress-dev/data/:/var/lib/postgresql/data/ -e POSTGRESS_DB=development -e POSTGRES_PASSWORD=password postgres:17.2
-test-db: docker-compose -f docker-compose.testing.yml up
+dev-test-dbs: docker-compose -f docker-compose.dev.yml up
