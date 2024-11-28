@@ -6,7 +6,6 @@ services:
       - 443:${PORT}
     depends_on:
       - database
-      - redis
     networks:
       - postgres-network
     env_file:
