@@ -21,6 +21,8 @@ module Soccer
     config.autoload_paths += %W[#{config.root}/lib/clients/**/]
     config.eager_load_paths += %W[#{config.root}/lib/clients/**/]
 
+    config.active_support.to_time_preserves_timezone = :zone
+
     # Job interface
     config.active_job.queue_adapter = :solid_queue
     # config.active_job.queue_adapter = ActiveJob::QueueAdapters::AsyncAdapter.new(
