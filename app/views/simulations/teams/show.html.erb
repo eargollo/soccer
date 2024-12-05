@@ -1,0 +1,15 @@
+<h2><%= @team.name %></h2>
+<table>
+    <tr>
+        <th>Position</th>
+        <th>Count</th>
+        <th>Relative</th>
+    </tr>
+    <% @positions.each do |pos| %>
+        <tr>
+            <td><%= pos.position %></td>
+            <td><%= pos.count %></td>
+             <td><%= (pos.count * 10000 / @simulation.runs).to_f/100 %> %</td> 
+        </tr>
+    <% end %>
+</table>

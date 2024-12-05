@@ -17,7 +17,9 @@ Rails.application.routes.draw do
       get :list
     end
   end
-  resources :simulations, only: %i[index create new show]
+  resources :simulations, only: %i[index create new show] do
+    resources :teams, only: %i[show], controller: "simulations/teams"
+  end
   resources :matches, only: %i[index]
   resources :leagues, only: %i[show]
   resources :teams, only: %i[index show]
