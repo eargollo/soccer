@@ -36,7 +36,6 @@ services:
       - stack.env
     depends_on:
       - database
-      - init-pgadmin
     networks:
       - soccer-network
     volumes:
