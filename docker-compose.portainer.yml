@@ -31,7 +31,7 @@ services:
   pgadmin:
     image: dpage/pgadmin4
     ports:
-      - 8080:8080
+      - 8080:${PGADMIN_LISTEN_PORT}
     env_file:
       - stack.env
     depends_on:
