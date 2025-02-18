@@ -1,0 +1,47 @@
+services:
+  rails:
+    image: 'ghcr.io/eargollo/soccer:latest'
+    ports:
+      - 4443:${PORT}
+    depends_on:
+      - database
+    networks:
+      - soccer-network
+    env_file:
+      - stack.env
+  solidqueue:
+    image: 'ghcr.io/eargollo/soccer:latest'
+    command: bundle exec rake solid_queue:start
+    depends_on:
+      - database
+    networks:
+      - soccer-network
+    env_file:
+      - stack.env
+  database:
+    image: 'postgres:latest'
+    ports:
+      - 15432:5432
+    env_file:
+      - stack.env
+    networks:
+      - soccer-network
+    volumes:
+      - ${DB_DATA_LOCATION}:/var/lib/postgresql/data/
+  pgadmin:
+    image: dpage/pgadmin4
+    ports:
+      - 8080:8080
+    env_file:
+      - stack.env
+    depends_on:
+      - database
+      - init-pgadmin
+    networks:
+      - soccer-network
+    volumes:
+      - ${PGADMIN_DATA_LOCATION}/:/var/lib/pgadmin/
+
+networks: 
+  soccer-network:
+    driver: bridge
