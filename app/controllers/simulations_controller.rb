@@ -33,6 +33,6 @@ class SimulationsController < ApplicationController
   private
 
   def simulation_params
-    params.require(:simulation).permit(:season_id, :name, :runs, :matches)
+    params.require(:simulation).permit(:season_id, :name, :runs, :matches) # rubocop:disable Rails/StrongParametersExpect
   end
 end

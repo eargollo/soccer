@@ -2,7 +2,7 @@ VERSION=$(shell git describe --tags)
 
 .PHONY: check
 check:
-	rubocop
+	bundle exec rubocop
 	bundle-audit check --update
 
 .PHONY: release
