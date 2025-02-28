@@ -1,0 +1,115 @@
+<!-- <h1 class="text-lg text-gray-800 font-medium">2023 Season</h1> -->
+<div class="flex flex-col mt-6">
+    <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+        <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+            <%= turbo_frame_tag "standings", class: "shadow overflow-hidden sm:rounded-lg" do %>
+                <table class="min-w-full text-sm text-gray-600">
+                    <thead class="bg-gray-100 text-xs uppercase font-medium">
+                        <tr class="">
+                            <th></th>
+                            <th scope="col" class="grid grid-cols-2 px-6 py-3 text-left tracking-wider">
+                                <%= sort_link(column: "name", label: "Club") %>
+                                <%= sort_indicator if params[:column] == "name" %>
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-left tracking-wider">
+                                <%= sort_link(column: "points", label: "Pts") %>
+                                <%= sort_indicator if params[:column] == "points" %>
+                            </th>
+                            <th scope="col" class=" px-6 py-3 text-left tracking-wider">
+                                <%= sort_link(column: "matches", label: "MP") %>
+                                <%= sort_indicator if params[:column] == "matches" %>
+                            </th>
+                            <th scope="col" class=" px-6 py-3 text-left tracking-wider">
+                                <%= sort_link(column: "wins", label: "W") %>
+                                <%= sort_indicator if params[:column] == "wins" %>
+                            </th>
+                            <th scope="col" class=" px-6 py-3 text-left tracking-wider">
+                                <%= sort_link(column: "draws", label: "D") %>
+                                <%= sort_indicator if params[:column] == "draws" %>
+                            </th>
+                            <th scope="col" class=" px-6 py-3 text-left tracking-wider">
+                                <%= sort_link(column: "losses", label: "L") %>
+                                <%= sort_indicator if params[:column] == "losses" %>
+                            </th>
+                            <th scope="col" class=" px-6 py-3 text-left tracking-wider">
+                                <%= sort_link(column: "goals_pro", label: "GF") %>
+                                <%= sort_indicator if params[:column] == "goals_pro" %>
+                            </th>
+                            <th scope="col" class=" px-6 py-3 text-left tracking-wider">
+                                <%= sort_link(column: "goals_against", label: "GA") %>
+                                <%= sort_indicator if params[:column] == "goals_against" %>
+                            </th>
+                            <th scope="col" class=" px-6 py-3 text-left tracking-wider">
+                                <%= sort_link(column: "goals_difference", label: "GD") %>
+                                <%= sort_indicator if params[:column] == "goals_difference" %>
+                            </th>
+                            <th scope="col" class=" px-6 py-3 text-left tracking-wider">
+                                <%= sort_link(column: "rate", label: "R") %>
+                                <%= sort_indicator if params[:column] == "rate" %>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-gray-100">
+                        <% @standings.each_with_index do |standing, i| %>
+                            <tr class="<%= (i%2)==0 ? "bg-white" : "bg-gray-100" %>">
+                                <td class="pl-4">
+                                    <%= i + 1 %>
+                                </td>
+                                <td class="flex px-6 py-2 whitespace-nowrap">
+                                    <img class="w-5" src="<%= standing.team.logo %>" alt="">
+                                    <span class="ml-2 font-medium"><%= standing.team.name %></span>
+                                </td>
+                                <td class="px-6 py-2 whitespace-nowrap">
+                                    <%= standing.points %>
+                                </td>
+                                <td class="px-6 py-2 whitespace-nowrap">
+                                    <%= standing.matches %>
+                                </td>
+                                <td class="px-6 py-2 whitespace-nowrap">
+                                    <%= standing.wins %>
+                                </td>
+                                <td class="px-6 py-2 whitespace-nowrap">
+                                    <%= standing.draws %>
+                                </td>
+                                <td class="px-6 py-2 whitespace-nowrap">
+                                    <%= standing.losses %>
+                                </td>
+                                <td class="px-6 py-2 whitespace-nowrap">
+                                    <%= standing.goals_pro %>
+                                </td>
+                                <td class="px-6 py-2 whitespace-nowrap">
+                                    <%= standing.goals_against %>
+                                </td>
+                                <td class="px-6 py-2 whitespace-nowrap">
+                                    <%= standing.goals_difference %>
+                                </td>
+                                <td class="px-6 py-2 whitespace-nowrap">
+                                    <%= number_with_precision(standing.rate, precision: 2) %>%
+                                </td>
+                                <!--
+                                <td class="flex px-6 py-4 whitespace-nowrap">
+                                    <svg class="w-4 fill-current text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                                    </svg>
+                                    <svg class="w-4 fill-current text-green-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                    </svg>
+                                    <svg class="w-4 fill-current text-green-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                    </svg>
+                                    <svg class="w-4 fill-current text-gray-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM7 9a1 1 0 000 2h6a1 1 0 100-2H7z" clip-rule="evenodd" />
+                                    </svg>
+                                    <svg class="w-4 fill-current text-green-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                    </svg>
+                                </td>
+                                -->
+                            </tr>
+                        <% end %>
+                    </tbody>
+                </table>
+            <% end %>
+        </div>
+    </div>
+</div>
