@@ -9,6 +9,6 @@ class MatchesController < ApplicationController
       return
     end
 
-    @matches = Season.target_season.matches
+    @matches = Season.target_season.matches.order(:date, :round)
   end
 end

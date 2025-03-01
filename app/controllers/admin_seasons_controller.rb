@@ -1,14 +1,9 @@
 # frozen_string_literal: true
 
-class LeaguesController < ApplicationController
-  # before_action :authenticate_user!
+class AdminSeasonsController < ApplicationController
+  before_action :authenticate_user!
 
-  def index
-    @leagues = League.all
-  end
-
-  def show
-    @league = League.find(params[:id])
+  def new
     # results = "missing ID parameter"
     # if params[:id] == "seed"
     #   if params[:league].present? && params[:season].present?
@@ -23,5 +18,11 @@ class LeaguesController < ApplicationController
     # end
 
     # render json: { param: params[:id], results: }
+  end
+
+  def update
+    UpdateLeagueJob.perform_later(params[:id])
+
+    render status: :ok
   end
 end

@@ -10,9 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2024_11_27_200858) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_27_203804) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "api_client_teams", force: :cascade do |t|
+    t.bigint "team_id", null: false
+    t.integer "client_id"
+    t.string "client_key"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["team_id"], name: "index_api_client_teams_on_team_id"
+  end
 
   create_table "leagues", force: :cascade do |t|
     t.string "name", null: false
@@ -259,6 +268,7 @@ ActiveRecord::Schema[8.0].define(version: 2024_11_27_200858) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "api_client_teams", "teams"
   add_foreign_key "matches", "seasons"
   add_foreign_key "matches", "teams", column: "team_away_id"
   add_foreign_key "matches", "teams", column: "team_home_id"
