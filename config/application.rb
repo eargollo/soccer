@@ -10,6 +10,10 @@ Bundler.require(*Rails.groups)
 
 module Soccer
   class Application < Rails::Application
+    # Use application authentication to access `/jobs` interface
+    MissionControl::Jobs.base_controller_class = "AdminController"
+    config.mission_control.jobs.http_basic_auth_enabled = false
+
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.1
 
