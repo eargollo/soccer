@@ -22,7 +22,7 @@ Rails.application.routes.draw do
   end
   resources :matches, only: %i[index]
   resources :league_standings, only: %i[index show]
-  # resources :leagues, only: %i[index show]
+  resources :admin_leagues, only: %i[index show new]
   resources :teams, only: %i[index show]
 
   mount MissionControl::Jobs::Engine, at: "/jobs"
