@@ -17,12 +17,9 @@ class AdminLeaguesController < ApplicationController
   end
 
   def create # rubocop:disable Metrics/AbcSize
-    puts "params: #{params}"
     reference = params[:league][:reference]
     season = params[:season]
     if reference.blank? || season.blank?
-      flash[:error] = "reference is required" if reference.blank?
-      flash[:error] = "season is required" if season.blank?
       redirect_to new_admin_league_path
       return
     end
