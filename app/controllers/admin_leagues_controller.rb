@@ -25,6 +25,8 @@ class AdminLeaguesController < ApplicationController
     end
 
     imported = Season.apifootball_seed(league_id: reference, season_id: season)
+    LeagueStanding.refresh
+
     flash[:notice] = "imported league #{imported.league.name} season #{imported.year}"
     redirect_to admin_leagues_path
   end

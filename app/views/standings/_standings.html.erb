@@ -11,14 +11,16 @@
                                 <%= sort_link(column: "name", label: "Club") %>
                                 <%= sort_indicator if params[:column] == "name" %>
                             </th>
-                            <th scope="col" class="px-6 py-3 text-left tracking-wider">
-                                <%= sort_link(column: "champion", label: "C") %>
-                                <%= sort_indicator if params[:column] == "champion" %>
-                            </th>
-                            <th scope="col" class="px-6 py-3 text-left tracking-wider">
-                                <%= sort_link(column: "relegation", label: "Re") %>
-                                <%= sort_indicator if params[:column] == "relegation" %>
-                            </th>
+                            <% if show_simulation %>
+                                <th scope="col" class="px-6 py-3 text-left tracking-wider">
+                                    <%= sort_link(column: "champion", label: "C") %>
+                                    <%= sort_indicator if params[:column] == "champion" %>
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left tracking-wider">
+                                    <%= sort_link(column: "relegation", label: "Re") %>
+                                    <%= sort_indicator if params[:column] == "relegation" %>
+                                </th>
+                            <% end %>
                             <th scope="col" class="px-6 py-3 text-left tracking-wider">
                                 <%= sort_link(column: "points", label: "Pts") %>
                                 <%= sort_indicator if params[:column] == "points" %>
@@ -63,7 +65,7 @@
                         </tr>
                     </thead>
                     <tbody class="bg-gray-100">
-                        <% @standings.each_with_index do |standing, i| %>
+                        <% standings.each_with_index do |standing, i| %>
                             <tr class="<%= (i%2)==0 ? "bg-white" : "bg-gray-100" %>">
                                 <td class="pl-4">
                                     <%= i + 1 %>
@@ -72,12 +74,14 @@
                                     <img class="w-5" src="<%= standing.team.logo %>" alt="">
                                     <span class="ml-2 font-medium"><%= standing.team.name %></span>
                                 </td>
-                                <td class="px-6 py-2 whitespace-nowrap">
-                                    <%= number_with_precision(standing.last_simulation&.champion, precision: 2) %>%
-                                </td>
-                                <td class="px-6 py-2 whitespace-nowrap">
-                                    <%= number_with_precision(standing.last_simulation&.relegation, precision: 2) %>%
-                                </td>
+                                <% if show_simulation %>
+                                    <td class="px-6 py-2 whitespace-nowrap">
+                                        <%= number_with_precision(standing.last_simulation&.champion, precision: 2) %>%
+                                    </td>
+                                    <td class="px-6 py-2 whitespace-nowrap">
+                                        <%= number_with_precision(standing.last_simulation&.relegation, precision: 2) %>%
+                                    </td>
+                                <% end %>
                                 <td class="px-6 py-2 whitespace-nowrap">
                                     <%= standing.points %>
                                 </td>

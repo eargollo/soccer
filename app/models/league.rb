@@ -2,6 +2,7 @@
 
 class League < ApplicationRecord
   has_many :seasons, dependent: :destroy
+  has_many :league_standings, dependent: :destroy
   has_many :matches, through: :seasons
 
   def probability # rubocop:disable Metrics/AbcSize

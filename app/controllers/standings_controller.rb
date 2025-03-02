@@ -16,6 +16,7 @@ class StandingsController < ApplicationController
 
     season.compute_standings
     @standings = season.standings.order(points: :desc, wins: :desc)
+    @show_simulation = @standings.last_simulation.present?
   end
 
   def list # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
@@ -23,6 +24,7 @@ class StandingsController < ApplicationController
     direction = params[:direction] || "desc"
 
     @standings = season.standings
+    @show_simulation = @standings.last_simulation.present?
 
     @standings = @standings.sort_by { |standing| standing.team.name }
     @standings = case params[:column]

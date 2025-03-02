@@ -7,10 +7,16 @@ class LeagueStanding < ApplicationRecord
   belongs_to :team
 
   def rate
+    return 0 if matches.zero?
+
     100 * ((wins * 3) + draws) / (matches * 3.00)
   end
 
   def goals_difference
     goals_pro - goals_against
+  end
+
+  def self.refresh
+    ActiveRecord::Base.connection.execute("REFRESH MATERIALIZED VIEW league_standings_matview;")
   end
 end
