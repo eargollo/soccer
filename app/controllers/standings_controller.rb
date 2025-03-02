@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class StandingsController < ApplicationController
-  def index
+  def index # rubocop:disable Metrics/AbcSize
     season = Season.target_season
 
     if season.nil?
