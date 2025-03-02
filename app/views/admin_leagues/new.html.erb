@@ -2,5 +2,9 @@
     <h1> New league </h1>
     <%= f.label :reference %>
     <%= f.text_field :reference %>
+    <div>
+        <label for="season">Season</label>
+        <input type="text" name="season" id="season">
+    </div>
     <%= f.submit class: "rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"%>
 <% end %>
