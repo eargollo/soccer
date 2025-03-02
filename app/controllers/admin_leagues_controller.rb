@@ -16,7 +16,16 @@ class AdminLeaguesController < ApplicationController
     @league = League.new
   end
 
-  def create
+  def create # rubocop:disable Metrics/AbcSize
+    reference = params[:league][:reference]
+    season = params[:season]
+    if reference.blank? || season.blank?
+      redirect_to new_admin_league_path
+      return
+    end
+
+    imported = Season.apifootball_seed(league_id: reference, season_id: season)
+    flash[:notice] = "imported league #{imported.league.name} season #{imported.year}"
     redirect_to admin_leagues_path
   end
 end
