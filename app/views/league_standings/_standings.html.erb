@@ -47,6 +47,10 @@
                                 <%= sort_link(column: "rate", label: "R", league: true, league_id: @league.id) %>
                                 <%= sort_indicator if params[:column] == "rate" %>
                             </th>
+                            <th scope="col" class=" px-6 py-3 text-left tracking-wider">
+                                <%= sort_link(column: "seasons", label: "S", league: true, league_id: @league.id) %>
+                                <%= sort_indicator if params[:column] == "seasons" %>
+                            </th>
                         </tr>
                     </thead>
                     <tbody class="bg-gray-100">
@@ -85,6 +89,9 @@
                                 </td>
                                 <td class="px-6 py-2 whitespace-nowrap">
                                     <%= number_with_precision(standing.rate, precision: 2) %>%
+                                </td>
+                                <td class="px-6 py-2 whitespace-nowrap">
+                                    <%= standing.seasons %>
                                 </td>
                             </tr>
                         <% end %>
