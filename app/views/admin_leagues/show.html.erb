@@ -8,7 +8,7 @@
             <% @league.seasons.each do |season| %>
                 <tr>
                     <%= season.year %>
-                    <%= form_for admin_season_path(season.id), method: :post do |f| %>
+                    <%= form_with url: admin_season_path(season.id), method: :patch do |f| %>
                         <%= f.submit "Schedule refresh", class: "rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"%>
                     <% end %>
                 </tr>
