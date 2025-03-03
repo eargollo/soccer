@@ -25,7 +25,10 @@ class UpdateLeagueJob < ApplicationJob
 
     new_next_match_time = @season.matches.scheduled.minimum(:date)
 
-    schedule_simulation if new_next_match_time != next_match_time
+    if new_next_match_time != next_match_time
+      schedule_simulation
+      LeagueStanding.refresh
+    end
 
     schedule_next_update(new_next_match_time)
   end
