@@ -2,7 +2,7 @@
 
 # Make sure RUBY_VERSION matches the Ruby version in .ruby-version and Gemfile
 ARG RUBY_VERSION=3.3.4
-FROM registry.docker.com/library/ruby:$RUBY_VERSION-slim as base
+FROM registry.docker.com/library/ruby:$RUBY_VERSION-slim AS base
 
 # Rails app lives here
 WORKDIR /rails
@@ -15,7 +15,7 @@ ENV RAILS_ENV="production" \
 
 
 # Throw-away build stage to reduce size of final image
-FROM base as build
+FROM base AS build
 
 # Generating self signed certificate for development
 RUN openssl req -x509 -nodes -newkey rsa:2048 -keyout /rails/localhost.key -out /rails/localhost.crt -days 365 -subj "/C=US/ST=Denial/L=Springfield/O=Dis/CN=localhost"

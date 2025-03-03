@@ -6,4 +6,4 @@ require "bundler/setup" # Set up gems listed in the Gemfile.
 require "bootsnap/setup" # Speed up boot time by caching expensive operations.
 
 require 'simplecov'
-SimpleCov.start 'rails'
+SimpleCov.start 'rails' if ENV["COVERAGE"] == true
