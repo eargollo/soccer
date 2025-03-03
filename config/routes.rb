@@ -27,7 +27,7 @@ Rails.application.routes.draw do
     end
   end
   resources :admin_leagues, only: %i[index show new create]
-  resources :admin_seasons, only: %i[show]
+  resources :admin_seasons, only: %i[update]
   resources :teams, only: %i[index show]
 
   mount MissionControl::Jobs::Engine, at: "/jobs"
