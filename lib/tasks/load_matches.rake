@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-namespace :import do
+namespace :import do # rubocop:disable Metrics/BlockLength
   desc "Import entire league data"
-  task league: :environment do
+  task league: :environment do # rubocop:disable Metrics/BlockLength
     Team.find_or_create_by!(name: "America-RN", reference: 2233, logo: "https://media.api-sports.io/football/teams/2233.png")
     Team.find_or_create_by!(name: "Brasiliense", reference: 2208, logo: "https://media.api-sports.io/football/teams/2208.png")
     Team.find_or_create_by!(name: "Ipatinga", reference: 12_277, logo: "https://media.api-sports.io/football/teams/12277.png")
