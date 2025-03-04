@@ -34,4 +34,21 @@ class LoadLeagueJobTest < ActiveJob::TestCase
     assert_equal(45, loader.teams.length)
     assert_equal("Guarani", loader.teams.first)
   end
+
+  test "#teams_missing returns all teams that are not at teams table" do
+    loader = Clients::Dataset::Loader.new(file_fixture("campeonato-brasileiro-missing.csv"))
+    missing = loader.teams_missing.sort
+    assert_equal(2, missing.length)
+    assert_equal("Guarani", missing.first)
+    assert_equal("Super Real Madrid", missing.second)
+  end
+
+  test "#teams_missing returns all teams that are also not in lookup" do
+    ApiClientTeam.create!(client_id: Clients::Dataset::CLIENT_ID, client_key: "Super Real Madrid", team: teams(:madrid))
+
+    loader = Clients::Dataset::Loader.new(file_fixture("campeonato-brasileiro-missing.csv"))
+    missing = loader.teams_missing.sort
+    assert_equal(1, missing.length)
+    assert_equal("Guarani", missing.first)
+  end
 end

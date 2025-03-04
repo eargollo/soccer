@@ -3,12 +3,11 @@
 namespace :import do
   desc "Import entire league data"
   task league: :environment do
-    target = Season.target_season
-    if target.nil?
-      Season.apifootball_seed(league_id: 71, season_id: 2024)
-      return
+    loader = Clients::Dataset::Loader.new
+    missing = loader.teams_missing.sort
+    unless missing.empty?
+      puts "Can't import league data. There are #{missing.length} missing teams:"
+      puts "'#{missing.join("', '")}'"
     end
-
-    target.seed
   end
 end

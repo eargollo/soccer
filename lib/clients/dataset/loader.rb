@@ -13,11 +13,15 @@ module Clients
         end
 
         def self.guess_team(name)
+          lookup = find_team(name)
+          return lookup if lookup
+
           Team.find_by(name: name)
         end
 
-        def initialize
-          @data = ::CSV.read("lib/clients/dataset/campeonato-brasileiro-full.csv", headers: true)
+        def initialize(file = nil)
+          file ||= "lib/clients/dataset/campeonato-brasileiro-full.csv"
+          @data = ::CSV.read(file, headers: true)
         end
 
         def matches
@@ -34,6 +38,14 @@ module Clients
           # puts "Teams: #{teams.to_a.sort}"
 
           teams.to_a
+        end
+
+        def teams_missing
+          missing = []
+          teams.each do |team|
+            missing << team unless Loader.guess_team(team)
+          end
+          missing
         end
       end
   end
