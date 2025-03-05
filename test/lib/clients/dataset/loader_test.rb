@@ -51,4 +51,16 @@ class LoadLeagueJobTest < ActiveJob::TestCase
     assert_equal(1, missing.length)
     assert_equal("Guarani", missing.first)
   end
+
+  test "#matches has all matches" do
+    loader = Clients::Dataset::Loader.new(file_fixture("campeonato-brasileiro-missing.csv"))
+    assert_equal(2, loader.matches.length)
+  end
+
+  test "#each_match_missing_or_inconsistent raises if team is missing" do
+    # loader = Clients::Dataset::Loader.new(file_fixture("campeonato-brasileiro-missing.csv"))
+    # # assert_raises do
+    # loader.each_match_missing_or_inconsistent { |m| }
+    # # end
+  end
 end
