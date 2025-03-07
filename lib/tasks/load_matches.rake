@@ -54,15 +54,11 @@ namespace :import do # rubocop:disable Metrics/BlockLength
         team_home = Clients::Dataset::Loader.guess_team(m["mandante"])
         team_away = Clients::Dataset::Loader.guess_team(m["visitante"])
         year = m["data"][6..10].to_i
-        puts "year: #{year}"
+        # puts "year: #{year}"
         season = league.seasons.find_by(year: year)
         if season.nil?
           puts "Season #{year} is missing. Creating"
           season = league.seasons.create!(year: year)
-        else
-          # Validate data is the same
-          puts "Season does already exist"
-          puts season
         end
 
         date = Time.zone.local(year, m["data"][3..5].to_i, m["data"][0..2].to_i, m["hora"][0..2].to_i,
@@ -74,34 +70,56 @@ namespace :import do # rubocop:disable Metrics/BlockLength
         match = season.matches.find_by(team_home: team_home, team_away: team_away)
         if match.nil?
           if season.year >= 2010
+            File.write('tmp/diffs.txt', "MISSING match #{date} #{team_home.name} #{home_goals} x #{away_goals} " \
+                                        "#{team_away.name}\n",
+                       mode: 'a+')
+
             puts "Match #{date} #{team_home.name} #{home_goals} x #{away_goals} #{team_away.name} is missing!!!"
-            raise "Missing match from football API!"
+          else
+            puts "Match #{date} #{team_home.name} x #{team_away.name} is missing. Creating..."
+            season.matches.create!(
+              date: date,
+              team_home: team_home,
+              team_away: team_away,
+              home_goals: home_goals,
+              away_goals: away_goals,
+              round: round,
+              round_name: "Regular Season - #{round}",
+              status: "Match Finished"
+            )
           end
-          puts "Match #{team_home.name} x #{team_away.name} is missing. Creating..."
-          puts "Date of match #{date}"
-          season.matches.create!(
-            date: date,
-            team_home: team_home,
-            team_away: team_away,
-            home_goals: home_goals,
-            away_goals: away_goals,
-            round: round,
-            round_name: "Regular Season - #{round}",
-            status: "Match Finished"
-          )
         else
-          puts "Match #{match.season.year} round #{round} #{match.date} #{match.team_home.name} #{matcho.home_goals}x #{match.away_goals} #{match.team_away.name} already exists. Verifying..."
-          raise "Date is incorrect: existing #{match.date} incoming #{date}" if match.date != date
+          m_text = "Match #{match.season.year} round #{round} #{match.date} #{match.team_home.name} " \
+                   "#{match.home_goals} x #{match.away_goals} #{match.team_away.name}"
+          puts "#{m_text} already exists. Verifying..."
+          if match.date != date
+            File.write('tmp/diffs.txt', "#{m_text}: Date is incorrect: existing #{match.date} incoming #{date}\n",
+                       mode: 'a+')
+          end
           if match.home_goals != home_goals
-            raise "Home goals is incorrect: existing #{match.home_goals} incoming #{home_goals}"
+            File.write('tmp/diffs.txt', "#{m_text}: Home goals is incorrect: existing #{match.home_goals} " \
+                                        "incoming #{home_goals}\n",
+                       mode: 'a+')
           end
           if match.away_goals != away_goals
-            raise "Away goals is incorrect: existing #{match.away_goals} incoming #{away_goals}"
+            File.write('tmp/diffs.txt', "#{m_text}: Away goals is incorrect: existing #{match.away_goals} " \
+                                        "incoming #{away_goals}\n",
+                       mode: 'a+')
           end
-          raise "Status is incorrect: existing #{match.status}" if match.status != "Match Finished"
-          raise "Round is incorrect: existing #{match.round} incoming #{round}" if match.round != round
+          if match.status != "Match Finished"
+            File.write('tmp/diffs.txt', "#{m_text}: Status is incorrect: existing #{match.status}\n",
+                       mode: 'a+')
+          end
 
-          puts "Match is ok. Moving on..."
+          if match.round != round
+            File.write('tmp/diffs.txt', "#{m_text}: Round is incorrect: existing #{match.round} incoming #{round}\n",
+                       mode: 'a+')
+            if season.year == 2010 && match.round == 38 && round == 1
+
+              puts "Updating round from #{match.round} to #{round}"
+              match.update!(round: round, round_name: "Regular Season - #{round}")
+            end
+          end
         end
 
         LeagueStanding.refresh if (i % 100).zero?
