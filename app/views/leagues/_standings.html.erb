@@ -1,0 +1,103 @@
+<!-- <h1 class="text-lg text-gray-800 font-medium">2023 Season</h1> -->
+<div class="flex flex-col">
+    <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+        <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
+            <%= turbo_frame_tag "standings", class: "shadow overflow-hidden sm:rounded-lg" do %>
+                <table class="min-w-full text-sm text-gray-600">
+                    <thead class="bg-gray-100 text-xs uppercase font-medium">
+                        <tr class="">
+                            <th></th>
+                            <th scope="col" class="grid grid-cols-2 px-6 py-3 text-left tracking-wider">
+                                <%= sort_link(column: "name", label: "Club", league: true, league_id: @league.id) %>
+                                <%= sort_indicator if params[:column] == "name" %>
+                            </th>
+                            <th scope="col" class="px-6 py-3 text-left tracking-wider">
+                                <%= sort_link(column: "points", label: "Pts", league: true, league_id: @league.id) %>
+                                <%= sort_indicator if params[:column] == "points" %>
+                            </th>
+                            <th scope="col" class=" px-6 py-3 text-left tracking-wider">
+                                <%= sort_link(column: "matches", label: "MP", league: true, league_id: @league.id) %>
+                                <%= sort_indicator if params[:column] == "matches" %>
+                            </th>
+                            <th scope="col" class=" px-6 py-3 text-left tracking-wider">
+                                <%= sort_link(column: "wins", label: "W", league: true, league_id: @league.id) %>
+                                <%= sort_indicator if params[:column] == "wins" %>
+                            </th>
+                            <th scope="col" class=" px-6 py-3 text-left tracking-wider">
+                                <%= sort_link(column: "draws", label: "D", league: true, league_id: @league.id) %>
+                                <%= sort_indicator if params[:column] == "draws" %>
+                            </th>
+                            <th scope="col" class=" px-6 py-3 text-left tracking-wider">
+                                <%= sort_link(column: "losses", label: "L", league: true, league_id: @league.id) %>
+                                <%= sort_indicator if params[:column] == "losses" %>
+                            </th>
+                            <th scope="col" class=" px-6 py-3 text-left tracking-wider">
+                                <%= sort_link(column: "goals_pro", label: "GF", league: true, league_id: @league.id) %>
+                                <%= sort_indicator if params[:column] == "goals_pro" %>
+                            </th>
+                            <th scope="col" class=" px-6 py-3 text-left tracking-wider">
+                                <%= sort_link(column: "goals_against", label: "GA", league: true, league_id: @league.id) %>
+                                <%= sort_indicator if params[:column] == "goals_against" %>
+                            </th>
+                            <th scope="col" class=" px-6 py-3 text-left tracking-wider">
+                                <%= sort_link(column: "goals_difference", label: "GD", league: true, league_id: @league.id) %>
+                                <%= sort_indicator if params[:column] == "goals_difference" %>
+                            </th>
+                            <th scope="col" class=" px-6 py-3 text-left tracking-wider">
+                                <%= sort_link(column: "rate", label: "R", league: true, league_id: @league.id) %>
+                                <%= sort_indicator if params[:column] == "rate" %>
+                            </th>
+                            <th scope="col" class=" px-6 py-3 text-left tracking-wider">
+                                <%= sort_link(column: "seasons", label: "S", league: true, league_id: @league.id) %>
+                                <%= sort_indicator if params[:column] == "seasons" %>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-gray-100">
+                        <% standings.each_with_index do |standing, i| %>
+                            <tr class="<%= (i%2)==0 ? "bg-white" : "bg-gray-100" %>">
+                                <td class="pl-4">
+                                    <%= i + 1 %>
+                                </td>
+                                <td class="flex px-6 py-2 whitespace-nowrap">
+                                    <img class="w-5" src="<%= standing.team.logo %>" alt="">
+                                    <span class="ml-2 <%= @last_season == standing.last_season ? "font-semibold":"font-normal" %>"><%= standing.team.name %></span>
+                                </td>
+                                <td class="px-6 py-2 whitespace-nowrap">
+                                    <%= standing.points %>
+                                </td>
+                                <td class="px-6 py-2 whitespace-nowrap">
+                                    <%= standing.matches %>
+                                </td>
+                                <td class="px-6 py-2 whitespace-nowrap">
+                                    <%= standing.wins %>
+                                </td>
+                                <td class="px-6 py-2 whitespace-nowrap">
+                                    <%= standing.draws %>
+                                </td>
+                                <td class="px-6 py-2 whitespace-nowrap">
+                                    <%= standing.losses %>
+                                </td>
+                                <td class="px-6 py-2 whitespace-nowrap">
+                                    <%= standing.goals_pro %>
+                                </td>
+                                <td class="px-6 py-2 whitespace-nowrap">
+                                    <%= standing.goals_against %>
+                                </td>
+                                <td class="px-6 py-2 whitespace-nowrap">
+                                    <%= standing.goals_difference %>
+                                </td>
+                                <td class="px-6 py-2 whitespace-nowrap">
+                                    <%= number_with_precision(standing.rate, precision: 2) %>%
+                                </td>
+                                <td class="px-6 py-2 whitespace-nowrap">
+                                    <%= standing.seasons %>
+                                </td>
+                            </tr>
+                        <% end %>
+                    </tbody>
+                </table>
+            <% end %>
+        </div>
+    </div>
+</div>

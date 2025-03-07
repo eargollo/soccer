@@ -5,7 +5,7 @@ module StandingsHelper
     sort_direction = column == params[:column] ? next_sort_direction : "desc"
 
     if league
-      link_to(label, list_league_standings_path(id: league_id, column:, direction: sort_direction))
+      link_to(label, list_league_standings_path(league_id: league_id, column:, direction: sort_direction))
     else
       link_to(label, list_standings_path(column:, direction: sort_direction))
     end

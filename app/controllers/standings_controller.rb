@@ -19,6 +19,24 @@ class StandingsController < ApplicationController
     @show_simulation = @standings.last_simulation.present?
   end
 
+  def show
+    @season = Season.find(params[:id])
+
+    if @season.nil?
+      flash[:error] = "No season found" # rubocop:disable Rails/I18nLocaleTexts
+      @standings = []
+      return
+    end
+
+    @standings = @season.standings.order(points: :desc, wins: :desc)
+    Rails.logger.info("Found #{@standings.count} standings for #{@season.league.name} #{@season.year}")
+    return unless @standings.empty?
+
+    @season.compute_standings
+    @standings = @season.standings.order(points: :desc, wins: :desc)
+    @show_simulation = @standings.last_simulation.present?
+  end
+
   def list # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     season = Season.target_season
     direction = params[:direction] || "desc"

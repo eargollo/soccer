@@ -9,6 +9,7 @@ class LeaguesController < ApplicationController
 
   def show
     @league = League.find(params[:id])
+    @seasons = @league.seasons.order(year: :asc)
     # results = "missing ID parameter"
     # if params[:id] == "seed"
     #   if params[:league].present? && params[:season].present?

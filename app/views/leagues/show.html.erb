@@ -1,0 +1,5 @@
+<div class="flex flex-col items-center w-screen min-h-screen bg-white py-0">
+    <% @seasons.each do |season| %>
+        <p><%= link_to(season.year, standing_path(season.id)) %></p>
+    <% end %>
+</div>
