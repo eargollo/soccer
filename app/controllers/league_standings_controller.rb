@@ -4,20 +4,16 @@ class LeagueStandingsController < ApplicationController
   # before_action :authenticate_user!
 
   def index
-    @leagues = League.all
-  end
-
-  def show
-    @league = League.find(params[:id])
-    @standings = @league.league_standings.where(league_id: params[:id]).order(points: :desc, wins: :desc)
+    @league = League.find(params[:league_id])
+    @standings = LeagueStanding.where(league_id: params[:league_id]).order(points: :desc, wins: :desc)
     @last_season = @standings.first.league.seasons.maximum(:year)
   end
 
   def list # rubocop:disable Metrics/AbcSize
     direction = params[:direction] || "desc"
 
-    @league = League.find(params[:id])
-    @standings = @league.league_standings.where(league_id: params[:id]).order(points: :desc, wins: :desc)
+    @league = League.find(params[:league_id])
+    @standings = LeagueStanding.where(league_id: params[:league_id]).order(points: :desc, wins: :desc)
     @last_season = @standings.first.league.seasons.maximum(:year)
 
     @standings = @standings.sort_by { |standing| standing.team.name }

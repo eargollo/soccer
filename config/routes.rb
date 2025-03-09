@@ -12,23 +12,25 @@ Rails.application.routes.draw do
   # root "posts#index"
   root "standings#index"
 
-  resources :standings, only: %i[index] do
+  resources :standings, only: %i[index show] do
     collection do
-      get :list
+      get "list(:id)", to: "standings#list", as: :list
     end
   end
   resources :simulations, only: %i[index create new show] do
     resources :teams, only: %i[show], controller: "simulations/teams"
   end
   resources :matches, only: %i[index]
-  resources :league_standings, only: %i[index show] do
-    collection do
-      get :list
-    end
-  end
   resources :admin_leagues, only: %i[index show new create]
   resources :admin_seasons, only: %i[update]
   resources :teams, only: %i[index show]
+  resources :leagues, only: %i[index show] do
+    resources :standings, only: %i[index], controller: "league_standings" do
+      collection do
+        get :list
+      end
+    end
+  end
 
   mount MissionControl::Jobs::Engine, at: "/jobs"
 end
