@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-class AdminSeasonsController < ApplicationController
-  before_action :authenticate_user!
-
+class AdminSeasonsController < AdminController
   def update
     Rails.logger.info("Updating season #{params[:id]}")
     UpdateLeagueJob.perform_later(params[:id])
