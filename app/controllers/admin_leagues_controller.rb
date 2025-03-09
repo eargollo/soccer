@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-class AdminLeaguesController < ApplicationController
-  before_action :authenticate_user!
-
+class AdminLeaguesController < AdminController
   def index
     @leagues = League.all
   end
