@@ -51,7 +51,7 @@ namespace :import do # rubocop:disable Metrics/BlockLength
       league = League.find_by(reference: 71)
 
       prev_year = nil
-      loader.matches.each_with_index do |m, i|
+      loader.matches.each_with_index do |m, i| # rubocop:disable Metrics/BlockLength
         team_home = Clients::Dataset::Loader.guess_team(m["mandante"])
         team_away = Clients::Dataset::Loader.guess_team(m["visitante"])
         year = m["data"][6..10].to_i
@@ -146,12 +146,10 @@ namespace :import do # rubocop:disable Metrics/BlockLength
       config.hook_into :webmock
     end
 
-    # (2003..2021).each do |year|
-    (2003..2024).each do |year|
-      # Somehow 22, 23, and 24 are missing at O Globo
+    (2003..2024).each do |year| # rubocop:disable Metrics/BlockLength
       puts year
 
-      VCR.use_cassette("globo_#{year}", record_on_error: false) do |cassette|
+      VCR.use_cassette("globo_#{year}", record_on_error: false) do |_cassette| # rubocop:disable Metrics/BlockLength
         url = "https://ge.globo.com/futebol/brasileirao-serie-a/#{year}"
         response = HTTParty.get(url)
         # puts response.body
@@ -161,7 +159,7 @@ namespace :import do # rubocop:disable Metrics/BlockLength
         # puts scripts
         # puts(scripts.select { |s| s['scriptReact'] })
         json = nil
-        scripts.each_with_index do |scr, i|
+        scripts.each_with_index do |scr, _i|
           res = scr =~ /const classificacao = (\{.*\})/
           next unless res
 
@@ -203,7 +201,7 @@ namespace :import do # rubocop:disable Metrics/BlockLength
           raise "Error finding data for #{year} verify #{"https://ge.globo.com/futebol/brasileirao-serie-a/#{year}"}"
         end
 
-        json["classificacao"].each do |cla_standing|
+        json["classificacao"].each do |cla_standing| # rubocop:disable Metrics/BlockLength
           tname = lookup[cla_standing["nome_popular"]] || cla_standing["nome_popular"]
           team = Team.find_by(name: tname)
           if team.nil?
@@ -212,22 +210,28 @@ namespace :import do # rubocop:disable Metrics/BlockLength
           end
           standing = season.standings.find_by(team: team)
           if cla_standing["jogos"] != standing.matches
-            puts "Year #{year} Team #{team.name} matches is incorrect: existing #{standing.matches} incoming #{cla_standing['jogos']}"
+            puts "Year #{year} Team #{team.name} matches is incorrect: existing #{standing.matches} " /
+                 "incoming #{cla_standing['jogos']}"
           end
           if cla_standing["vitorias"] != standing.wins
-            puts "Year #{year} Team #{team.name} wins is incorrect: existing #{standing.wins} incoming #{cla_standing['vitorias']}"
+            puts "Year #{year} Team #{team.name} wins is incorrect: existing #{standing.wins} " /
+                 "incoming #{cla_standing['vitorias']}"
           end
           if cla_standing["empates"] != standing.draws
-            puts "Year #{year} Team #{team.name} draws is incorrect: existing #{standing.draws} incoming #{cla_standing['empates']}"
+            puts "Year #{year} Team #{team.name} draws is incorrect: existing #{standing.draws} " /
+                 "incoming #{cla_standing['empates']}"
           end
           if cla_standing["derrotas"] != standing.losses
-            puts "Year #{year} Team #{team.name} losses is incorrect: existing #{standing.losses} incoming #{cla_standing['derrotas']}"
+            puts "Year #{year} Team #{team.name} losses is incorrect: existing #{standing.losses} " /
+                 "incoming #{cla_standing['derrotas']}"
           end
           if cla_standing["gols_pro"] != standing.goals_pro
-            puts "Year #{year} Team #{team.name} goals pro is incorrect: existing #{standing.goals_pro} incoming #{cla_standing['gols_pro']}"
+            puts "Year #{year} Team #{team.name} goals pro is incorrect: existing #{standing.goals_pro} " /
+                 "incoming #{cla_standing['gols_pro']}"
           end
           if cla_standing["gols_contra"] != standing.goals_against
-            puts "Year #{year} Team #{team.name} goals against is incorrect: existing #{standing.goals_against} incoming #{cla_standing['gols_contra']}"
+            puts "Year #{year} Team #{team.name} goals against is incorrect: existing #{standing.goals_against} " /
+                 "incoming #{cla_standing['gols_contra']}"
           end
         end
       end

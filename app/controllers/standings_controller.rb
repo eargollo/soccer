@@ -21,7 +21,7 @@ class StandingsController < ApplicationController
     # @show_simulation = @standings.last_simulation.present?
   end
 
-  def show
+  def show # rubocop:disable Metrics/AbcSize
     @season = Season.find(params[:id])
 
     if @season.nil?
