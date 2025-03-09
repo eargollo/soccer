@@ -9,6 +9,7 @@ namespace :import do # rubocop:disable Metrics/BlockLength
       Team.find_or_create_by!(name: "America-RN", reference: 2233, logo: "https://media.api-sports.io/football/teams/2233.png")
       Team.find_or_create_by!(name: "Brasiliense", reference: 2208, logo: "https://media.api-sports.io/football/teams/2208.png")
       Team.find_or_create_by!(name: "Ipatinga", reference: 12_277, logo: "https://media.api-sports.io/football/teams/12277.png")
+      Team.find_or_create_by!(name: "Paysandu", reference: 149, logo: "https://media.api-sports.io/football/teams/149.png")
       Team.find_or_create_by!(name: "Santo André", reference: 10_003, logo: "https://media.api-sports.io/football/teams/10003.png")
       Team.find_or_create_by!(name: "São Caetano", reference: 7786, logo: "https://media.api-sports.io/football/teams/7786.png")
 
