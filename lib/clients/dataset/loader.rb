@@ -45,12 +45,6 @@ module Clients
         end
         missing
       end
-
-      # def each_match_missing_or_inconsistent(&func)
-      #   matches.each do |m|
-      #     yield block(m)
-      #   end
-      # end
     end
   end
 end

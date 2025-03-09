@@ -11,7 +11,7 @@
                                 <%= sort_link(column: "name", label: "Club") %>
                                 <%= sort_indicator if params[:column] == "name" %>
                             </th>
-                            <% if show_simulation %>
+                            <% if @show_simulation %>
                                 <th scope="col" class="px-6 py-3 text-left tracking-wider">
                                     <%= sort_link(column: "champion", label: "C") %>
                                     <%= sort_indicator if params[:column] == "champion" %>
@@ -74,7 +74,7 @@
                                     <img class="w-5" src="<%= standing.team.logo %>" alt="">
                                     <span class="ml-2 font-medium"><%= standing.team.name %></span>
                                 </td>
-                                <% if show_simulation %>
+                                <% if @show_simulation %>
                                     <td class="px-6 py-2 whitespace-nowrap">
                                         <%= number_with_precision(standing.last_simulation&.champion, precision: 2) %>%
                                     </td>

@@ -14,7 +14,7 @@ Rails.application.routes.draw do
 
   resources :standings, only: %i[index show] do
     collection do
-      get :list
+      get "list(:id)", to: "standings#list", as: :list
     end
   end
   resources :simulations, only: %i[index create new show] do

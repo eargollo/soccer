@@ -98,3 +98,7 @@ gem "jsbundling-rails", "~> 1.3"
 # Solid Queue
 gem "mission_control-jobs"
 gem "solid_queue"
+
+# Scrap http to validate seasons (Rake)
+gem "httparty"
+gem "nokogiri"

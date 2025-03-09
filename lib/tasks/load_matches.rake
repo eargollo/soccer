@@ -50,48 +50,56 @@ namespace :import do # rubocop:disable Metrics/BlockLength
       puts "Importing matches..."
       league = League.find_by(reference: 71)
 
+      prev_year = nil
       loader.matches.each_with_index do |m, i|
         team_home = Clients::Dataset::Loader.guess_team(m["mandante"])
         team_away = Clients::Dataset::Loader.guess_team(m["visitante"])
         year = m["data"][6..10].to_i
-        # puts "year: #{year}"
+        date = Time.zone.local(year, m["data"][3..5].to_i, m["data"][0..2].to_i, m["hora"][0..2].to_i,
+                               m["hora"][3..5].to_i)
+
+        year = 2020 if date > Time.zone.local(2020, 12, 31) && date < Time.zone.local(2021, 3, 1)
+
+        if year != prev_year
+          puts "year: #{year}"
+          prev_year = year
+        end
         season = league.seasons.find_by(year: year)
         if season.nil?
           puts "Season #{year} is missing. Creating"
           season = league.seasons.create!(year: year)
         end
 
-        date = Time.zone.local(year, m["data"][3..5].to_i, m["data"][0..2].to_i, m["hora"][0..2].to_i,
-                               m["hora"][3..5].to_i)
         home_goals = m["mandante_Placar"].to_i
         away_goals = m["visitante_Placar"].to_i
         round = m["rodata"].to_i
 
         match = season.matches.find_by(team_home: team_home, team_away: team_away)
         if match.nil?
-          if season.year >= 2010
-            File.write('tmp/diffs.txt', "MISSING match #{date} #{team_home.name} #{home_goals} x #{away_goals} " \
-                                        "#{team_away.name}\n",
-                       mode: 'a+')
+          # raise "Match #{date} #{team_home.name} x #{team_away.name} is missing!!!" if season.year >= 2010
 
-            puts "Match #{date} #{team_home.name} #{home_goals} x #{away_goals} #{team_away.name} is missing!!!"
-          else
-            puts "Match #{date} #{team_home.name} x #{team_away.name} is missing. Creating..."
-            season.matches.create!(
-              date: date,
-              team_home: team_home,
-              team_away: team_away,
-              home_goals: home_goals,
-              away_goals: away_goals,
-              round: round,
-              round_name: "Regular Season - #{round}",
-              status: "Match Finished"
-            )
-          end
+          #   File.write('tmp/diffs.txt', "MISSING match #{date} #{team_home.name} #{home_goals} x #{away_goals} " \
+          #                               "#{team_away.name}\n",
+          #              mode: 'a+')
+
+          #   puts "Match #{date} #{team_home.name} #{home_goals} x #{away_goals} #{team_away.name} is missing!!!"
+          # else
+          puts "Match #{date} #{team_home.name} x #{team_away.name} is missing. Creating..."
+          season.matches.create!(
+            date: date,
+            team_home: team_home,
+            team_away: team_away,
+            home_goals: home_goals,
+            away_goals: away_goals,
+            round: round,
+            round_name: "Regular Season - #{round}",
+            status: "Match Finished"
+          )
+          # end
         else
           m_text = "Match #{match.season.year} round #{round} #{match.date} #{match.team_home.name} " \
                    "#{match.home_goals} x #{match.away_goals} #{match.team_away.name}"
-          puts "#{m_text} already exists. Verifying..."
+          # puts "#{m_text} already exists. Verifying..."
           if match.date != date
             File.write('tmp/diffs.txt', "#{m_text}: Date is incorrect: existing #{match.date} incoming #{date}\n",
                        mode: 'a+')
@@ -128,5 +136,104 @@ namespace :import do # rubocop:disable Metrics/BlockLength
     end
   ensure
     Time.zone = cur_zone
+  end
+
+  desc "Validate every season standigns"
+  task validate: :environment do # rubocop:disable Metrics/BlockLength
+    require "vcr"
+    VCR.configure do |config|
+      config.cassette_library_dir = "lib/clients/globo/vcr/"
+      config.hook_into :webmock
+    end
+
+    # (2003..2021).each do |year|
+    (2003..2024).each do |year|
+      # Somehow 22, 23, and 24 are missing at O Globo
+      puts year
+
+      VCR.use_cassette("globo_#{year}", record_on_error: false) do |cassette|
+        url = "https://ge.globo.com/futebol/brasileirao-serie-a/#{year}"
+        response = HTTParty.get(url)
+        # puts response.body
+        doc = Nokogiri::HTML(response.body)
+        scripts = doc.css('script').map(&:text)
+        # puts "Script count #{scripts.length}"
+        # puts scripts
+        # puts(scripts.select { |s| s['scriptReact'] })
+        json = nil
+        scripts.each_with_index do |scr, i|
+          res = scr =~ /const classificacao = (\{.*\})/
+          next unless res
+
+          # puts "Found at #{i}"
+          classificacao = Regexp.last_match(1)
+          json = JSON.parse(classificacao)
+          # puts json["classificacao"][1]["nome_popular"]
+          break
+        end
+        league = League.find_by(reference: 71)
+        season = league.seasons.find_by(year:)
+        lookup = {
+          "Grêmio" => "Gremio",
+          "Athletico-PR" => "Atletico Paranaense",
+          "São Paulo" => "Sao Paulo",
+          "Vasco" => "Vasco DA Gama",
+          "Ceará" => "Ceara",
+          "Atlético-MG" => "Atletico-MG",
+          "Avaí" => "Avai",
+          "Atlético-GO" => "Atletico Goianiense",
+          "Vitória" => "Vitoria",
+          "Guarani" => "Guarani Campinas",
+          "Goiás" => "Goias",
+          "Prudente" => "Grêmio Barueri",
+          "Criciúma" => "Criciuma",
+          "Fortaleza" => "Fortaleza EC",
+          "Paraná" => "Parana",
+          "Sport" => "Sport Recife",
+          "Náutico" => "Nautico Recife",
+          "América-RN" => "America-RN",
+          "Barueri" => "Grêmio Barueri",
+          "América-MG" => "America Mineiro",
+          "Chapecoense" => "Chapecoense-sc",
+          "Bragantino" => "RB Bragantino",
+          "Cuiabá" => "Cuiaba"
+        }
+
+        if json.nil?
+          raise "Error finding data for #{year} verify #{"https://ge.globo.com/futebol/brasileirao-serie-a/#{year}"}"
+        end
+
+        json["classificacao"].each do |cla_standing|
+          tname = lookup[cla_standing["nome_popular"]] || cla_standing["nome_popular"]
+          team = Team.find_by(name: tname)
+          if team.nil?
+            puts "Team #{tname} not found"
+            next
+          end
+          standing = season.standings.find_by(team: team)
+          if cla_standing["jogos"] != standing.matches
+            puts "Year #{year} Team #{team.name} matches is incorrect: existing #{standing.matches} incoming #{cla_standing['jogos']}"
+          end
+          if cla_standing["vitorias"] != standing.wins
+            puts "Year #{year} Team #{team.name} wins is incorrect: existing #{standing.wins} incoming #{cla_standing['vitorias']}"
+          end
+          if cla_standing["empates"] != standing.draws
+            puts "Year #{year} Team #{team.name} draws is incorrect: existing #{standing.draws} incoming #{cla_standing['empates']}"
+          end
+          if cla_standing["derrotas"] != standing.losses
+            puts "Year #{year} Team #{team.name} losses is incorrect: existing #{standing.losses} incoming #{cla_standing['derrotas']}"
+          end
+          if cla_standing["gols_pro"] != standing.goals_pro
+            puts "Year #{year} Team #{team.name} goals pro is incorrect: existing #{standing.goals_pro} incoming #{cla_standing['gols_pro']}"
+          end
+          if cla_standing["gols_contra"] != standing.goals_against
+            puts "Year #{year} Team #{team.name} goals against is incorrect: existing #{standing.goals_against} incoming #{cla_standing['gols_contra']}"
+          end
+        end
+      end
+    rescue StandardError => e
+      puts "Error on year #{year}: #{e.message}, going to next year"
+      next
+    end
   end
 end

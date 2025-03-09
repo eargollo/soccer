@@ -1,22 +1,24 @@
 # frozen_string_literal: true
 
 class StandingsController < ApplicationController
-  def index # rubocop:disable Metrics/AbcSize
+  def index
     season = Season.target_season
 
-    if season.nil?
-      flash[:error] = "No active season found" # rubocop:disable Rails/I18nLocaleTexts
-      @standings = []
-      return
-    end
+    redirect_to(standing_path(season))
 
-    @standings = season.standings.order(points: :desc, wins: :desc)
-    Rails.logger.info("Found #{@standings.count} standings for #{season.league.name} #{season.year}")
-    return unless @standings.empty?
+    # if season.nil?
+    #   flash[:error] = "No active season found"
+    #   @standings = []
+    #   return
+    # end
 
-    season.compute_standings
-    @standings = season.standings.order(points: :desc, wins: :desc)
-    @show_simulation = @standings.last_simulation.present?
+    # @standings = season.standings.order(points: :desc, wins: :desc)
+    # Rails.logger.info("Found #{@standings.count} standings for #{season.league.name} #{season.year}")
+    # return unless @standings.empty?
+
+    # season.compute_standings
+    # @standings = season.standings.order(points: :desc, wins: :desc)
+    # @show_simulation = @standings.last_simulation.present?
   end
 
   def show
@@ -38,11 +40,12 @@ class StandingsController < ApplicationController
   end
 
   def list # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
-    season = Season.target_season
+    season = params[:id].nil? ? Season.target_season : Season.find(params[:id])
+    @season = season
     direction = params[:direction] || "desc"
 
     @standings = season.standings
-    @show_simulation = @standings.last_simulation.present?
+    @show_simulation = @standings.first.last_simulation.present?
 
     @standings = @standings.sort_by { |standing| standing.team.name }
     @standings = case params[:column]
