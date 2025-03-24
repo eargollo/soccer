@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class AdminSeasonsController < AdminController
-  def update
+  def update # rubocop:disable Metrics/AbcSize
     Rails.logger.info("Updating season #{params[:id]}")
     if params[:type] == 'sync'
       Rails.logger.info("Syncing season #{params[:id]}")
