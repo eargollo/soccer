@@ -7,7 +7,7 @@ class AdminLeaguesController < AdminController
 
   def show
     @league = League.find(params[:id])
-    @seasons = @league.seasons
+    @seasons = @league.seasons.order(year: :desc)
   end
 
   def new
