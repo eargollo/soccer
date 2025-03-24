@@ -7,7 +7,7 @@ class StandingsController < ApplicationController
     redirect_to(standing_path(season))
   end
 
-  def show # rubocop:disable Metrics/AbcSize
+  def show
     @season = Season.find(params[:id])
 
     if @season.nil?
@@ -17,12 +17,7 @@ class StandingsController < ApplicationController
     end
 
     @standings = @season.standings.order(points: :desc, wins: :desc)
-    Rails.logger.info("Found #{@standings.count} standings for #{@season.league.name} #{@season.year}")
-    return unless @standings.empty?
-
-    @season.compute_standings
-    @standings = @season.standings.order(points: :desc, wins: :desc)
-    @show_simulation = @standings.last_simulation.present?
+    @show_simulation = @season.last_simulation.present?
   end
 
   def list # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
@@ -31,7 +26,7 @@ class StandingsController < ApplicationController
     direction = params[:direction] || "desc"
 
     @standings = season.standings
-    @show_simulation = @standings.first.last_simulation.present?
+    @show_simulation = season.last_simulation.present?
 
     @standings = @standings.sort_by { |standing| standing.team.name }
     @standings = case params[:column]

@@ -39,6 +39,10 @@ class Season < ApplicationRecord
     league.seasons.find_or_create_by(year: match[:league]["season"])
   end
 
+  def last_simulation
+    simulations.where.not(finish: nil).last
+  end
+
   def seed
     Rails.logger.info('Seeding season')
     Season.apifootball_seed(league_id: league.reference, season_id: year)
