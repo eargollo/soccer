@@ -11,6 +11,11 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root "seasons#index"
 
+  resources :standings, only: %i[index show] do
+    collection do
+      get "list(:id)", to: "standings#list", as: :list
+    end
+  end
   resources :simulations, only: %i[index create new show] do
     resources :teams, only: %i[show], controller: "simulations/teams"
   end
