@@ -2,6 +2,7 @@
 
 ## To do
 
+- Start name sorting ascending
 - Make a graph out of th simulation distribution page
 - Add teams and single team view
 - Paginate matches
