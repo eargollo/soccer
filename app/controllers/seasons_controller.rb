@@ -21,6 +21,7 @@ class SeasonsController < ApplicationController
   end
 
   def list # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+    puts "GOT HERE with params #{params}"
     season = params[:id].nil? ? Season.target_season : Season.find(params[:id])
     @season = season
     direction = params[:direction] || "desc"
