@@ -2,6 +2,8 @@
 
 ## To do
 
+- Add simulation to season showing the simulation distribution
+- Add teams and single team view
 - Start name sorting ascending
 - Make a graph out of th simulation distribution page
 - Add teams and single team view
