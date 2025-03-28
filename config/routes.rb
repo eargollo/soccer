@@ -12,11 +12,6 @@ Rails.application.routes.draw do
   # root "posts#index"
   root "seasons#index"
 
-  resources :seasons, only: %i[index show] do
-    collection do
-      get "list(:id)", to: "seasons#list", as: :list
-    end
-  end
   # resources :standings, only: %i[index show] do
   #   collection do
   #     get "list(:id)", to: "standings#list", as: :list
@@ -29,11 +24,18 @@ Rails.application.routes.draw do
   resources :admin_leagues, only: %i[index show new create]
   resources :admin_seasons, only: %i[update]
   resources :teams, only: %i[index show]
+
   resources :leagues, only: %i[index show] do
     resources :standings, only: %i[index], controller: "leagues/standings" do
       collection do
         get :list
       end
+    end
+  end
+
+  resources :seasons, only: %i[index show] do
+    collection do
+      get "list(:id)", to: "seasons#list", as: :list
     end
   end
 

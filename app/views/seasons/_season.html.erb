@@ -2,59 +2,59 @@
 <div class="flex flex-col">
     <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
         <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-            <%= turbo_frame_tag "standings", class: "shadow overflow-hidden sm:rounded-lg" do %>
+            <%= turbo_frame_tag "season", class: "shadow overflow-hidden sm:rounded-lg" do %>
                 <table class="min-w-full text-sm text-gray-600">
                     <thead class="bg-gray-100 text-xs uppercase font-medium">
                         <tr class="">
                             <th></th>
                             <th scope="col" class="grid grid-cols-2 px-6 py-3 text-left tracking-wider">
-                                <%= sort_link(column: "name", label: "Club") %>
+                                <%= season_sort_link(column: "name", label: "Club") %>
                                 <%= sort_indicator if params[:column] == "name" %>
                             </th>
                             <% if @show_simulation %>
                                 <th scope="col" class="px-6 py-3 text-left tracking-wider">
-                                    <%= sort_link(column: "champion", label: "C") %>
+                                    <%= season_sort_link(column: "champion", label: "C") %>
                                     <%= sort_indicator if params[:column] == "champion" %>
                                 </th>
                                 <th scope="col" class="px-6 py-3 text-left tracking-wider">
-                                    <%= sort_link(column: "relegation", label: "Re") %>
+                                    <%= season_sort_link(column: "relegation", label: "Re") %>
                                     <%= sort_indicator if params[:column] == "relegation" %>
                                 </th>
                             <% end %>
                             <th scope="col" class="px-6 py-3 text-left tracking-wider">
-                                <%= sort_link(column: "points", label: "Pts") %>
+                                <%= season_sort_link(column: "points", label: "Pts") %>
                                 <%= sort_indicator if params[:column] == "points" %>
                             </th>
                             <th scope="col" class=" px-6 py-3 text-left tracking-wider">
-                                <%= sort_link(column: "matches", label: "MP") %>
+                                <%= season_sort_link(column: "matches", label: "MP") %>
                                 <%= sort_indicator if params[:column] == "matches" %>
                             </th>
                             <th scope="col" class=" px-6 py-3 text-left tracking-wider">
-                                <%= sort_link(column: "wins", label: "W") %>
+                                <%= season_sort_link(column: "wins", label: "W") %>
                                 <%= sort_indicator if params[:column] == "wins" %>
                             </th>
                             <th scope="col" class=" px-6 py-3 text-left tracking-wider">
-                                <%= sort_link(column: "draws", label: "D") %>
+                                <%= season_sort_link(column: "draws", label: "D") %>
                                 <%= sort_indicator if params[:column] == "draws" %>
                             </th>
                             <th scope="col" class=" px-6 py-3 text-left tracking-wider">
-                                <%= sort_link(column: "losses", label: "L") %>
+                                <%= season_sort_link(column: "losses", label: "L") %>
                                 <%= sort_indicator if params[:column] == "losses" %>
                             </th>
                             <th scope="col" class=" px-6 py-3 text-left tracking-wider">
-                                <%= sort_link(column: "goals_pro", label: "GF") %>
+                                <%= season_sort_link(column: "goals_pro", label: "GF") %>
                                 <%= sort_indicator if params[:column] == "goals_pro" %>
                             </th>
                             <th scope="col" class=" px-6 py-3 text-left tracking-wider">
-                                <%= sort_link(column: "goals_against", label: "GA") %>
+                                <%= season_sort_link(column: "goals_against", label: "GA") %>
                                 <%= sort_indicator if params[:column] == "goals_against" %>
                             </th>
                             <th scope="col" class=" px-6 py-3 text-left tracking-wider">
-                                <%= sort_link(column: "goals_difference", label: "GD") %>
+                                <%= season_sort_link(column: "goals_difference", label: "GD") %>
                                 <%= sort_indicator if params[:column] == "goals_difference" %>
                             </th>
                             <th scope="col" class=" px-6 py-3 text-left tracking-wider">
-                                <%= sort_link(column: "rate", label: "R") %>
+                                <%= season_sort_link(column: "rate", label: "R") %>
                                 <%= sort_indicator if params[:column] == "rate" %>
                             </th>
                             <!--

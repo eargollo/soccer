@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-class StandingsController < ApplicationController
+class SeasonsController < ApplicationController
   def index
     season = Season.target_season
 
-    redirect_to(standing_path(season))
+    redirect_to(season_path(season))
   end
 
   def show
@@ -21,6 +21,7 @@ class StandingsController < ApplicationController
   end
 
   def list # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+    puts "GOT HERE with params #{params}"
     season = params[:id].nil? ? Season.target_season : Season.find(params[:id])
     @season = season
     direction = params[:direction] || "desc"
@@ -47,6 +48,6 @@ class StandingsController < ApplicationController
                  end
 
     @standings.reverse! if direction == "desc"
-    render(partial: "standings", locals: { standings: @standings })
+    render(partial: "season", locals: { standings: @standings })
   end
 end
