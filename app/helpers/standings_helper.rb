@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 module StandingsHelper
-  def league_sort_link(column:, label:, league_id: nil)
-    link_to(label, list_league_standings_path(league_id:, column:, direction: sort_direction(column)))
-  end
-
-  def season_sort_link(column:, label:)
-    link_to(label, list_seasons_path(params[:id], column:, direction: sort_direction(column)))
+  def sort_link(column:, label:, league_id: nil, league: false)
+    if league
+      link_to(label, list_league_standings_path(league_id: league_id, column:, direction: sort_direction(column)))
+    else
+      link_to(label, list_standings_path(params[:id], column:, direction: sort_direction(column)))
+    end
   end
 
   def sort_indicator
