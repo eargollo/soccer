@@ -51,6 +51,10 @@
                                 <%= sort_link(column: "seasons", label: "S", league: true, league_id: @league.id) %>
                                 <%= sort_indicator if params[:column] == "seasons" %>
                             </th>
+                            <th scope="col" class=" px-6 py-3 text-left tracking-wider">
+                                <%= sort_link(column: "last_season", label: "LS", league: true, league_id: @league.id) %>
+                                <%= sort_indicator if params[:column] == "last_season" %>
+                            </th>
                         </tr>
                     </thead>
                     <tbody class="bg-gray-100">
@@ -92,6 +96,9 @@
                                 </td>
                                 <td class="px-6 py-2 whitespace-nowrap">
                                     <%= standing.seasons %>
+                                </td>
+                                <td class="px-6 py-2 whitespace-nowrap">
+                                    <%= standing.last_season %>
                                 </td>
                             </tr>
                         <% end %>

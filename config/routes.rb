@@ -10,13 +10,18 @@ Rails.application.routes.draw do
 
   # Defines the root path route ("/")
   # root "posts#index"
-  root "standings#index"
+  root "seasons#index"
 
-  resources :standings, only: %i[index show] do
+  resources :seasons, only: %i[index show] do
     collection do
-      get "list(:id)", to: "standings#list", as: :list
+      get "list(:id)", to: "seasons#list", as: :list
     end
   end
+  # resources :standings, only: %i[index show] do
+  #   collection do
+  #     get "list(:id)", to: "standings#list", as: :list
+  #   end
+  # end
   resources :simulations, only: %i[index create new show] do
     resources :teams, only: %i[show], controller: "simulations/teams"
   end
@@ -25,7 +30,7 @@ Rails.application.routes.draw do
   resources :admin_seasons, only: %i[update]
   resources :teams, only: %i[index show]
   resources :leagues, only: %i[index show] do
-    resources :standings, only: %i[index], controller: "league_standings" do
+    resources :standings, only: %i[index], controller: "leagues/standings" do
       collection do
         get :list
       end
