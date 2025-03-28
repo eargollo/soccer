@@ -2,7 +2,12 @@
 
 ## To do
 
+- Add simulation to season showing the simulation distribution
+- Add teams and single team view
 - Start name sorting ascending
+Data:
+- Rename teams via Rake (keep imports up to date)
+- Import Serie B
 Technical:
 - Simplify link sorting in a single helper
 - Concern for standings
