@@ -1,5 +1,15 @@
 # Tasks
 
+## To do
+
+- Start name sorting ascending
+Technical:
+- Simplify link sorting in a single helper
+- Concern for standings
+- Cache team logos locally
+- Add annotations
+- Add sorbet
+
 ## Milestone 2
 - Improve look and feel
 - Support to multiple competitions
