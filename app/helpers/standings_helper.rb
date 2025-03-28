@@ -2,12 +2,10 @@
 
 module StandingsHelper
   def sort_link(column:, label:, league_id: nil, league: false)
-    sort_direction = column == params[:column] ? next_sort_direction : "desc"
-
     if league
-      link_to(label, list_league_standings_path(league_id: league_id, column:, direction: sort_direction))
+      link_to(label, list_league_standings_path(league_id: league_id, column:, direction: sort_direction(column)))
     else
-      link_to(label, list_standings_path(params[:id], column:, direction: sort_direction))
+      link_to(label, list_standings_path(params[:id], column:, direction: sort_direction(column)))
     end
   end
 
@@ -45,5 +43,9 @@ module StandingsHelper
 
   def next_sort_direction
     params[:direction] == "asc" ? "desc" : "asc"
+  end
+
+  def sort_direction(column)
+    column == params[:column] ? next_sort_direction : "desc"
   end
 end

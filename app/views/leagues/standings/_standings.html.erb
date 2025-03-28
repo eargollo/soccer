@@ -32,6 +32,18 @@
                                 <%= sort_indicator if params[:column] == "losses" %>
                             </th>
                             <th scope="col" class=" px-6 py-3 text-left tracking-wider">
+                                <%= sort_link(column: "wins_rate", label: "W%", league: true, league_id: @league.id) %>
+                                <%= sort_indicator if params[:column] == "wins_rate" %>
+                            </th>
+                            <th scope="col" class=" px-6 py-3 text-left tracking-wider">
+                                <%= sort_link(column: "draws_rate", label: "D%", league: true, league_id: @league.id) %>
+                                <%= sort_indicator if params[:column] == "draws_rate" %>
+                            </th>
+                            <th scope="col" class=" px-6 py-3 text-left tracking-wider">
+                                <%= sort_link(column: "losses_rate", label: "L%", league: true, league_id: @league.id) %>
+                                <%= sort_indicator if params[:column] == "losses_rate" %>
+                            </th>
+                            <th scope="col" class=" px-6 py-3 text-left tracking-wider">
                                 <%= sort_link(column: "goals_pro", label: "GF", league: true, league_id: @league.id) %>
                                 <%= sort_indicator if params[:column] == "goals_pro" %>
                             </th>
@@ -81,6 +93,15 @@
                                 </td>
                                 <td class="px-6 py-2 whitespace-nowrap">
                                     <%= standing.losses %>
+                                </td>
+                                <td class="px-6 py-2 whitespace-nowrap">
+                                    <%= number_with_precision(standing.wins_rate, precision: 2) %>%
+                                </td>
+                                <td class="px-6 py-2 whitespace-nowrap">
+                                    <%= number_with_precision(standing.draws_rate, precision: 2) %>%
+                                </td>
+                                <td class="px-6 py-2 whitespace-nowrap">
+                                    <%= number_with_precision(standing.losses_rate, precision: 2) %>%
                                 </td>
                                 <td class="px-6 py-2 whitespace-nowrap">
                                     <%= standing.goals_pro %>
