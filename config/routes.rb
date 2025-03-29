@@ -33,5 +33,7 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :simulation_standings, only: %i[show], controller: "simulation_standings"
+
   mount MissionControl::Jobs::Engine, at: "/jobs"
 end

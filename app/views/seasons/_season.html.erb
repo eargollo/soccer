@@ -76,7 +76,7 @@
                                 </td>
                                 <% if @show_simulation %>
                                     <td class="px-6 py-2 whitespace-nowrap">
-                                        <%= number_with_precision(standing.last_simulation&.champion, precision: 2) %>%
+                                        <%= link_to(number_with_precision(standing.last_simulation&.champion, precision: 2), simulation_standing_path(standing.last_simulation), target: "_top" ) %>
                                     </td>
                                     <td class="px-6 py-2 whitespace-nowrap">
                                         <%= number_with_precision(standing.last_simulation&.relegation, precision: 2) %>%
