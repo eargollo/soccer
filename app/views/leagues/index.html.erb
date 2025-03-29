@@ -20,11 +20,11 @@
                     <tbody class="divide-y divide-gray-200">
                         <% @leagues.each do |league| %>
                             <tr>
-                                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0"><%= link_to(league.name, league_path(league.id), class:"underline hover:font-semibold") %></td>
+                                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0"><%= league.name %></td>
                                 <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                                     <%= link_to("Points", league_standings_path(league.id), class:"underline hover:font-semibold") %>
                                 </td>
-                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= league.seasons.length %></td>
+                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= link_to(league.seasons.length, league_path(league.id), class:"underline hover:font-semibold") %></td>
                             </tr>
                         <% end %>
                     </tbody>

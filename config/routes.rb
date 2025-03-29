@@ -9,14 +9,8 @@ Rails.application.routes.draw do
   get "up" => "rails/health#show", as: :rails_health_check
 
   # Defines the root path route ("/")
-  # root "posts#index"
-  root "standings#index"
+  root "seasons#index"
 
-  resources :standings, only: %i[index show] do
-    collection do
-      get "list(:id)", to: "standings#list", as: :list
-    end
-  end
   resources :simulations, only: %i[index create new show] do
     resources :teams, only: %i[show], controller: "simulations/teams"
   end
@@ -24,13 +18,22 @@ Rails.application.routes.draw do
   resources :admin_leagues, only: %i[index show new create]
   resources :admin_seasons, only: %i[update]
   resources :teams, only: %i[index show]
+
   resources :leagues, only: %i[index show] do
-    resources :standings, only: %i[index], controller: "league_standings" do
+    resources :standings, only: %i[index], controller: "leagues/standings" do
       collection do
         get :list
       end
     end
   end
+
+  resources :seasons, only: %i[index show] do
+    collection do
+      get "list(:id)", to: "seasons#list", as: :list
+    end
+  end
+
+  resources :simulation_standings, only: %i[show], controller: "simulation_standings"
 
   mount MissionControl::Jobs::Engine, at: "/jobs"
 end

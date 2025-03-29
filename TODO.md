@@ -1,5 +1,21 @@
 # Tasks
 
+## To do
+
+- Make a graph out of th simulation distribution page
+- Add teams and single team view
+- Paginate matches
+- Start name sorting ascending
+Data:
+- Rename teams via Rake (keep imports up to date)
+- Import Serie B
+Technical:
+- Simplify link sorting in a single helper
+- Concern for standings
+- Cache team logos locally
+- Add annotations
+- Add sorbet
+
 ## Milestone 2
 - Improve look and feel
 - Support to multiple competitions

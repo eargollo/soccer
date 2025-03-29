@@ -12,6 +12,24 @@ class LeagueStanding < ApplicationRecord
     100 * ((wins * 3) + draws) / (matches * 3.00)
   end
 
+  def wins_rate
+    return 0 if matches.zero?
+
+    (100.0 * wins) / matches
+  end
+
+  def draws_rate
+    return 0 if matches.zero?
+
+    (100.0 * draws) / matches
+  end
+
+  def losses_rate
+    return 0 if matches.zero?
+
+    (100.0 * losses) / matches
+  end
+
   def goals_difference
     goals_pro - goals_against
   end
