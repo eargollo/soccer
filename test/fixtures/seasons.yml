@@ -3,3 +3,4 @@
 season1:
   year: 2023
   league: a_league
+  active: true
