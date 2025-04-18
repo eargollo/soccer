@@ -9,13 +9,22 @@
                         <tr>
                             <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">Position</th>
                             <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Count</th>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Running Total</th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">
+                        <% running_total = 0.0 %>
                         <% @positions.each do |pos| %>
+                            <% 
+                                perc = (100.0 * pos.count) / @simulation.runs
+                                running_total += perc
+                                formatted_perc = "#{number_with_precision(perc, precision: 2)}%"
+                                formatted_rt = "#{number_with_precision(running_total, precision: 2)}%"
+                            %>
                             <tr>
                                 <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0"><%= pos.position %></td>
-                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= pos.count %></td>
+                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= formatted_perc %></td>
+                                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= formatted_rt %></td>
                             </tr>
                         <% end %>
                     </tbody>
