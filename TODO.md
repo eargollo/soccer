@@ -2,6 +2,7 @@
 
 ## To do
 
+- Refresh admin page when open or close are run
 - Make a chart out of the simulation distribution page
 - Add teams and single team view
 - Paginate matches
