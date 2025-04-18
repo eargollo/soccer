@@ -6,5 +6,6 @@ class SimulationStandingsController < ApplicationController
     @positions = SimulationStandingPosition.where(team: @sim_standing.team,
                                                   simulation: @sim_standing.simulation).order(:position)
     @season = @sim_standing.simulation.season
+    @simulation = @sim_standing.simulation
   end
 end
