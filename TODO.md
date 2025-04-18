@@ -2,7 +2,7 @@
 
 ## To do
 
-- Make a graph out of th simulation distribution page
+- Make a chart out of the simulation distribution page
 - Add teams and single team view
 - Paginate matches
 - Start name sorting ascending
