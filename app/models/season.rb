@@ -88,7 +88,7 @@ class Season < ApplicationRecord
   end
 
   def all_matches_played?
-    matches.count == matches.where(status: "Match Finished").count
+    matches.count == matches.where(status: ["Match Finished", "Match Cancelled"]).count
   end
 
   def update_standings_positions
