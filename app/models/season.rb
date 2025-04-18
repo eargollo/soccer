@@ -6,6 +6,9 @@ class Season < ApplicationRecord
   has_many :standings, dependent: :destroy
   has_many :simulations, dependent: :destroy
 
+  class MatchesToPlayError < StandardError
+  end
+
   def self.target_season
     season = Season.where(active: true).order(:year).last
     return season unless season.nil?
@@ -13,7 +16,7 @@ class Season < ApplicationRecord
     Season.order(year: :desc, updated_at: :desc).first
   end
 
-  def self.apifootball_seed(league_id:, season_id:)
+  def self.apifootball_seed(league_id:, season_id:) # rubocop:disable Metrics/AbcSize
     client = Clients::ApiFootball::Client.new(Rails.application.credentials.api_football.token)
 
     Rails.logger.info "Importing league #{league_id} season #{season_id}"
@@ -25,6 +28,9 @@ class Season < ApplicationRecord
     matches.each do |m|
       season.import_match(m)
     end
+
+    season.close if all_matches_played?
+
     season
   end
 
@@ -79,5 +85,26 @@ class Season < ApplicationRecord
     matches.each do |match|
       match.send(:compute_points_commit)
     end
+  end
+
+  def all_matches_played?
+    matches.count == matches.where(status: "Match Finished").count
+  end
+
+  def update_standings_positions
+    standings.select("*, goals_pro - goals_against as goals_difference")
+             .order(points: :desc,
+                    wins: :desc,
+                    goals_difference: :desc,
+                    goals_pro: :desc).each_with_index do |st, index|
+      st.update!(position: index + 1)
+    end
+  end
+
+  def close
+    raise MatchesToPlayError unless all_matches_played?
+
+    update_standings_positions
+    update!(active: false)
   end
 end

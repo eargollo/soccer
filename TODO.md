@@ -2,6 +2,10 @@
 
 ## To do
 
+- Make a chart out of the simulation distribution page
+- Add teams and single team view
+- Paginate matches
+- Start name sorting ascending
 - Make a graph out of th simulation distribution page
 - Add teams and single team view
 - Paginate matches
@@ -10,6 +14,7 @@ Data:
 - Rename teams via Rake (keep imports up to date)
 - Import Serie B
 Technical:
+- Adopt https://github.com/ankane/ahoy for metrics
 - Simplify link sorting in a single helper
 - Concern for standings
 - Cache team logos locally
