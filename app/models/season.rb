@@ -29,7 +29,7 @@ class Season < ApplicationRecord
       season.import_match(m)
     end
 
-    season.close if all_matches_played?
+    season.close if season.all_matches_played?
 
     season
   end
