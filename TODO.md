@@ -21,6 +21,7 @@ Technical:
 - Cache team logos locally
 - Add annotations
 - Add sorbet
+- Move to use SQL so that the materialization view works well without the need to put it on seeds.rb
 
 ## Milestone 2
 - Improve look and feel

@@ -1,1 +1,2 @@
 dev-test-dbs: docker-compose -f docker-compose.dev.yml up
+css: bin/rails tailwindcss:watch
