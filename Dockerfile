@@ -1,8 +1,9 @@
 # syntax = docker/dockerfile:1
 
 # Make sure RUBY_VERSION matches the Ruby version in .ruby-version and Gemfile
-ARG RUBY_VERSION=3.3.4
-FROM registry.docker.com/library/ruby:$RUBY_VERSION-slim AS base
+ARG RUBY_VERSION=3.4.3
+# FROM registry.docker.com/library/ruby:$RUBY_VERSION-slim AS base
+FROM registry.docker.com/library/ruby:$RUBY_VERSION AS base
 
 # Rails app lives here
 WORKDIR /rails
@@ -25,18 +26,16 @@ RUN chmod +r /rails/localhost.key
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y build-essential git libvips pkg-config libpq-dev nodejs npm
 
-# Turbo
-RUN npm install -g yarn
-
 # Install application gems
 COPY Gemfile Gemfile.lock ./
+
 RUN bundle install && \
     rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git && \
     bundle exec bootsnap precompile --gemfile
 
 # Turbo
-COPY yarn.lock package.json package-lock.json ./
-RUN yarn install --check-files
+COPY package.json package-lock.json ./
+RUN npm install
 
 # Copy application code
 COPY . .

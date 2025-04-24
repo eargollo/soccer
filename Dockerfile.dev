@@ -1,4 +1,4 @@
-FROM ruby:3.3.4
+FROM ruby:3.4.3
 
 WORKDIR /home/app
 
@@ -8,13 +8,12 @@ ARG PORT=3000
 EXPOSE $PORT
 
 RUN apt-get update -qq && apt-get install -y nodejs npm
-RUN npm install -g yarn
 
 RUN gem install rails bundler
 RUN gem install rails
 
-COPY yarn.lock package.json package-lock.json ./
-RUN yarn install --check-files
+COPY package.json package-lock.json ./
+RUN npm install
 
 COPY Gemfile Gemfile.lock ./
 
