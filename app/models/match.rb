@@ -1,5 +1,36 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: matches
+#
+#  id           :bigint           not null, primary key
+#  away_goals   :integer
+#  date         :datetime
+#  home_goals   :integer
+#  reference    :integer
+#  result       :string
+#  round        :integer
+#  round_name   :string
+#  status       :string
+#  created_at   :datetime         not null
+#  updated_at   :datetime         not null
+#  season_id    :bigint           default(1), not null
+#  team_away_id :bigint           not null
+#  team_home_id :bigint           not null
+#
+# Indexes
+#
+#  index_matches_on_season_id     (season_id)
+#  index_matches_on_team_away_id  (team_away_id)
+#  index_matches_on_team_home_id  (team_home_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (season_id => seasons.id)
+#  fk_rails_...  (team_away_id => teams.id)
+#  fk_rails_...  (team_home_id => teams.id)
+#
 class Match < ApplicationRecord
   belongs_to :team_home, class_name: 'Team'
   belongs_to :team_away, class_name: 'Team'

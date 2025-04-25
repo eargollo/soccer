@@ -1,5 +1,16 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: teams
+#
+#  id         :bigint           not null, primary key
+#  logo       :string
+#  name       :string
+#  reference  :integer
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
 class Team < ApplicationRecord
   has_many :home_matches, class_name: 'Match', foreign_key: 'team_home_id', dependent: :restrict_with_exception,
                           inverse_of: :team_home
