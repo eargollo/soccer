@@ -255,8 +255,4 @@ namespace :seriea do # rubocop:disable Metrics/BlockLength
       next
     end
   end
-
-  desc "Update teams from serie a apifootball dataset"
-  task update_teams: :environment do
-  end
 end
