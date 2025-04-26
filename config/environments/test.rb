@@ -7,7 +7,7 @@ require "active_support/core_ext/integer/time"
 # your test database is "scratch space" for the test suite and is wiped
 # and recreated between test runs. Don't rely on the data there!
 
-Rails.application.configure do
+Rails.application.configure do # rubocop:disable Metrics/BlockLength
   # Settings specified here will take precedence over those in config/application.rb.
 
   # While tests run files are not watched, reloading is not necessary.
@@ -63,4 +63,17 @@ Rails.application.configure do
 
   # Raise error when a before_action's only/except options reference missing actions
   config.action_controller.raise_on_missing_callback_actions = true
+
+  config.active_job.queue_adapter = :async
+
+  # Configure Active Storage for local storage without using storage.yml
+  config.active_storage.service = :local
+
+  # Define the local storage service programmatically
+  config.active_storage.service_configurations = {
+    local: {
+      service: "Disk",
+      root: Rails.root.join("storage/test/active_storage")
+    }
+  }
 end
