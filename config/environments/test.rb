@@ -65,4 +65,15 @@ Rails.application.configure do
   config.action_controller.raise_on_missing_callback_actions = true
 
   config.active_job.queue_adapter = :async
+
+  # Configure Active Storage for local storage without using storage.yml
+  config.active_storage.service = :local
+
+  # Define the local storage service programmatically
+  config.active_storage.service_configurations = {
+    local: {
+      service: "Disk",
+      root: Rails.root.join("storage/test/active_storage")
+    }
+  }
 end
