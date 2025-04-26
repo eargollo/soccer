@@ -42,5 +42,16 @@ module Soccer
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    # Configure Active Storage for local storage without using storage.yml
+    config.active_storage.service = :local
+
+    # Define the local storage service programmatically
+    config.active_storage.service_configurations = {
+      local: {
+        service: "Disk",
+        root: Rails.root.join("storage/active_storage")
+      }
+    }
   end
 end

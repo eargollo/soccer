@@ -9,6 +9,8 @@ services:
       - soccer-network
     env_file:
       - stack.env
+    volumes:
+      - ${RAILS_STORAGE_LOCATION}:/storage
   solidqueue:
     image: 'ghcr.io/eargollo/soccer:latest'
     command: bundle exec rake solid_queue:start
