@@ -1,9 +1,23 @@
 # frozen_string_literal: true
 
-namespace :import do # rubocop:disable Metrics/BlockLength
-  desc "Import entire league data"
-  task league: :environment do # rubocop:disable Metrics/BlockLength
+namespace :seriea do # rubocop:disable Metrics/BlockLength
+  desc "Fix matches from serie a apifootball dataset, importing from apifootball first"
+  task fix: :environment do # rubocop:disable Metrics/BlockLength
     cur_zone = Time.zone
+    require "vcr"
+    VCR.configure do |config|
+      config.cassette_library_dir = "lib/clients/api_football/vcr/"
+      config.hook_into :webmock
+    end
+
+    (2010..2025).each do |year|
+      puts year
+
+      VCR.use_cassette("apifootball_#{year}", record_on_error: false) do |_cassette|
+        Season.apifootball_seed(league_id: 71, season_id: year)
+      end
+    end
+
     begin
       Time.zone = "America/Sao_Paulo"
       Team.find_or_create_by!(name: "America-RN", reference: 2233, logo: "https://media.api-sports.io/football/teams/2233.png")
@@ -240,5 +254,9 @@ namespace :import do # rubocop:disable Metrics/BlockLength
       puts "Error on year #{year}: #{e.message}, going to next year"
       next
     end
+  end
+
+  desc "Update teams from serie a apifootball dataset"
+  task update_teams: :environment do
   end
 end
