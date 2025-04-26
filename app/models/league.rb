@@ -1,5 +1,18 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: leagues
+#
+#  id         :bigint           not null, primary key
+#  country    :string
+#  flag       :string
+#  logo       :string
+#  name       :string           not null
+#  reference  :integer          not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
 class League < ApplicationRecord
   has_many :seasons, dependent: :destroy
   has_many :league_standings, dependent: :destroy

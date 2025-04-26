@@ -4,6 +4,11 @@ class SeasonsController < ApplicationController
   def index
     season = Season.target_season
 
+    if season.nil?
+      redirect_to(leagues_path)
+      return
+    end
+
     redirect_to(season_path(season))
   end
 

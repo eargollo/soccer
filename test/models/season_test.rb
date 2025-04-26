@@ -1,5 +1,24 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: seasons
+#
+#  id         :bigint           not null, primary key
+#  active     :boolean          default(FALSE), not null
+#  year       :integer          not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  league_id  :bigint           not null
+#
+# Indexes
+#
+#  index_seasons_on_league_id  (league_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (league_id => leagues.id)
+#
 require "test_helper"
 
 class SeasonTest < ActiveSupport::TestCase

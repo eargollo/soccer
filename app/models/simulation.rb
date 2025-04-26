@@ -1,5 +1,26 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: simulations
+#
+#  id         :bigint           not null, primary key
+#  finish     :datetime
+#  name       :string
+#  runs       :integer
+#  start      :datetime
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#  season_id  :bigint           default(1), not null
+#
+# Indexes
+#
+#  index_simulations_on_season_id  (season_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (season_id => seasons.id)
+#
 class Simulation < ApplicationRecord
   belongs_to :season
   has_many :simulation_standings, dependent: :destroy

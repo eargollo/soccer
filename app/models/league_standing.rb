@@ -1,5 +1,21 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: league_standings_matview
+#
+#  draws         :bigint
+#  goals_against :bigint
+#  goals_pro     :bigint
+#  last_season   :integer
+#  losses        :bigint
+#  matches       :bigint
+#  points        :bigint
+#  seasons       :bigint
+#  wins          :bigint
+#  league_id     :bigint
+#  team_id       :bigint
+#
 class LeagueStanding < ApplicationRecord
   self.table_name = "league_standings_matview"
 

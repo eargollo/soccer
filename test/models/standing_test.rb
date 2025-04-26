@@ -1,5 +1,33 @@
 # frozen_string_literal: true
 
+# == Schema Information
+#
+# Table name: standings
+#
+#  id            :bigint           not null, primary key
+#  draws         :integer
+#  goals_against :integer
+#  goals_pro     :integer
+#  losses        :integer
+#  matches       :integer
+#  points        :integer
+#  position      :integer
+#  wins          :integer
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  season_id     :bigint           default(1), not null
+#  team_id       :bigint           not null
+#
+# Indexes
+#
+#  index_standings_on_season_id  (season_id)
+#  index_standings_on_team_id    (team_id)
+#
+# Foreign Keys
+#
+#  fk_rails_...  (season_id => seasons.id)
+#  fk_rails_...  (team_id => teams.id)
+#
 require "test_helper"
 
 class StandingTest < ActiveSupport::TestCase

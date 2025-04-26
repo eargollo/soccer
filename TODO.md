@@ -19,7 +19,6 @@ Technical:
 - Simplify link sorting in a single helper
 - Concern for standings
 - Cache team logos locally
-- Add annotations
 - Add sorbet
 - Move to use SQL so that the materialization view works well without the need to put it on seeds.rb
 
