@@ -1,32 +1,112 @@
-<header class="bg-gray-800 text-orange-50">
-    <nav class="h-16 flex justify-between items-center w-[96%] mx-auto">
-        <div>Stochastic Soccer</div>
-        <div class="">
-        <ul class="flex items-center gap-8">
-            <li class="">
-            <%= link_to "Leagues", leagues_path, class: "hover:text-orange-300" %>
-            </li>
-            <li class="">
-            <%= link_to "Seasons", root_path, class: "hover:text-orange-300" %>
-            </li>
-            <li class="">
-            <%= link_to "Matches", matches_path, class: "hover:text-orange-300" %>
-            </li>
-            <li class="">
-            <%= link_to "Simulations", simulations_path, class: "hover:text-orange-300" %>
-            </li>
-            <%= link_to "Admin League", admin_leagues_path, class: "hover:text-orange-300" %>
-            </li>
-        </ul>
+<header class="bg-white">
+    <nav class="mx-auto flex max-w-7xl items-center justify-between p-4 lg:px-8" aria-label="Global">
+    <div class="flex lg:flex-1">
+        <a href="#" class="-m-1.5 p-1.5">
+        <span class="sr-only">Futebol Stats</span>
+        <%= image_tag("logoshadow.png", class: "h-8 w-auto", alt: "Stochastic Soccer") %>
+        </a>
+    </div>
+    <div class="flex lg:hidden">
+        <button id="openMenuButton" type="button" class="-m-2.5 inline-flex items-center justify-center rounded-md p-2.5 text-gray-700">
+        <span class="sr-only">Open main menu</span>
+        <svg class="size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+        </svg>
+        </button>
+    </div>
+    <div class="hidden lg:flex lg:gap-x-12">
+        <%= link_to "Standings", root_path, class: "text-sm/6 font-semibold text-gray-900" %>
+        <%= link_to "Matches", matches_path, class: "text-sm/6 font-semibold text-gray-900" %>
+        <div class="relative">
+        <button id="rankingMenuButton" type="button" class=" flex items-center gap-x-1 text-sm/6 font-semibold text-gray-900" aria-expanded="false">
+            Rankings
+            <svg id="rankingMenuIcon" class="rotate-180 size-5 flex-none text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+            <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+            </svg>
+        </button>
+        <!--
+            'ranking' flyout menu, show/hide based on flyout menu state.
+
+            Entering: "transition ease-out duration-200"
+            From: "opacity-0 translate-y-1"
+            To: "opacity-100 translate-y-0"
+            Leaving: "transition ease-in duration-150"
+            From: "opacity-100 translate-y-0"
+            To: "opacity-0 translate-y-1"
+        -->
+        <div id="rankingMenu" class="hidden absolute top-full -left-8 z-10 mt-3 w-screen max-w-md overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-gray-900/5">
+            <div class="p-4">
+            <div class="group relative flex items-center gap-x-6 rounded-lg p-4 text-sm/6 hover:bg-gray-50">
+                <div class="flex size-11 flex-none items-center justify-center rounded-lg bg-gray-50 group-hover:bg-white">
+                
+                <svg class="size-6 text-gray-600 group-hover:text-indigo-600" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.242 5.992h12m-12 6.003H20.24m-12 5.999h12M4.117 7.495v-3.75H2.99m1.125 3.75H2.99m1.125 0H5.24m-1.92 2.577a1.125 1.125 0 1 1 1.591 1.59l-1.83 1.83h2.16M2.99 15.745h1.125a1.125 1.125 0 0 1 0 2.25H3.74m0-.002h.375a1.125 1.125 0 0 1 0 2.25H2.99" />                    </svg>
+                </div>
+                <div class="flex-auto">
+                <a href="<%= league_standings_path(1) %>" class="block font-semibold text-gray-900">
+                    Points
+                    <span class="absolute inset-0"></span>
+                </a>
+                <p class="mt-1 text-gray-600">Accumulated totals for all seasos</p>
+                </div>
+            </div>
+            </div>
         </div>
-        <div class="">
-            <% if user_signed_in? %>
-                <%= button_to "Sign out", destroy_user_session_path, method: :delete, 
-                    class: "rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                %>
-            <% else %>
-                <%= link_to "Sign in", new_user_session_path, class: "rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"%>
-            <% end %>
         </div>
+
+        <%= link_to "Seasons", leagues_path, class: "text-sm/6 font-semibold text-gray-900" %>
+    </div>
+    <div class="hidden lg:flex lg:flex-1 lg:justify-end">
+        <a href="#" class="text-sm/6 font-semibold text-gray-900">Log in <span aria-hidden="true">&rarr;</span></a>
+    </div>
     </nav>
+    <!-- Mobile menu, show/hide based on menu open state. -->
+    <div id="mobileMenu" class="lg:hidden" role="dialog" aria-modal="true">
+    <!-- Background backdrop, show/hide based on slide-over state. -->
+    <div class="fixed inset-0 z-10"></div>
+    <div class="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
+        <div class="flex items-center justify-between">
+        <a href="#" class="-m-1.5 p-1.5">
+            <span class="sr-only">Futebol Stats</span>
+            <img class="h-8 w-auto" src="img/logoshadow.png" alt="">
+        </a>
+        <button id="closemobilebutton" type="button" class="-m-2.5 rounded-md p-2.5 text-gray-700">
+            <span class="sr-only">Close menu</span>
+            <svg class="size-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+            </svg>
+        </button>
+        </div>
+        <div class="mt-6 flow-root">
+        <div class="-my-6 divide-y divide-gray-500/10">
+            <div class="space-y-2 py-6">
+            <%= link_to "Standings", root_path, class: "-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50" %>
+            <%= link_to "Matches", matches_path, class: "-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50" %>
+            <div class="-mx-3">
+                <button id="rankingMobileButton" type="button" class="flex w-full items-center justify-between rounded-lg py-2 pr-3.5 pl-3 text-base/7 font-semibold text-gray-900 hover:bg-gray-50" aria-controls="disclosure-1" aria-expanded="false">
+                Rankings
+                <!--
+                    Expand/collapse icon, toggle classes based on menu open state.
+
+                    Open: "rotate-180", Closed: ""
+                -->
+                <svg id="rankingMobileMenuIcon" class="rotate-180 size-5 flex-none" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+                    <path fill-rule="evenodd" d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" />
+                </svg>
+                </button>
+                <!-- 'ranking' sub-menu, show/hide based on menu state. -->
+                <div id="rankingMobileMenu" class="hidden mt-2 space-y-2" id="disclosure-1">
+                <%= link_to "Points", league_standings_path(1), class: "block rounded-lg py-2 pr-3 pl-6 text-sm/7 font-semibold text-gray-900 hover:bg-gray-50" %>
+                </div>
+            </div>
+            <%= link_to "Seasons", leagues_path, class: "-mx-3 block rounded-lg px-3 py-2 text-base/7 font-semibold text-gray-900 hover:bg-gray-50" %>
+
+            </div>
+            <div class="py-6">
+            <a href="#" class="-mx-3 block rounded-lg px-3 py-2.5 text-base/7 font-semibold text-gray-900 hover:bg-gray-50">Log in</a>
+            </div>
+        </div>
+        </div>
+    </div>
+    </div>
 </header>

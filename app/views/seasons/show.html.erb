@@ -1,4 +1,4 @@
-<div class="flex flex-col items-center w-screen min-h-screen bg-white py-0">
-    <h1><%= @season.league.name %> <%= @season.year%></h1>
+<div class="flex flex-col w-screen min-h-screen bg-white py-0">
+    <h1 class="pb-4 flex justify-center"><%= @season.league.name %> <%= @season.year%></h1>
     <%= render "season", standings: @standings, show_simulation: @show_simulation  %>
 </div>

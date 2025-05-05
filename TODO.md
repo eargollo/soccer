@@ -2,6 +2,10 @@
 
 ## To do
 
+- Change logged in menu mobile and web for when logged in
+- Go over every page in mobile
+- Anchor menu so it does not scroll
+- Increase padding of standings table on lg mode for better readibility
 - Refresh admin page when open or close are run
 - Make a chart out of the simulation distribution page
 - Add teams and single team view

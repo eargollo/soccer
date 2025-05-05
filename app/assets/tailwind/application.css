@@ -1,1 +1,21 @@
 @import "tailwindcss";
+
+@layer theme, base, components, utilities;
+
+@layer components {
+    .table-header {
+        @apply px-2 py-3 text-left tracking-wider;
+    }
+    .table-rank {
+        @apply py-2 pl-2 sticky w-12 left-0 z-2 md:w-auto text-right;
+    }
+    .table-club {
+        @apply md:px-4 py-2 whitespace-nowrap flex sticky w-30 md:w-auto sm:overflow-visible overflow-clip left-6 z-0;
+    }
+    .tname {
+        @apply lg:ml-2 font-medium;
+    }
+    .table-td {
+        @apply px-2 py-2 whitespace-nowrap text-right;
+    }
+}
