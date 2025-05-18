@@ -4,6 +4,7 @@
 
 - Change logged in menu mobile and web for when logged in
 - Go over every page in mobile
+- Fix Tailwind and assets generation in DEV for real time without restarting rails support
 - Anchor menu so it does not scroll
 - Increase padding of standings table on lg mode for better readibility
 - Refresh admin page when open or close are run

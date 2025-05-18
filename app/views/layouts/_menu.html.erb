@@ -56,9 +56,15 @@
 
         <%= link_to "Seasons", leagues_path, class: "text-sm/6 font-semibold text-gray-900" %>
     </div>
-    <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-        <a href="#" class="text-sm/6 font-semibold text-gray-900">Log in <span aria-hidden="true">&rarr;</span></a>
-    </div>
+    <% if user_signed_in? %>
+        <div class="hidden lg:flex lg:flex-1 lg:justify-end">
+            <a href="#" class="text-sm/6 font-semibold text-gray-900">Log out <span aria-hidden="true">&rarr;</span></a>
+        </div>
+    <% else %>
+        <div class="hidden lg:flex lg:flex-1 lg:justify-end">
+            <a href="#" class="text-sm/6 font-semibold text-gray-900">Log in <span aria-hidden="true">&rarr;</span></a>
+        </div>
+    <% end %>
     </nav>
     <!-- Mobile menu, show/hide based on menu open state. -->
     <div id="mobileMenu" class="lg:hidden" role="dialog" aria-modal="true">
