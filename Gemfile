@@ -5,14 +5,12 @@ source "https://rubygems.org"
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
 gem 'rails', '~> 8.0.0'
 
-
 # Render
 gem 'pg'
 # Use the Puma web server [https://github.com/puma/puma]
 gem 'puma', '>= 5.0'
 # Use JavaScript with ESM import maps [https://github.com/rails/importmap-rails]
 gem 'importmap-rails'
-
 
 # The original asset pipeline for Rails [https://github.com/rails/sprockets-rails]
 gem 'sprockets-rails'
@@ -33,9 +31,9 @@ gem 'tzinfo-data', platforms: %i[mswin mswin64 mingw x64_mingw jruby]
 
 # TODO: Configure solid_cache and solid_cable - added copying from new app 2025-11-09
 # Use the database-backed adapters for Rails.cache, Active Job, and Action Cable
+gem "solid_cable"
 gem "solid_cache"
 gem "solid_queue"
-gem "solid_cable"
 
 # Dashboard for jobs
 gem "mission_control-jobs"
@@ -100,7 +98,6 @@ group :test do
   gem 'vcr'
   gem 'webmock'
 end
-
 
 gem "devise", "~> 4.9"
 
