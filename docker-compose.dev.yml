@@ -5,24 +5,29 @@ services:
       - 5435:5435
     environment:
       POSTGRES_PASSWORD: password
-      POSTGRESS_DB: development
+      POSTGRES_DB: development
       PGPORT: 5435
+      POSTGRES_HOST_AUTH_METHOD: trust
     networks:
       - database-net
     volumes:
-      - ./storage/postgress-dev/data/:/var/lib/postgresql/data/
+      - pg-dev-data:/var/lib/postgresql/data/
   test-db:
     image: 'postgres:17.2'
     ports:
       - 5434:5434
     environment:
       POSTGRES_PASSWORD: password
-      POSTGRESS_DB: test
+      POSTGRES_DB: test
       PGPORT: 5434
+      POSTGRES_HOST_AUTH_METHOD: trust
     networks:
       - database-net
     volumes:
-      - ./storage/postgress-test/data/:/var/lib/postgresql/data/
+      - pg-test-data:/var/lib/postgresql/data/
 networks: 
   database-net:
     driver: bridge
+volumes:
+  pg-dev-data:
+  pg-test-data:
