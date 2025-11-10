@@ -1,5 +1,4 @@
-web: env RUBY_DEBUG_OPEN=true bin/rails server -p 3000
-solidqueueworker: bundle exec rake solid_queue:start
-css: bin/rails tailwindcss:watch
-js: npm run build --watch
 dev-test-dbs: docker-compose -f docker-compose.dev.yml up --remove-orphans
+web: bin/rails server
+css: bin/rails tailwindcss:watch
+solidqueueworker: bundle exec rake solid_queue:start
