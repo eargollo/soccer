@@ -255,4 +255,33 @@ namespace :seriea do # rubocop:disable Metrics/BlockLength
       next
     end
   end
+
+  desc "Fix team names"
+  task teamnames: :environment do
+    names = {
+      "Atletico-MG" => "Atlético-MG",
+      "Gremio" => "Grêmio",
+      "Atletico Paranaense" => "Athletico-PR",
+      "Vasco DA Gama" => "Vasco",
+      "Goias" => "Goiás",
+      "Vitoria" => "Vitória",
+      "Fortaleza EC" => "Fortaleza",
+      "Atletico Goianiense" => "Atlético-GO",
+      "Ceara" => "Ceará",
+      "Parana" => "Paraná",
+      "Chapecoense-sc" => "Chapecoense",
+      "Avai" => "Avaí",
+      "America Mineiro" => "América-MG",
+      "Criciuma" => "Criciúma",
+      "Nautico Recife" => "Náutico",
+      "Cuiaba" => "Cuiabá",
+      "Guarani Campinas" => "Guarani",
+      "America-RN" => "América-RN"
+    }
+
+    names.each_key do |old_name|
+      team = Team.find_by(name: old_name)
+      team&.update!(name: names[old_name])
+    end
+  end
 end

@@ -2,6 +2,7 @@
 
 ## To do
 
+- Check if I should take out self signed certificate and have no encription at Rails itself
 - Refresh admin page when open or close are run
 - Make a chart out of the simulation distribution page
 - Add teams and single team view
@@ -29,7 +30,6 @@ Technical:
 - Show different probabilities for different milestones on standings
 
 # Extra
-- Take out node and yarn and use importmaps
 - Deployment with Kamal
 
 ## Thoughts

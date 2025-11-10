@@ -3,7 +3,11 @@ plugins:
   - rubocop-rails
 
 AllCops:
- NewCops: enable
+  NewCops: enable
+  Exclude:
+    - 'vendor/**/*'
+    - 'gems/**/*'
+    - '~/.loca/**/*'
 
 Style/StringLiterals:
   Enabled: false

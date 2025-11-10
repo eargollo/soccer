@@ -16,7 +16,7 @@ class UpdateLeagueJob < ApplicationJob
     next_match_time = @season.matches.scheduled.minimum(:date)
 
     if next_match_time.nil?
-      schedule_next_update(nil) unless @season.matches.pending.count.zero?
+      schedule_next_update(nil) unless @season.matches.pending.count.none?
 
       return
     end
