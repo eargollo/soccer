@@ -111,6 +111,7 @@ class Match < ApplicationRecord
   def compute_points_commit
     Standing.compute(season:, team: team_home)
     Standing.compute(season:, team: team_away)
+    LeagueStanding.refresh
   end
 
   def determine_result
