@@ -109,3 +109,6 @@ gem "devise", "~> 4.9"
 # Scrap http to validate seasons (Rake)
 gem "httparty"
 gem "nokogiri"
+
+# Properly add materialized views as migrations and to schema.db
+gem "scenic"

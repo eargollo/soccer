@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_26_153427) do
+ActiveRecord::Schema[8.0].define(version: 2025_11_10_162125) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -319,4 +319,41 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_26_153427) do
   add_foreign_key "solid_queue_scheduled_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "standings", "seasons"
   add_foreign_key "standings", "teams"
+
+  create_view "league_standings", sql_definition: <<-SQL
+      SELECT teams.id AS team_id,
+      seasons.league_id,
+      sum(standings.points) AS points,
+      sum(standings.matches) AS matches,
+      sum(standings.wins) AS wins,
+      sum(standings.draws) AS draws,
+      sum(standings.losses) AS losses,
+      sum(standings.goals_pro) AS goals_pro,
+      sum(standings.goals_against) AS goals_against,
+      count(seasons.id) AS seasons,
+      max(seasons.year) AS last_season
+     FROM teams,
+      standings,
+      seasons
+    WHERE ((teams.id = standings.team_id) AND (standings.season_id = seasons.id))
+    GROUP BY teams.id, seasons.league_id;
+  SQL
+  create_view "league_standings_matview", materialized: true, sql_definition: <<-SQL
+      SELECT teams.id AS team_id,
+      seasons.league_id,
+      sum(standings.points) AS points,
+      sum(standings.matches) AS matches,
+      sum(standings.wins) AS wins,
+      sum(standings.draws) AS draws,
+      sum(standings.losses) AS losses,
+      sum(standings.goals_pro) AS goals_pro,
+      sum(standings.goals_against) AS goals_against,
+      count(seasons.id) AS seasons,
+      max(seasons.year) AS last_season
+     FROM teams,
+      standings,
+      seasons
+    WHERE ((teams.id = standings.team_id) AND (standings.season_id = seasons.id))
+    GROUP BY teams.id, seasons.league_id;
+  SQL
 end
