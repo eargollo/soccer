@@ -4,7 +4,7 @@ class SimulationsController < ApplicationController
   before_action :authenticate_user!, only: %i[new create]
 
   def index
-    @simulations = Simulation.all
+    @simulations = Simulation.order(updated_at: :desc)
   end
 
   def show
