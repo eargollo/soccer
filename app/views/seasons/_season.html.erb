@@ -13,6 +13,9 @@
                             </th>
                             <% if @show_simulation %>
                                 <th scope="col" class="px-6 py-3 text-left tracking-wider">
+                                    POS
+                                </th>
+                                <th scope="col" class="px-6 py-3 text-left tracking-wider">
                                     <%= season_sort_link(column: "champion", label: "C") %>
                                     <%= sort_indicator if params[:column] == "champion" %>
                                 </th>
@@ -76,7 +79,10 @@
                                 </td>
                                 <% if @show_simulation %>
                                     <td class="px-6 py-2 whitespace-nowrap">
-                                        <%= link_to("#{number_with_precision(standing.last_simulation&.champion, precision: 2)}%", simulation_standing_path(standing.last_simulation), target: "_top" ) %>
+                                        <%= link_to("#{standing.last_simulation&.standing_positions.where(count: 1..).pluck(Arel.sql("MIN(position), MAX(position)"))[0].join("-")}", simulation_standing_path(standing.last_simulation), target: "_top" ) %>
+                                    </td>
+                                    <td class="px-6 py-2 whitespace-nowrap">
+                                        <%= number_with_precision(standing.last_simulation&.champion, precision: 2) %>
                                     </td>
                                     <td class="px-6 py-2 whitespace-nowrap">
                                         <%= number_with_precision(standing.last_simulation&.relegation, precision: 2) %>%

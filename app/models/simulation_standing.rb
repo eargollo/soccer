@@ -26,4 +26,11 @@
 class SimulationStanding < ApplicationRecord
   belongs_to :simulation
   belongs_to :team
+
+  def standing_positions
+    SimulationStandingPosition.where(
+      simulation_id: simulation_id,
+      team_id: team_id
+    )
+  end
 end
