@@ -112,3 +112,5 @@ gem "nokogiri"
 
 # Properly add materialized views as migrations and to schema.db
 gem "scenic"
+
+gem "honeybadger", "~> 6.1"
