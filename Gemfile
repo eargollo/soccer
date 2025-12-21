@@ -27,7 +27,7 @@ gem 'jbuilder'
 # gem "bcrypt", "~> 3.1.7"
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: %i[mswin mswin64 mingw x64_mingw jruby]
+gem 'tzinfo-data', platforms: %i[windows]
 
 # TODO: Configure solid_cache and solid_cable - added copying from new app 2025-11-09
 # Use the database-backed adapters for Rails.cache, Active Job, and Action Cable
@@ -53,7 +53,7 @@ group :development, :test do
   gem 'sqlite3', '~> 2'
 
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
-  gem 'debug', platforms: %i[mri mswin mswin64 mingw x64_mingw]
+  gem 'debug', platforms: %i[mri windows]
   gem 'dotenv-rails'
 
   # Audits gems for known security defects (use config/bundler-audit.yml to ignore issues)

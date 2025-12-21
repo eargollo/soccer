@@ -15,7 +15,7 @@ module Soccer
     config.mission_control.jobs.http_basic_auth_enabled = false
 
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 7.1
+    config.load_defaults 8.1
 
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
@@ -24,8 +24,6 @@ module Soccer
 
     config.autoload_paths += %W[#{config.root}/lib/clients/**/]
     config.eager_load_paths += %W[#{config.root}/lib/clients/**/]
-
-    config.active_support.to_time_preserves_timezone = :zone
 
     # Job interface
     config.active_job.queue_adapter = :solid_queue
