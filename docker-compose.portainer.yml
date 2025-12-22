@@ -24,6 +24,8 @@ services:
     image: 'postgres:18.1'
     ports:
       - 15432:5432
+    environment:
+      POSTGRES_DB: soccer
     env_file:
       - stack.env
     networks:
