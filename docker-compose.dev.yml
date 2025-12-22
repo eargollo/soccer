@@ -1,6 +1,6 @@
 services:
   dev-db:
-    image: 'postgres:17.2'
+    image: 'postgres:18.1'
     ports:
       - 5435:5435
     environment:
@@ -11,9 +11,9 @@ services:
     networks:
       - database-net
     volumes:
-      - pg-dev-data:/var/lib/postgresql/data/
+      - pg-dev-data:/var/lib/postgresql
   test-db:
-    image: 'postgres:17.2'
+    image: 'postgres:18.1'
     ports:
       - 5434:5434
     environment:
@@ -24,7 +24,7 @@ services:
     networks:
       - database-net
     volumes:
-      - pg-test-data:/var/lib/postgresql/data/
+      - pg-test-data:/var/lib/postgresql
 networks: 
   database-net:
     driver: bridge

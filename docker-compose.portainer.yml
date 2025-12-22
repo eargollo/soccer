@@ -10,7 +10,7 @@ services:
     env_file:
       - stack.env
     volumes:
-      - ${RAILS_STORAGE_LOCATION}:/storage
+      - soccer-rails-storage:/storage
   solidqueue:
     image: 'ghcr.io/eargollo/soccer:latest'
     command: bundle exec rake solid_queue:start
@@ -21,7 +21,7 @@ services:
     env_file:
       - stack.env
   database:
-    image: 'postgres:latest'
+    image: 'postgres:18.1'
     ports:
       - 15432:5432
     env_file:
@@ -29,7 +29,7 @@ services:
     networks:
       - soccer-network
     volumes:
-      - ${DB_DATA_LOCATION}:/var/lib/postgresql/data/
+      - soccer-postgres-data:/var/lib/postgresql
   pgadmin:
     image: dpage/pgadmin4
     ports:
@@ -41,8 +41,13 @@ services:
     networks:
       - soccer-network
     volumes:
-      - ${PGADMIN_DATA_LOCATION}/:/var/lib/pgadmin/
+      - soccer-pgadmin-data:/var/lib/pgadmin
 
 networks: 
   soccer-network:
     driver: bridge
+
+volumes:
+  soccer-postgres-data:
+  soccer-pgadmin-data:
+  soccer-rails-storage:

@@ -11,6 +11,8 @@ services:
       - postgres-network
     env_file:
       - .env.DEV
+    volumes:
+      - rails-storage:/storage
 
   solidqueue:
     build:
@@ -25,7 +27,7 @@ services:
       - .env.DEV
 
   database:
-    image: 'postgres:17.2'
+    image: 'postgres:18.1'
     # ports:
       # - 15432:5435
     env_file:
@@ -33,7 +35,7 @@ services:
     networks:
       - postgres-network
     volumes:
-      - pg-dev-data:/var/lib/postgresql/data/
+      - pg-dev-data:/var/lib/postgresql
   
   pgadmin:
     image: dpage/pgadmin4
@@ -55,3 +57,4 @@ networks:
 volumes:
   pg-dev-data:
   pgadmin-data:
+  rails-storage:

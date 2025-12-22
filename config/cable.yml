@@ -6,5 +6,5 @@ test:
 
 production:
   adapter: postgresql
-  url: <%= ENV.fetch("DATABASE_URL") { "postgres://postgres@database:5432/postgres" } %>
+  url: <%= ENV.fetch("DATABASE_URL") { "postgres://postgres@database:5432/soccer" } %>
   channel_prefix: soccer_production
