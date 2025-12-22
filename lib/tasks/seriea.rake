@@ -10,7 +10,7 @@ namespace :seriea do # rubocop:disable Metrics/BlockLength
       config.hook_into :webmock
     end
 
-    (2010..2025).each do |year|
+    (2010..2026).each do |year|
       puts year
 
       VCR.use_cassette("apifootball_#{year}", record_on_error: false) do |_cassette|

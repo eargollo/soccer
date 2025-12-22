@@ -10,6 +10,8 @@ services:
       - postgres-network
     env_file:
       - .env.PROD
+    volumes:
+      - rails-storage:/storage
 
   solidqueue:
     image: 'ghcr.io/eargollo/soccer:latest'
@@ -22,7 +24,7 @@ services:
       - .env.PROD
 
   database:
-    image: 'postgres:17.2'
+    image: 'postgres:18.1'
     ports:
       - 15432:5432
     env_file:
@@ -30,19 +32,8 @@ services:
     networks:
       - postgres-network
     volumes:
-      - ./storage/postgress/data/:/var/lib/postgresql/data/
+      - pg-prod-data:/var/lib/postgresql
   
-  init-pgadmin:
-    image: ubuntu
-    command: >
-      sh -c "mkdir -p /var/lib/postgress/pgadmin-data ; chown -R 5050:5050 /var/lib/postgress/pgadmin-data"
-    env_file:
-      - .env.PROD
-    networks:
-      - postgres-network
-    volumes:
-      - ./storage/postgress/:/var/lib/postgress
-
   pgadmin:
     image: dpage/pgadmin4
     ports:
@@ -55,8 +46,13 @@ services:
     networks:
       - postgres-network
     volumes:
-      - ./storage/postgress/pgadmin-data/:/var/lib/pgadmin/
+      - pgadmin-data:/var/lib/pgadmin/
 
 networks: 
   postgres-network:
     driver: bridge
+
+volumes:
+  pg-prod-data:
+  pgadmin-data:
+  rails-storage:

@@ -8,6 +8,7 @@ AllCops:
     - 'vendor/**/*'
     - 'gems/**/*'
     - '~/.loca/**/*'
+    - 'db/schema.rb'
 
 Style/StringLiterals:
   Enabled: false
