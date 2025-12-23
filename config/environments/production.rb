@@ -99,8 +99,9 @@ Rails.application.configure do
   # Skip DNS rebinding protection for the default health check endpoint.
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
 
-  # Render
-  config.public_file_server.enabled = ENV['RAILS_SERVE_STATIC_FILES'].present? || ENV['RENDER'].present?
+  # Render - always enable static file serving (needed for team logos in public/team_logos/)
+  # The original Render-specific logic is kept for compatibility but we always enable it
+  config.public_file_server.enabled = true
 
   # Not tied to a host name for now
   config.hosts.clear
