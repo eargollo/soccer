@@ -9,8 +9,6 @@ services:
       - soccer-network
     env_file:
       - stack.env
-    volumes:
-      - soccer-rails-storage:/storage
     restart: unless-stopped
   solidqueue:
     image: 'ghcr.io/eargollo/soccer:latest'
@@ -67,4 +65,3 @@ networks:
 volumes:
   soccer-postgres-data:
   soccer-pgadmin-data:
-  soccer-rails-storage:
