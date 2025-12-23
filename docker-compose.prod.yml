@@ -9,8 +9,6 @@ services:
       - postgres-network
     env_file:
       - .env.PROD
-    volumes:
-      - rails-prod-storage:/storage
 
   solidqueue:
     image: 'ghcr.io/eargollo/soccer:latest'
@@ -53,4 +51,3 @@ networks:
 volumes:
   pg-prod-data:
   pgadmin-prod-data:
-  rails-prod-storage:
