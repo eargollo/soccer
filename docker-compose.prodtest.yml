@@ -1,0 +1,61 @@
+services:
+  rails:
+    build:
+      dockerfile: Dockerfile
+      context: .
+      args:
+        PORT: 3001
+    ports:
+      - "3001:3001"
+    depends_on:
+      - database
+    networks:
+      - postgres-network
+    env_file:
+      - .env.PROD
+
+  solidqueue:
+    build:
+      dockerfile: Dockerfile
+      context: .
+      args:
+        PORT: ${PORT:-3000}
+    command: bundle exec rake solid_queue:start
+    depends_on:
+      - database
+    networks:
+      - postgres-network
+    env_file:
+      - .env.PROD
+
+  database:
+    image: 'postgres:18.1'
+    ports:
+      - 15432:5432
+    env_file:
+      - .env.PROD
+    networks:
+      - postgres-network
+    volumes:
+      - pg-prod-data:/var/lib/postgresql
+  
+  pgadmin:
+    image: dpage/pgadmin4
+    ports:
+      - 8080:8080
+    env_file:
+      - .env.PROD
+    depends_on:
+      - database
+    networks:
+      - postgres-network
+    volumes:
+      - pgadmin-prod-data:/var/lib/pgadmin/
+
+networks: 
+  postgres-network:
+    driver: bridge
+
+volumes:
+  pg-prod-data:
+  pgadmin-prod-data:
