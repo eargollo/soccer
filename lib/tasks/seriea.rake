@@ -5,9 +5,13 @@ namespace :seriea do # rubocop:disable Metrics/BlockLength
   task fix: :environment do # rubocop:disable Metrics/BlockLength
     cur_zone = Time.zone
     require "vcr"
+    require "uri"
     VCR.configure do |config|
       config.cassette_library_dir = "lib/clients/api_football/vcr/"
       config.hook_into :webmock
+      config.ignore_request do |request|
+        URI(request.uri).host == "api.honeybadger.io"
+      end
     end
 
     (2010..2026).each do |year|
@@ -156,9 +160,13 @@ namespace :seriea do # rubocop:disable Metrics/BlockLength
   desc "Validate every season standigns"
   task validate: :environment do # rubocop:disable Metrics/BlockLength
     require "vcr"
+    require "uri"
     VCR.configure do |config|
       config.cassette_library_dir = "lib/clients/globo/vcr/"
       config.hook_into :webmock
+      config.ignore_request do |request|
+        URI(request.uri).host == "api.honeybadger.io"
+      end
     end
 
     (2003..2024).each do |year| # rubocop:disable Metrics/BlockLength
