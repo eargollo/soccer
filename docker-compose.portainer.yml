@@ -2,7 +2,7 @@ services:
   rails:
     image: 'ghcr.io/eargollo/soccer:latest'
     ports:
-      - ${PORT}:4443
+      - ${PORT:-3000}:${PORT:-3000}
     depends_on:
       - database
     networks:
@@ -11,6 +11,7 @@ services:
       - stack.env
     volumes:
       - soccer-rails-storage:/storage
+    restart: unless-stopped
   solidqueue:
     image: 'ghcr.io/eargollo/soccer:latest'
     command: bundle exec rake solid_queue:start
@@ -20,6 +21,7 @@ services:
       - soccer-network
     env_file:
       - stack.env
+    restart: unless-stopped
   database:
     image: 'postgres:18.1'
     ports:
@@ -32,6 +34,7 @@ services:
       - soccer-network
     volumes:
       - soccer-postgres-data:/var/lib/postgresql
+    restart: unless-stopped
   pgadmin:
     image: dpage/pgadmin4
     ports:
@@ -44,6 +47,18 @@ services:
       - soccer-network
     volumes:
       - soccer-pgadmin-data:/var/lib/pgadmin
+    restart: unless-stopped
+
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    command: tunnel --no-autoupdate run --token ${CLOUDFLARE_TUNNEL_TOKEN}
+    env_file:
+      - stack.env
+    depends_on:
+      - rails
+    networks:
+      - soccer-network
+    restart: unless-stopped
 
 networks: 
   soccer-network:

@@ -18,13 +18,17 @@ ENV RAILS_ENV="production" \
 # Throw-away build stage to reduce size of final image
 FROM base AS build
 
-# Generating self signed certificate for development
-RUN openssl req -x509 -nodes -newkey rsa:2048 -keyout /rails/localhost.key -out /rails/localhost.crt -days 365 -subj "/C=US/ST=Denial/L=Springfield/O=Dis/CN=localhost"
-RUN chmod +r /rails/localhost.key
-
 # Install packages needed to build gems
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential git libvips pkg-config libpq-dev
+    apt-get install --no-install-recommends -y \
+    build-essential \
+    git \
+    libvips \
+    pkg-config \
+    libpq-dev \
+    libyaml-dev \
+    curl && \
+    rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Install application gems
 COPY Gemfile Gemfile.lock ./
@@ -44,12 +48,17 @@ RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
 
 # Final stage for app image
 FROM base
-# Serving port
-ARG PORT=443
+
+# Serving port (default to 3000 since Cloudflare handles TLS termination)
+ARG PORT=3000
+ENV PORT=$PORT
 
 # Install packages needed for deployment
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y curl libsqlite3-0 libvips libpq-dev curl && \
+    apt-get install --no-install-recommends -y \
+    curl \
+    libvips \
+    libpq-dev && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Copy built artifacts: gems, application
@@ -64,6 +73,10 @@ USER rails:rails
 # Entrypoint prepares the database.
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
+# Health check
+HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
+    CMD curl -f http://localhost:$PORT/up || exit 1
+
 # Start the server by default, this can be overwritten at runtime
 EXPOSE ${PORT}
-CMD ["./bin/rails", "server", "-b", "ssl://0.0.0.0?key=localhost.key&cert=localhost.crt"]
+CMD ["./bin/rails", "server", "-b", "0.0.0.0"]

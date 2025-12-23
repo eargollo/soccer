@@ -1,9 +1,8 @@
 services:
   rails:
-    build:
     image: 'ghcr.io/eargollo/soccer:latest'
     ports:
-      - 443:${PORT}
+      - ${PORT:-3000}:${PORT:-3000}
     depends_on:
       - database
     networks:
@@ -11,7 +10,7 @@ services:
     env_file:
       - .env.PROD
     volumes:
-      - rails-storage:/storage
+      - rails-prod-storage:/storage
 
   solidqueue:
     image: 'ghcr.io/eargollo/soccer:latest'
@@ -42,11 +41,10 @@ services:
       - .env.PROD
     depends_on:
       - database
-      - init-pgadmin
     networks:
       - postgres-network
     volumes:
-      - pgadmin-data:/var/lib/pgadmin/
+      - pgadmin-prod-data:/var/lib/pgadmin/
 
 networks: 
   postgres-network:
@@ -54,5 +52,5 @@ networks:
 
 volumes:
   pg-prod-data:
-  pgadmin-data:
-  rails-storage:
+  pgadmin-prod-data:
+  rails-prod-storage:
