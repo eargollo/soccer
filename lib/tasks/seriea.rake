@@ -284,7 +284,8 @@ namespace :seriea do # rubocop:disable Metrics/BlockLength
       "Nautico Recife" => "Náutico",
       "Cuiaba" => "Cuiabá",
       "Guarani Campinas" => "Guarani",
-      "America-RN" => "América-RN"
+      "America-RN" => "América-RN",
+      "remo" => "Remo"
     }
 
     names.each_key do |old_name|
