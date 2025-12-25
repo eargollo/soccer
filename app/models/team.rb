@@ -11,7 +11,13 @@
 #  created_at :datetime         not null
 #  updated_at :datetime         not null
 #
+# Indexes
+#
+#  index_teams_on_name  (name) UNIQUE
+#
 class Team < ApplicationRecord
+  validates :name, presence: true, uniqueness: true
+
   has_many :home_matches, class_name: 'Match', foreign_key: 'team_home_id', dependent: :restrict_with_exception,
                           inverse_of: :team_home
   has_many :away_matches, class_name: 'Match', foreign_key: 'team_away_id', dependent: :restrict_with_exception,
