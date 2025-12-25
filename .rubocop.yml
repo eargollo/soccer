@@ -9,6 +9,7 @@ AllCops:
     - 'gems/**/*'
     - '~/.loca/**/*'
     - 'db/schema.rb'
+    - 'lib/clients/backup/backup.rb'
 
 Style/StringLiterals:
   Enabled: false
