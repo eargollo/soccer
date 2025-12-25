@@ -22,6 +22,17 @@ namespace :seriea do # rubocop:disable Metrics/BlockLength
       end
     end
 
+    puts "Clean up duplicated matches for 2025"
+    league = League.find_by(reference: 71)
+    season = league&.seasons&.find_by(year: 2025)
+    if season
+      matches = season.matches.where(status: 'Time to be defined')
+      count = matches.count
+      puts "Deleting #{count} matches with status 'Time to be defined'"
+      matches.delete_all
+      puts "Deleted #{count} matches"
+    end
+
     begin
       Time.zone = "America/Sao_Paulo"
       Team.find_or_create_by!(name: "America-RN", reference: 2233, logo: "https://media.api-sports.io/football/teams/2233.png")
@@ -169,7 +180,7 @@ namespace :seriea do # rubocop:disable Metrics/BlockLength
       end
     end
 
-    (2003..2024).each do |year| # rubocop:disable Metrics/BlockLength
+    (2003..2025).each do |year| # rubocop:disable Metrics/BlockLength
       puts year
 
       VCR.use_cassette("globo_#{year}", record_on_error: false) do |_cassette| # rubocop:disable Metrics/BlockLength
@@ -216,7 +227,7 @@ namespace :seriea do # rubocop:disable Metrics/BlockLength
           "Barueri" => "Grêmio Barueri",
           "América-MG" => "America Mineiro",
           "Chapecoense" => "Chapecoense-sc",
-          "Bragantino" => "RB Bragantino",
+          # "Bragantino" => "RB Bragantino",
           "Cuiabá" => "Cuiaba"
         }
 
@@ -265,7 +276,7 @@ namespace :seriea do # rubocop:disable Metrics/BlockLength
   end
 
   desc "Fix team names"
-  task teamnames: :environment do
+  task teamnames: :environment do # rubocop:disable Metrics/BlockLength
     names = {
       "Atletico-MG" => "Atlético-MG",
       "Gremio" => "Grêmio",
@@ -285,7 +296,8 @@ namespace :seriea do # rubocop:disable Metrics/BlockLength
       "Cuiaba" => "Cuiabá",
       "Guarani Campinas" => "Guarani",
       "America-RN" => "América-RN",
-      "remo" => "Remo"
+      "remo" => "Remo",
+      "Sao Paulo" => "São Paulo"
     }
 
     names.each_key do |old_name|
