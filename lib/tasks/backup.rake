@@ -1,43 +1,53 @@
 # frozen_string_literal: true
 
 namespace :backup do # rubocop:disable Metrics/BlockLength
-  desc "Save teams to a file"
-  task dump_teams: :environment do
-    file = Rails.root.join("lib/clients/backup/teams_backup.json").to_s
-    teams_data = Team.all.map(&:attributes)
+  desc "Backup leagues, teams, seasons and matches to a dsl file"
+  task save: :environment do
+    file = Rails.root.join("lib/clients/backup/backup.rb").to_s
 
-    File.write(file, JSON.pretty_generate(teams_data))
+    File.open(file, "w") do |f|
+      Team.order(Arel.sql("CASE WHEN name = 'Vitória' THEN 0 ELSE 1 END, name")).each do |team|
+        f.puts "team name: '#{team.name}', reference: #{team.reference}, logo: '#{team.logo}'"
+      end
+      League.order(:reference).each do |league|
+        f.puts "league country: '#{league.country}', flag: '#{league.flag}', logo: '#{league.logo}', " \
+               "name: '#{league.name}', reference: #{league.reference}, seasons: #{league.seasons.count} do"
 
-    puts "Teams have been serialized to #{file}"
+        league.seasons.order(year: :asc).each do |season|
+          f.puts "  season year: #{season.year}, active: #{season.active}, matches: #{season.matches.count} do"
+          season.matches.order(round: :asc, date: :asc).each do |match|
+            home_goals_str = match.home_goals.present? ? ", home_goals: #{match.home_goals}" : ""
+            away_goals_str = match.away_goals.present? ? ", away_goals: #{match.away_goals}" : ""
+            reference_str = match.reference.present? ? ", reference: #{match.reference}" : ""
+            f.puts "    match date: '#{match.date.iso8601}', round: #{match.round}, " \
+                   "round_name: '#{match.round_name}', " \
+                   "team_home: '#{match.team_home.name}', team_away: '#{match.team_away.name}', " \
+                   "status: '#{match.status}', result: '#{match.result}'" \
+                   "#{home_goals_str}#{away_goals_str}#{reference_str}"
+          end
+
+          f.puts "  end"
+        end
+        f.puts "end"
+      end
+    end
   end
 
-  desc "Save leagues to a file"
-  task dump_leagues: :environment do
-    file = Rails.root.join("lib/clients/backup/leagues_backup.json").to_s
-    leagues_data = League.all.map(&:attributes)
+  desc "Load leagues, teams, seasons and matches from backup file"
+  task load: :environment do
+    file = ENV["FILE"] || Rails.root.join("lib/clients/backup/backup.rb").to_s
 
-    File.write(file, JSON.pretty_generate(leagues_data))
+    puts "Loading backup from #{file}"
 
-    puts "Leagues have been serialized to #{file}"
-  end
+    observer = Object.new.tap do |obs|
+      def obs.season_created(season)
+        puts "#{season.league.name} #{season.year}"
+      end
+    end
 
-  desc "Save seasons to a file"
-  task dump_seasons: :environment do
-    file = Rails.root.join("lib/clients/backup/seasons_backup.json").to_s
-    seasons_data = Season.all.map(&:attributes)
+    client = Clients::Backup::Client.new(file, observer: observer)
+    client.load
 
-    File.write(file, JSON.pretty_generate(seasons_data))
-
-    puts "Seasons have been serialized to #{file}"
-  end
-
-  desc "Save matches to a file"
-  task dump_matches: :environment do
-    file = Rails.root.join("lib/clients/backup/matches_backup.json").to_s
-    matches_data = Match.all.map(&:attributes)
-
-    File.write(file, JSON.pretty_generate(matches_data))
-
-    puts "Matches have been serialized to #{file}"
+    puts "Backup loaded successfully"
   end
 end
