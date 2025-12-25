@@ -13,11 +13,11 @@ class SeasonsController < ApplicationController
   end
 
   def show
-    @season = Season.find(params[:id])
+    @season = Season.find_by(id: params[:id])
 
     if @season.nil?
-      flash[:error] = "No season found" # rubocop:disable Rails/I18nLocaleTexts
-      @standings = []
+      flash[:alert] = "No season found" # rubocop:disable Rails/I18nLocaleTexts
+      redirect_to(season_path(Season.target_season))
       return
     end
 
@@ -26,12 +26,13 @@ class SeasonsController < ApplicationController
   end
 
   def list # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
-    season = params[:id].nil? ? Season.target_season : Season.find(params[:id])
-    @season = season
+    season = params[:id].nil? ? Season.target_season : Season.find_by(id: params[:id])
+    @season = season || Season.target_season
+
     direction = params[:direction] || "desc"
 
-    @standings = season.standings
-    @show_simulation = season.last_simulation.present?
+    @standings = @season.standings
+    @show_simulation = @season.last_simulation.present?
 
     @standings = @standings.sort_by { |standing| standing.team.name }
     @standings = case params[:column]
@@ -39,11 +40,15 @@ class SeasonsController < ApplicationController
                    @standings.sort_by { |standing| standing.team.name }
                  when "champion"
                    @standings.sort_by do |standing|
-                     [standing.last_simulation&.champion || 0, -standing.last_simulation&.relegation || 0]
+                     [standing.last_simulation&.champion || 0, -(standing.last_simulation&.relegation || 0)]
                    end
                  when "relegation"
                    @standings.sort_by do |standing|
-                     [standing.last_simulation&.relegation || 0, -standing.last_simulation&.champion || 0]
+                     [standing.last_simulation&.relegation || 0, -(standing.last_simulation&.champion || 0)]
+                   end
+                 when nil
+                   @standings.sort_by do |standing|
+                     [standing.points, standing.wins, standing.goals_difference, standing.goals_pro]
                    end
                  else
                    @standings.sort_by do |standing|
