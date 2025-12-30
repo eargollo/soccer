@@ -35,6 +35,8 @@ module Clients
         data = JSON.parse(response.read_body)
         raise "Request failed with errors: #{data['errors']}" unless data["errors"].empty?
 
+        raise "No data found for season #{season} and league #{league_id}" unless data["response"].any?
+
         convert_matches(data)
       end
 
