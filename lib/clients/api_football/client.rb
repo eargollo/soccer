@@ -23,7 +23,7 @@ module Clients
         @http.verify_mode = OpenSSL::SSL::VERIFY_NONE
       end
 
-      def matches(league_id:, season:)
+      def matches(league_id:, season:) # rubocop:disable Metrics/AbcSize
         url = URI("#{URL}/fixtures?season=#{season}&league=#{league_id}")
 
         response = @http.request(request(url))
