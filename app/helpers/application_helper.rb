@@ -111,14 +111,17 @@ module ApplicationHelper
 
   # Get CSS classes for menu item based on active state
   def menu_item_classes(active:, additional_classes: "")
-    base_classes = "hover:text-lime-300 transition-colors"
+    base_classes = "hover:text-lime-300 transition-colors duration-200 focus:outline-none focus:ring-2 " \
+                   "focus:ring-lime-400 focus:ring-offset-2 focus:ring-offset-emerald-700 rounded-sm px-1"
     active_classes = active ? "border-b-2 border-lime-400" : ""
     [base_classes, active_classes, additional_classes].compact_blank.join(" ")
   end
 
   # Get CSS classes for dropdown menu item
   def dropdown_item_classes(active: false)
-    base_classes = "block px-4 py-2 text-sm text-gray-900 hover:bg-emerald-50"
+    base_classes = "block px-4 py-2 text-sm text-gray-900 hover:bg-emerald-50 transition-colors " \
+                   "duration-150 focus:outline-none focus:bg-emerald-100 focus:ring-2 " \
+                   "focus:ring-emerald-500 focus:ring-inset"
     active_classes = active ? "bg-emerald-100 font-semibold" : ""
     [base_classes, active_classes].compact_blank.join(" ")
   end
