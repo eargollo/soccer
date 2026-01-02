@@ -3,8 +3,10 @@
 module ApplicationHelper
   # Standard button classes for primary actions (emerald/lime color scheme)
   def button_primary_classes(additional_classes: "")
-    base_classes = "rounded-md bg-emerald-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-emerald-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-lime-400 transition-colors"
-    [base_classes, additional_classes].reject(&:blank?).join(" ")
+    base_classes = "rounded-md bg-emerald-600 px-3 py-2 text-sm font-semibold text-white shadow-sm " \
+                   "hover:bg-emerald-500 focus-visible:outline focus-visible:outline-2 " \
+                   "focus-visible:outline-offset-2 focus-visible:outline-lime-400 transition-colors"
+    [base_classes, additional_classes].compact_blank.join(" ")
   end
 
   # Generic sort link for teams page (no sorting functionality yet)
@@ -53,7 +55,7 @@ module ApplicationHelper
   end
 
   # Menu path helper - returns contextual routes based on league/season
-  def menu_path_for(menu_item, league: nil)
+  def menu_path_for(menu_item, league: nil) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/MethodLength, Metrics/PerceivedComplexity
     league ||= current_league
     season = current_season
 
@@ -108,7 +110,7 @@ module ApplicationHelper
   end
 
   # Check if menu item is active based on controller/action
-  def menu_item_active?(menu_item)
+  def menu_item_active?(menu_item) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
     case menu_item.to_sym
     when :classificacao
       # Active when viewing a season page (standings view)
