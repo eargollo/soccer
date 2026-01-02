@@ -18,6 +18,11 @@ class League < ApplicationRecord
   has_many :league_standings, dependent: :destroy
   has_many :matches, through: :seasons
 
+  def target_season
+    seasons.where(active: true).order(year: :desc).first ||
+      seasons.order(year: :desc).first
+  end
+
   def probability # rubocop:disable Metrics/AbcSize
     return @probability unless @probability.nil?
     return [0.45, 0.30, 0.25] if matches.finished.count < 500
