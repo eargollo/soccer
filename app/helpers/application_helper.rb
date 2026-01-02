@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module ApplicationHelper
+module ApplicationHelper # rubocop:disable Metrics/ModuleLength
   # Standard button classes for primary actions (emerald/lime color scheme)
   def button_primary_classes(additional_classes: "")
     base_classes = "rounded-md bg-emerald-600 px-3 py-2 text-sm font-semibold text-white shadow-sm " \

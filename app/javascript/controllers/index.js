@@ -6,3 +6,6 @@ import { application } from "controllers/application"
 
 import DropdownController from "controllers/dropdown_controller"
 application.register("dropdown", DropdownController)
+
+import MobileMenuController from "controllers/mobile_menu_controller"
+application.register("mobile-menu", MobileMenuController)

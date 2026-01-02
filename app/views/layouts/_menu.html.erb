@@ -1,4 +1,8 @@
-<header class="bg-emerald-700 text-white">
+<%# Mobile Menu (visible on mobile/tablet) %>
+<%= render "layouts/mobile_menu" %>
+
+<%# Desktop Menu (hidden on mobile) %>
+<header class="hidden lg:block bg-emerald-700 text-white">
   <nav class="h-16 flex justify-between items-center w-[96%] mx-auto">
     <!-- League Selector (Left Side) -->
     <div class="relative" data-controller="dropdown">
