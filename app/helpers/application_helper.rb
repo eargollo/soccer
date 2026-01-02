@@ -1,19 +1,12 @@
 # frozen_string_literal: true
 
-module ApplicationHelper # rubocop:disable Metrics/ModuleLength
+module ApplicationHelper
   # Standard button classes for primary actions (emerald/lime color scheme)
   def button_primary_classes(additional_classes: "")
     base_classes = "rounded-md bg-emerald-600 px-3 py-2 text-sm font-semibold text-white shadow-sm " \
                    "hover:bg-emerald-500 focus-visible:outline focus-visible:outline-2 " \
                    "focus-visible:outline-offset-2 focus-visible:outline-lime-400 transition-colors"
     [base_classes, additional_classes].compact_blank.join(" ")
-  end
-
-  # Generic sort link for teams page (no sorting functionality yet)
-  def sort_link(column:, label:) # rubocop:disable Lint/UnusedMethodArgument
-    # For now, just return the label as plain text
-    # TODO: Add sorting functionality if needed
-    label
   end
 
   # Get current league from URL only (no session, no fallback queries)
