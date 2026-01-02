@@ -50,7 +50,7 @@
                         </tr>
                     </thead>
                     <tbody class="bg-gray-100">
-                        <% @standings.each_with_index do |standing, i| %>
+                        <% standings.each_with_index do |standing, i| %>
                             <tr class="<%= (i%2)==0 ? "bg-white" : "bg-gray-100" %>">
                                 <td class="pl-4">
                                     <%= i + 1 %>
