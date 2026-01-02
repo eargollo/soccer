@@ -64,6 +64,11 @@ class Season < ApplicationRecord
     league.seasons.find_or_create_by(year: match[:league]["season"])
   end
 
+  def target_season
+    league.seasons.where(active: true).order(year: :desc).first ||
+      league.seasons.order(year: :desc).first
+  end
+
   def last_simulation
     simulations.where.not(finish: nil).last
   end
