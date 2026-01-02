@@ -109,6 +109,20 @@ module ApplicationHelper
     end
   end
 
+  # Get CSS classes for menu item based on active state
+  def menu_item_classes(active:, additional_classes: "")
+    base_classes = "hover:text-lime-300 transition-colors"
+    active_classes = active ? "border-b-2 border-lime-400" : ""
+    [base_classes, active_classes, additional_classes].compact_blank.join(" ")
+  end
+
+  # Get CSS classes for dropdown menu item
+  def dropdown_item_classes(active: false)
+    base_classes = "block px-4 py-2 text-sm text-gray-900 hover:bg-emerald-50"
+    active_classes = active ? "bg-emerald-100 font-semibold" : ""
+    [base_classes, active_classes].compact_blank.join(" ")
+  end
+
   # Check if menu item is active based on controller/action
   def menu_item_active?(menu_item) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
     case menu_item.to_sym

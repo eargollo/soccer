@@ -1,0 +1,51 @@
+<%# 
+  Reusable dropdown partial
+  Accepts:
+    - trigger: Block for the trigger button/content
+    - items: Array of items with :label, :path, :active (optional)
+    - alignment: 'left' or 'right' (default: 'left')
+    - width: Tailwind width class (default: 'w-56')
+    - menu_classes: Additional classes for the dropdown menu
+%>
+<% alignment ||= 'left' %>
+<% width ||= 'w-56' %>
+<% menu_classes ||= '' %>
+
+<div class="relative" data-controller="dropdown">
+  <%= capture(&trigger) %>
+  
+  <div
+    data-dropdown-target="menu"
+    class="hidden absolute top-full <%= alignment == 'right' ? 'right-0' : 'left-0' %> mt-2 <%= width %> bg-white rounded-md shadow-xl border border-gray-200 py-1 z-50 <%= menu_classes %>"
+  >
+    <% items.each do |item| %>
+      <% if item[:separator] %>
+        <div class="border-t border-gray-200 my-1"></div>
+      <% elsif item[:header] %>
+        <div class="px-4 py-2 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+          <%= item[:header] %>
+        </div>
+      <% elsif item[:button] %>
+        <%= button_to item[:label], item[:path], method: item[:method] || :post,
+            class: "w-full text-left block px-4 py-2 text-sm text-gray-900 hover:bg-emerald-50 #{'bg-emerald-100 font-semibold' if item[:active]}",
+            form: { class: "m-0" } %>
+      <% else %>
+        <%= link_to item[:path], class: "block px-4 py-2 text-sm text-gray-900 hover:bg-emerald-50 #{'bg-emerald-100 font-semibold' if item[:active]}" do %>
+          <% if item[:with_checkmark] %>
+            <div class="flex items-center justify-between">
+              <span><%= item[:label] %></span>
+              <% if item[:active] %>
+                <svg class="w-4 h-4 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                </svg>
+              <% end %>
+            </div>
+          <% else %>
+            <%= item[:label] %>
+          <% end %>
+        <% end %>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+
