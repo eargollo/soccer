@@ -40,12 +40,7 @@ module ApplicationHelper
     end
 
     # If viewing a league, get its target season
-    if current_league
-      target = current_league.seasons.where(active: true).order(:year).last
-      return target if target.present?
-
-      return current_league.seasons.order(year: :desc).first
-    end
+    return current_league.target_season if current_league
 
     # Fallback to global target season
     Season.target_season
