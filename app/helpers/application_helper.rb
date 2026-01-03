@@ -29,10 +29,14 @@ module ApplicationHelper
   # - Otherwise: return global target season
   def current_season # rubocop:disable Metrics/AbcSize
     # If viewing a specific season (nested or not)
-    if params[:id].present? && controller_name == "seasons"
-      # Find season directly by ID - simpler and more direct
-      # The season will have the league association, so we don't need to go through league first
+    # Check if we're in a nested route like /leagues/:league_id/seasons/:id/matches
+    # In this case, params[:season_id] contains the season ID when controller is "matches"
+    if controller_name == "seasons" && params[:id].present?
+      # Direct season view - params[:id] is the season ID
       return Season.find_by(id: params[:id])
+    elsif controller_name == "matches" && params[:season_id].present?
+      # Season-scoped matches - params[:season_id] is the season ID
+      return Season.find_by(id: params[:season_id])
     end
 
     # If viewing a league, get its target season
@@ -68,11 +72,12 @@ module ApplicationHelper
       end
     when :tabela
       # Links to matches - season-scoped if viewing a season, league-scoped otherwise
-      # Check if we're currently viewing a season page
-      viewing_season = params[:id].present? && controller_name == "seasons"
+      # Check if we're currently viewing a season page or season-scoped matches
+      viewing_season = (controller_name == "seasons" && params[:id].present?) ||
+                       (controller_name == "matches" && params[:season_id].present?)
 
       if viewing_season && season && league
-        # We're viewing a specific season, link to that season's matches
+        # We're viewing a specific season or its matches, link to that season's matches
         league_season_matches_path(league, season)
       elsif league
         # We're in a league context but not viewing a specific season
