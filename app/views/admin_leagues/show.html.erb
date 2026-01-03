@@ -11,20 +11,20 @@
                 <td>
                     <%= form_with url: admin_season_path(season.id), method: :patch do |f| %>
                         <%= f.hidden_field :type, value: 'async' %>
-                        <%= f.submit "Schedule", class: "rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"%>
+                        <%= f.submit "Schedule", class: button_primary_classes %>
                     <% end %>
                 </td>
                 <td>
                     <%= form_with url: admin_season_path(season.id), method: :patch do |f| %>
                         <%= f.hidden_field :type, value: 'sync' %>
-                        <%= f.submit "Sync", class: "rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"%>
+                        <%= f.submit "Sync", class: button_primary_classes %>
                     <% end %>
                 </td>
                 <td>
                     <%= form_with url: admin_season_path(season.id), method: :patch do |f| %>
                         <%= f.hidden_field :type, value: 'close' %>
                         <% title = season.active ? "Close" : "Open" %>
-                        <%= f.submit title, class: "rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"%>
+                        <%= f.submit title, class: button_primary_classes %>
                     <% end %>
                 </td>
             </tr>

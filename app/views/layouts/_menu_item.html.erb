@@ -1,0 +1,13 @@
+<%# 
+  Menu item partial for navigation links
+  Accepts:
+    - label: Text to display
+    - path: URL path
+    - active: Boolean indicating if item is active
+    - additional_classes: Optional additional CSS classes
+%>
+<% additional_classes ||= "" %>
+<%= link_to label, path, 
+    class: menu_item_classes(active: active, additional_classes: additional_classes),
+    tabindex: "0" %>
+

@@ -1,0 +1,5 @@
+<div class="flex flex-col lg:items-center items-start w-screen min-h-screen bg-white py-0">
+  <h1><%= @league.name %> <%= @season.year %></h1>
+  <%= render "seasons/season", standings: @standings, show_simulation: @show_simulation %>
+</div>
+

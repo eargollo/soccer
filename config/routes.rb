@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-Rails.application.routes.draw do
+Rails.application.routes.draw do # rubocop:disable Metrics/BlockLength
   devise_for :users
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
@@ -14,12 +14,18 @@ Rails.application.routes.draw do
   resources :simulations, only: %i[index create new show] do
     resources :teams, only: %i[show], controller: "simulations/teams"
   end
-  resources :matches, only: %i[index]
   resources :admin_leagues, only: %i[index show new create]
   resources :admin_seasons, only: %i[update]
   resources :teams, only: %i[index show]
 
   resources :leagues, only: %i[index show] do
+    resources :seasons, only: %i[index show], controller: "leagues/seasons" do
+      resources :matches, only: %i[index], controller: "leagues/seasons/matches"
+      collection do
+        get "list(:id)", to: "leagues/seasons#list", as: :list
+      end
+    end
+    resources :matches, only: %i[index], controller: "leagues/matches"
     resources :standings, only: %i[index], controller: "leagues/standings" do
       collection do
         get :list
@@ -27,11 +33,13 @@ Rails.application.routes.draw do
     end
   end
 
+  # Keep non-nested routes for backward compatibility (can be removed later)
   resources :seasons, only: %i[index show] do
     collection do
       get "list(:id)", to: "seasons#list", as: :list
     end
   end
+  resources :matches, only: %i[index]
 
   resources :simulation_standings, only: %i[show], controller: "simulation_standings"
 

@@ -29,10 +29,8 @@ class Season < ApplicationRecord
   end
 
   def self.target_season
-    season = Season.where(active: true).order(:year).last
-    return season unless season.nil?
-
-    Season.order(year: :desc, updated_at: :desc).first
+    Season.where(active: true).order(:year).last ||
+      Season.order(year: :desc, updated_at: :desc).first
   end
 
   def self.apifootball_seed(league_id:, season_id:) # rubocop:disable Metrics/AbcSize
@@ -62,6 +60,11 @@ class Season < ApplicationRecord
     end
 
     league.seasons.find_or_create_by(year: match[:league]["season"])
+  end
+
+  def target_season
+    league.seasons.where(active: true).order(year: :desc).first ||
+      league.seasons.order(year: :desc).first
   end
 
   def last_simulation

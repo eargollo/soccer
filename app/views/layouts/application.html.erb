@@ -14,8 +14,9 @@
 
   <body class="h-screen">
     <%=render "layouts/menu"%>
+    <%=render "layouts/loading_indicator"%>
     <%=render "layouts/alert"%>
-    <main class="container mx-auto mt-5 flex">
+    <main class="container mx-auto mt-5 flex lg:mt-5 lg:pt-0 pt-16">
       <%= yield %>
     </main>
   </body>

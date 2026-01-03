@@ -23,7 +23,7 @@ module Clients
         @http.verify_mode = OpenSSL::SSL::VERIFY_NONE
       end
 
-      def matches(league_id:, season:)
+      def matches(league_id:, season:) # rubocop:disable Metrics/AbcSize
         url = URI("#{URL}/fixtures?season=#{season}&league=#{league_id}")
 
         response = @http.request(request(url))
@@ -34,6 +34,8 @@ module Clients
 
         data = JSON.parse(response.read_body)
         raise "Request failed with errors: #{data['errors']}" unless data["errors"].empty?
+
+        raise "No data found for season #{season} and league #{league_id}" unless data["response"].any?
 
         convert_matches(data)
       end
