@@ -33,7 +33,9 @@ class Standing < ApplicationRecord
   belongs_to :season
 
   def rate
-    100 * ((wins * 3) + draws) / (matches * 3.00)
+    return 0.0 if matches.zero?
+
+    (100.0 * ((wins * 3) + draws) / (matches * 3.00))
   end
 
   def goals_difference
