@@ -78,6 +78,24 @@ class Match < ApplicationRecord
     prob_win + prob_draw
   end
 
+  # Returns historical statistics for the same teams in the same league
+  # with the same home/away context (excluding current match)
+  # Returns hash with :wins, :draws, :losses (from home team's perspective)
+  def historical_stats
+    return @historical_stats if defined?(@historical_stats)
+
+    # Find all finished matches in the same league with same teams and home/away context
+    historical_matches = league.matches.finished
+                               .where(team_home: team_home, team_away: team_away)
+                               .where.not(id: id)
+
+    @historical_stats = {
+      wins: historical_matches.where(result: 'home').count,
+      draws: historical_matches.where(result: 'draw').count,
+      losses: historical_matches.where(result: 'away').count
+    }
+  end
+
   def probability # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     return @probability unless @probability.nil?
     return [PROB_WIN, PROB_DRAW, PROB_LOSS] if team_away.nil? || team_home.nil?

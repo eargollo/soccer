@@ -5,45 +5,6 @@
       <p class="mt-2 text-sm text-gray-700">A list of all matches results. Probability is shown for matches that were not played yet.</p>
     </div>
   </div>
-  <div class="mt-8 flow-root">
-    <div class="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
-      <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-        <table class="min-w-full divide-y divide-gray-300">
-          <thead>
-            <tr>
-              <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">Date</th>
-              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Round</th>
-              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Home Team</th>
-              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Score</th>
-              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Away Team</th>
-              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Status</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-gray-200">
-            <% @matches.each do |match| %>
-                <tr>
-                    <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0"><%= match.date.strftime("%F %H:%M") %></td>
-                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= match.round %></td>
-                    <td class="whitespace-nowrap flex px-3 py-4 text-sm text-gray-500"><img class="w-5 h-5 object-contain" src="<%= match.team_home.logo %>" alt=""><%= match.team_home.name %></td>
-                    <% if match.finished? %>
-                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= match.home_goals %> x <%= match.away_goals %></td>
-                    <% else %>
-                        <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= (match.probability[0]*100).round(2) %>% | <%= (match.probability[1]*100).round(2) %>% | <%= (match.probability[2]*100).round(2) %>%</td>
-                    <% end %>
-                    <td class="whitespace-nowrap flex px-3 py-4 text-sm text-gray-500">
-                        <img class="w-5 h-5 object-contain" src="<%= match.team_away.logo %>" alt="">
-                        <%= match.team_away.name %> 
-                        <% if match.date.present? && match.date > Time.now %>
-                            TBP
-                        <% end %>
-                    </td>
-                    <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= match.status %></td>
-                </tr>
-            <% end %>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
+  <%= render "matches/matches_table", round_path: ->(round:) { league_season_matches_path(@league, @season, round: round) } %>
 </div>
 

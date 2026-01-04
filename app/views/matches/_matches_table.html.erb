@@ -1,0 +1,69 @@
+<% if @rounds.present? %>
+  <div class="mt-6">
+    <div class="inline-flex flex-col rounded-lg border border-gray-300 bg-white p-0.5 shadow-sm gap-0.5">
+      <% mid_point = (@rounds.length / 2.0).ceil %>
+      <% [@rounds.first(mid_point), @rounds.last(@rounds.length - mid_point)].each do |rounds_row| %>
+        <div class="flex gap-0.5">
+          <% rounds_row.each do |round| %>
+            <%= link_to round_path.call(round: round), 
+                class: "inline-flex items-center justify-center min-w-[2.5rem] px-2 py-1 text-sm font-medium rounded transition-colors #{@current_round == round ? 'bg-emerald-600 text-white shadow-sm' : 'text-gray-700 hover:bg-gray-100'}" do %>
+              <%= round %>
+            <% end %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+<% end %>
+<div class="mt-8">
+  <div class="overflow-x-auto">
+    <table class="w-auto">
+        <thead>
+          <tr>
+            <th scope="col" class="py-2 pl-0 pr-3 text-left text-sm font-semibold text-gray-900">Date</th>
+            <th scope="col" class="px-2 py-2 text-left text-sm font-semibold text-gray-900">Round</th>
+            <th scope="col" class="px-2 py-2 text-left text-sm font-semibold text-gray-900">Home Team</th>
+            <th scope="col" class="px-2 py-2 text-left text-sm font-semibold text-gray-900">Score</th>
+            <th scope="col" class="px-2 py-2 text-left text-sm font-semibold text-gray-900">Away Team</th>
+            <th scope="col" class="px-2 py-2 text-left text-sm font-semibold text-gray-900">Status</th>
+            <th scope="col" class="px-2 py-2 text-left text-sm font-semibold text-gray-900">History</th>
+          </tr>
+        </thead>
+        <tbody class="bg-gray-100">
+          <% @matches.each_with_index do |match, i| %>
+              <tr class="<%= (i%2)==0 ? "bg-white" : "bg-gray-100" %>">
+                  <td class="whitespace-nowrap py-3 pl-0 pr-3 text-sm font-medium text-gray-900"><%= match.date.strftime("%F %H:%M") %></td>
+                  <td class="whitespace-nowrap px-2 py-3 text-sm text-gray-500"><%= match.round %></td>
+                  <td class="whitespace-nowrap flex items-center gap-2 px-2 py-3 text-sm text-gray-500"><img class="w-5 h-5 object-contain" src="<%= match.team_home.logo %>" alt=""><%= match.team_home.name %></td>
+                  <% if match.finished? %>
+                      <td class="whitespace-nowrap px-2 py-3 text-sm text-gray-500"><%= match.home_goals %> x <%= match.away_goals %></td>
+                  <% else %>
+                      <td class="whitespace-nowrap px-2 py-3 text-sm text-gray-500"><%= (match.probability[0]*100).round(2) %>% | <%= (match.probability[1]*100).round(2) %>% | <%= (match.probability[2]*100).round(2) %>%</td>
+                  <% end %>
+                  <td class="whitespace-nowrap flex items-center gap-2 px-2 py-3 text-sm text-gray-500">
+                      <img class="w-5 h-5 object-contain" src="<%= match.team_away.logo %>" alt="">
+                      <%= match.team_away.name %> 
+                      <% if match.date.present? && match.date > Time.now %>
+                          TBP
+                      <% end %>
+                  </td>
+                  <td class="whitespace-nowrap px-2 py-3 text-sm text-gray-500"><%= match.status %></td>
+                  <td class="whitespace-nowrap px-2 py-3 text-sm text-gray-500">
+                    <% stats = match.historical_stats %>
+                    <% if stats[:wins] + stats[:draws] + stats[:losses] > 0 %>
+                      <span class="text-emerald-600 font-medium"><%= stats[:wins] %>W</span>
+                      <span class="text-gray-400">-</span>
+                      <span class="text-gray-600 font-medium"><%= stats[:draws] %>D</span>
+                      <span class="text-gray-400">-</span>
+                      <span class="text-red-600 font-medium"><%= stats[:losses] %>L</span>
+                    <% else %>
+                      <span class="text-gray-400 text-xs">No history</span>
+                    <% end %>
+                  </td>
+              </tr>
+          <% end %>
+        </tbody>
+      </table>
+  </div>
+</div>
+
