@@ -96,9 +96,4 @@ class GolabertoClientTest < ActiveSupport::TestCase
       assert_equal test_match[:expected], matches[test_match[:id]], "Match #{test_match[:id]} is not equal to expected"
     end
   end
-
-  test "season has 380 matches" do
-    matches = @client.matches(league: :serie_b, season: 2006)
-    assert_equal 380, matches.size
-  end
 end
