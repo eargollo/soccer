@@ -80,6 +80,8 @@ group :development do
   # Generate entity relationship diagrams
   gem "rails-erd"
 
+  gem 'ruby-lsp'
+  gem 'solargraph'
   # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
   # gem "rack-mini-profiler"
 
@@ -92,8 +94,8 @@ end
 group :test do
   # Use system testing [https://guides.rubyonrails.org/testing.html#system-testing]
   gem 'capybara'
+  gem "minitest", "< 6.0.0" # Version 6 is not compatible with Rails 8.1 yet
   gem 'selenium-webdriver'
-
   gem 'simplecov', require: false
   gem 'vcr'
   gem 'webmock'

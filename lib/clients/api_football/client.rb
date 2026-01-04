@@ -40,6 +40,17 @@ module Clients
         convert_matches(data)
       end
 
+      def team(name)
+        url = URI("#{URL}/teams?name=#{URI.encode_www_form_component(name)}&country=Brazil")
+        response = @http.request(request(url))
+        return nil unless response.code == "200"
+
+        data = JSON.parse(response.read_body)
+        return nil unless data["response"].any?
+
+        data["response"][0]
+      end
+
       private
 
       # Needs of a match:
