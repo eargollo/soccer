@@ -26,6 +26,7 @@
             <th scope="col" class="px-2 py-2 text-left text-sm font-semibold text-gray-900">Score</th>
             <th scope="col" class="px-2 py-2 text-left text-sm font-semibold text-gray-900">Away Team</th>
             <th scope="col" class="px-2 py-2 text-left text-sm font-semibold text-gray-900">Status</th>
+            <th scope="col" class="px-2 py-2 text-left text-sm font-semibold text-gray-900">History</th>
           </tr>
         </thead>
         <tbody class="bg-gray-100">
@@ -47,6 +48,18 @@
                       <% end %>
                   </td>
                   <td class="whitespace-nowrap px-2 py-3 text-sm text-gray-500"><%= match.status %></td>
+                  <td class="whitespace-nowrap px-2 py-3 text-sm text-gray-500">
+                    <% stats = match.historical_stats %>
+                    <% if stats[:wins] + stats[:draws] + stats[:losses] > 0 %>
+                      <span class="text-emerald-600 font-medium"><%= stats[:wins] %>W</span>
+                      <span class="text-gray-400">-</span>
+                      <span class="text-gray-600 font-medium"><%= stats[:draws] %>D</span>
+                      <span class="text-gray-400">-</span>
+                      <span class="text-red-600 font-medium"><%= stats[:losses] %>L</span>
+                    <% else %>
+                      <span class="text-gray-400 text-xs">No history</span>
+                    <% end %>
+                  </td>
               </tr>
           <% end %>
         </tbody>
