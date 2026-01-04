@@ -25,7 +25,21 @@ Rails.application.routes.draw do # rubocop:disable Metrics/BlockLength
         get "list(:id)", to: "leagues/seasons#list", as: :list
       end
     end
-    resources :matches, only: %i[index], controller: "leagues/matches"
+    # Redirect /leagues/:league_id/matches to target season's matches for backward compatibility
+    get "/matches", to: redirect { |params, request|
+      league = League.find_by(id: params[:league_id])
+      if league
+        season = league.target_season
+        if season
+          round_param = request.query_parameters[:round] ? "?round=#{request.query_parameters[:round]}" : ""
+          "/leagues/#{league.id}/seasons/#{season.id}/matches#{round_param}"
+        else
+          "/leagues/#{league.id}/seasons"
+        end
+      else
+        "/leagues"
+      end
+    }
     resources :standings, only: %i[index], controller: "leagues/standings" do
       collection do
         get :list
@@ -39,7 +53,16 @@ Rails.application.routes.draw do # rubocop:disable Metrics/BlockLength
       get "list(:id)", to: "seasons#list", as: :list
     end
   end
-  resources :matches, only: %i[index]
+  # Redirect /matches to target season's matches for backward compatibility
+  get "/matches", to: redirect { |_params, request|
+    target_season = Season.target_season
+    if target_season && target_season.league
+      round_param = request.query_parameters[:round] ? "?round=#{request.query_parameters[:round]}" : ""
+      "/leagues/#{target_season.league.id}/seasons/#{target_season.id}/matches#{round_param}"
+    else
+      "/leagues"
+    end
+  }
 
   resources :simulation_standings, only: %i[show], controller: "simulation_standings"
 

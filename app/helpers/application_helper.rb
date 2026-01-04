@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module ApplicationHelper
+module ApplicationHelper # rubocop:disable Metrics/ModuleLength
   # Standard button classes for primary actions (emerald/lime color scheme)
   def button_primary_classes(additional_classes: "")
     base_classes = "rounded-md bg-emerald-600 px-3 py-2 text-sm font-semibold text-white shadow-sm " \
@@ -66,20 +66,29 @@ module ApplicationHelper
         root_path
       end
     when :tabela
-      # Links to matches - season-scoped if viewing a season, league-scoped otherwise
-      # Check if we're currently viewing a season page or season-scoped matches
-      viewing_season = (controller_name == "seasons" && params[:id].present?) ||
-                       (controller_name == "matches" && params[:season_id].present?)
-
-      if viewing_season && season && league
-        # We're viewing a specific season or its matches, link to that season's matches
+      # Links to matches - always use league/season path
+      # Prefer season-scoped if we have a season, otherwise use league's target season
+      if season && league
+        # We have both season and league, use season-scoped matches
         league_season_matches_path(league, season)
       elsif league
-        # We're in a league context but not viewing a specific season
-        league_matches_path(league)
+        # We have league but no season, use league's target season
+        target_season = league.target_season
+        if target_season
+          league_season_matches_path(league, target_season)
+        else
+          # No target season, redirect to league seasons
+          league_seasons_path(league)
+        end
       else
-        # No league context
-        matches_path
+        # No league context - find target season and its league
+        target_season = Season.target_season
+        if target_season&.league
+          league_season_matches_path(target_season.league, target_season)
+        else
+          # Ultimate fallback - redirect to leagues
+          leagues_path
+        end
       end
     when :ranking, :pontos
       # Ranking dropdown and Pontos submenu - both link to aggregated points

@@ -2,11 +2,9 @@
 
 ## To do
 
-- Check if I should take out self signed certificate and have no encription at Rails itself
 - Refresh admin page when open or close are run
 - Make a chart out of the simulation distribution page
 - Add teams and single team view
-- Paginate matches
 - Start name sorting ascending
 - Make a graph out of th simulation distribution page
 - Add teams and single team view
