@@ -4,6 +4,7 @@ plugins:
 
 AllCops:
   NewCops: enable
+  TargetRubyVersion: 3.4   
   Exclude:
     - 'vendor/**/*'
     - 'gems/**/*'
