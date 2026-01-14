@@ -61,7 +61,7 @@ class TeamsController < ApplicationController
     opponents = Team.where(id: opponent_ids).order(:name)
 
     # Build opponent statistics
-    opponent_stats = opponents.map do |opponent| # rubocop:disable Metrics/BlockLength, Metrics/BlockLength
+    opponent_stats = opponents.map do |opponent| # rubocop:disable Metrics/BlockLength
       home_matches = league_matches.select { |m| m.team_home_id == @team.id && m.team_away_id == opponent.id }
       away_matches = league_matches.select { |m| m.team_away_id == @team.id && m.team_home_id == opponent.id }
       all_matches = home_matches + away_matches
