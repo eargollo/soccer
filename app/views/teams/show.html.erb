@@ -1,0 +1,41 @@
+<div class="px-4 sm:px-6 lg:px-8 py-8 w-full">
+  <div class="mb-8">
+    <div class="flex items-center space-x-4 mb-4">
+      <% if @team.logo.present? %>
+        <img src="<%= @team.logo %>" alt="<%= @team.name %>" class="w-20 h-20 object-contain flex-shrink-0">
+      <% else %>
+        <div class="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center flex-shrink-0">
+          <span class="text-gray-400 text-xl font-semibold"><%= @team.name[0..1].upcase %></span>
+        </div>
+      <% end %>
+      <div>
+        <h1 class="text-3xl font-bold text-gray-900"><%= @team.name %></h1>
+        <p class="text-sm text-gray-600 mt-1">Estatísticas por competição</p>
+      </div>
+    </div>
+  </div>
+
+  <% if @leagues.empty? %>
+    <div class="bg-white rounded-lg shadow-md border border-gray-200 p-8 text-center">
+      <p class="text-gray-600">Este time ainda não possui partidas registradas.</p>
+    </div>
+  <% else %>
+    <!-- Tabs -->
+    <div class="border-b border-gray-200 mb-6">
+      <nav class="-mb-px flex space-x-8 overflow-x-auto" aria-label="Tabs">
+        <% @leagues.each do |league| %>
+          <% is_active = @selected_league&.id == league.id %>
+          <%= link_to team_path(@team, league_id: league.id),
+              class: "#{is_active ? 'border-emerald-500 text-emerald-600' : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'} whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium transition-colors" do %>
+            <%= league.name %>
+          <% end %>
+        <% end %>
+      </nav>
+    </div>
+
+    <!-- Selected League Content -->
+    <% if @current_league_summary %>
+      <%= render "league_summary", league: @current_league_summary[:league], opponents: @current_league_summary[:opponents], team: @team %>
+    <% end %>
+  <% end %>
+</div>
