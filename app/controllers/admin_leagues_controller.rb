@@ -3,6 +3,20 @@
 class AdminLeaguesController < AdminController
   def index
     @leagues = League.all
+    apply_sorting if params[:column].present?
+  end
+
+  private
+
+  def apply_sorting
+    column = params[:column]
+    direction = params[:direction] || "asc"
+
+    # Validate column to prevent SQL injection
+    valid_columns = %w[id name country reference]
+    return unless valid_columns.include?(column)
+
+    @leagues = @leagues.order(column => direction.to_sym)
   end
 
   def show

@@ -40,5 +40,25 @@ module Soccer
     #
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
+
+    # Probability calculation configuration
+    # Exponential Moving Average (EMA) decay factor
+    # Higher lambda = more responsive to recent results, less weight on history
+    # Default: 0.15 (15%)
+    config.probability = ActiveSupport::OrderedOptions.new
+    config.probability.lambda = ENV.fetch('PROBABILITY_LAMBDA', '0.15').to_d
+
+    # Probability combination weights
+    # How much to weight home team's home probability vs away team's away probability
+    # Default: 60% home, 40% away
+    # away_weight is derived from home_weight to ensure they always sum to 1.0
+    config.probability.combiner_home_weight = ENV.fetch('PROBABILITY_COMBINER_HOME_WEIGHT', '0.6').to_d
+    config.probability.combiner_away_weight = 1.to_d - config.probability.combiner_home_weight
+
+    # Feature flag: Use new EMA-based probability calculation
+    # When true: Uses MatchProbabilityCalculator with EMA model
+    # When false: Uses legacy probability calculation
+    # Default: false (use legacy)
+    config.probability.use_ema_calculation = ENV.fetch('USE_EMA_PROBABILITY', 'false') == 'true'
   end
 end

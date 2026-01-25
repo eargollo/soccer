@@ -17,10 +17,15 @@ class League < ApplicationRecord
   has_many :seasons, dependent: :destroy
   has_many :league_standings, dependent: :destroy
   has_many :matches, through: :seasons
+  has_many :league_teams, dependent: :destroy
 
   def target_season
     seasons.where(active: true).order(year: :desc).first ||
       seasons.order(year: :desc).first
+  end
+
+  def baseline
+    LeagueBaselineCalculator.call(league: self)
   end
 
   def probability # rubocop:disable Metrics/AbcSize

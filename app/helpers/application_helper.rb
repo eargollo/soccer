@@ -151,4 +151,61 @@ module ApplicationHelper # rubocop:disable Metrics/ModuleLength
       false
     end
   end
+
+  # Admin league sort link helper
+  def admin_league_sort_link(column:, label:)
+    link_to(label, admin_leagues_path(column: column, direction: sort_direction(column)),
+            class: "underline hover:text-emerald-600 text-gray-900")
+  end
+
+  # Admin league team sort link helper
+  def admin_league_team_sort_link(column:, label:, league_id:)
+    link_to(label,
+            admin_league_league_teams_path(
+              admin_league_id: league_id,
+              column: column,
+              direction: sort_direction(column)
+            ),
+            class: "underline hover:text-emerald-600 text-gray-900")
+  end
+
+  def sort_direction(column)
+    column == params[:column] ? next_sort_direction : "desc"
+  end
+
+  def next_sort_direction
+    params[:direction] == "asc" ? "desc" : "asc"
+  end
+
+  def sort_indicator
+    content = content_tag(
+      :path,
+      nil,
+      stroke: "currentColor",
+      stroke_linecap: "round",
+      stroke_linejoin: "round",
+      stroke_width: 2,
+      d: "m1 1 5.326 5.7a.909.909 0 0 0 1.348 0L13 1"
+    )
+
+    if params[:direction] == "asc"
+      content = content_tag(
+        :path,
+        nil,
+        stroke: "currentColor",
+        stroke_linecap: "round",
+        stroke_linejoin: "round",
+        stroke_width: 2,
+        d: "M13 7 7.674 1.3a.91.91 0 0 0-1.348 0L1 7"
+      )
+    end
+
+    content_tag(:svg,
+                content,
+                class: "h-4 w-4 inline-block ml-1",
+                aria_hidden: true,
+                xmlns: "http://www.w3.org/2000/svg",
+                fill: "none",
+                viewBox: "0 0 14 8")
+  end
 end

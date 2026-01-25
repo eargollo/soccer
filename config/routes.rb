@@ -14,7 +14,17 @@ Rails.application.routes.draw do # rubocop:disable Metrics/BlockLength
   resources :simulations, only: %i[index create new show] do
     resources :teams, only: %i[show], controller: "simulations/teams"
   end
-  resources :admin_leagues, only: %i[index show new create]
+  get 'admin/feature-flags', to: 'admin/feature_flags#index', as: :admin_feature_flags
+  resources :admin_leagues, only: %i[index show new create] do
+    resources :league_teams, only: %i[index show], controller: 'admin/league_teams' do
+      collection do
+        post :recalculate
+      end
+      member do
+        post :recalculate
+      end
+    end
+  end
   resources :admin_seasons, only: %i[update]
   resources :teams, only: %i[index show]
 
