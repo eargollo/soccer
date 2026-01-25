@@ -193,6 +193,18 @@
           <%= link_to admin_leagues_path, class: "block px-4 py-3 text-base text-gray-900 hover:bg-emerald-50 active:bg-emerald-100 rounded-md transition-colors" do %>
             League
           <% end %>
+          <%= link_to admin_feature_flags_path, class: "block px-4 py-3 text-base text-gray-900 hover:bg-emerald-50 active:bg-emerald-100 rounded-md transition-colors" do %>
+            Feature Flags
+          <% end %>
+          <% if current_league %>
+            <%= link_to admin_league_league_teams_path(admin_league_id: current_league.id), class: "block px-4 py-3 text-base text-gray-900 hover:bg-emerald-50 active:bg-emerald-100 rounded-md transition-colors" do %>
+              Team Probabilities
+            <% end %>
+          <% elsif all_leagues.any? %>
+            <%= link_to admin_league_league_teams_path(admin_league_id: all_leagues.first.id), class: "block px-4 py-3 text-base text-gray-900 hover:bg-emerald-50 active:bg-emerald-100 rounded-md transition-colors" do %>
+              Team Probabilities
+            <% end %>
+          <% end %>
           <%= link_to simulations_path, class: "block px-4 py-3 text-base text-gray-900 hover:bg-emerald-50 active:bg-emerald-100 rounded-md transition-colors" do %>
             Simulations
           <% end %>

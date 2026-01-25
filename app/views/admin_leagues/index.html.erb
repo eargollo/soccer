@@ -6,12 +6,32 @@
                 <table class="min-w-full divide-y divide-gray-300">
                     <thead>
                         <tr>
-                            <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">Id</th>
-                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Name</th>
-                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Country</th>
+                            <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">
+                              <span class="inline-flex items-center gap-1">
+                                <%= admin_league_sort_link(column: "id", label: "Id") %>
+                                <%= sort_indicator if params[:column] == "id" %>
+                              </span>
+                            </th>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                              <span class="inline-flex items-center gap-1">
+                                <%= admin_league_sort_link(column: "name", label: "Name") %>
+                                <%= sort_indicator if params[:column] == "name" %>
+                              </span>
+                            </th>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                              <span class="inline-flex items-center gap-1">
+                                <%= admin_league_sort_link(column: "country", label: "Country") %>
+                                <%= sort_indicator if params[:column] == "country" %>
+                              </span>
+                            </th>
                             <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Logo</th>
                             <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Flag</th>
-                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Reference</th>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                              <span class="inline-flex items-center gap-1">
+                                <%= admin_league_sort_link(column: "reference", label: "Reference") %>
+                                <%= sort_indicator if params[:column] == "reference" %>
+                              </span>
+                            </th>
                         </tr>
                     </thead>
                     <tbody class="divide-y divide-gray-200">

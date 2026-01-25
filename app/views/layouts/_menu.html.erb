@@ -167,6 +167,18 @@
           <%= link_to admin_leagues_path, class: dropdown_item_classes do %>
             League
           <% end %>
+          <%= link_to admin_feature_flags_path, class: dropdown_item_classes do %>
+            Feature Flags
+          <% end %>
+          <% if current_league %>
+            <%= link_to admin_league_league_teams_path(admin_league_id: current_league.id), class: dropdown_item_classes do %>
+              Team Probabilities
+            <% end %>
+          <% elsif all_leagues.any? %>
+            <%= link_to admin_league_league_teams_path(admin_league_id: all_leagues.first.id), class: dropdown_item_classes do %>
+              Team Probabilities
+            <% end %>
+          <% end %>
           <%= link_to simulations_path, class: dropdown_item_classes do %>
             Simulations
           <% end %>

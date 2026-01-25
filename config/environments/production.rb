@@ -5,6 +5,9 @@ require "active_support/core_ext/integer/time"
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
+  # Probability calculation: Use lower lambda (0.12) in production for more stability
+  config.probability.lambda = ENV.fetch('PROBABILITY_LAMBDA', '0.05').to_d
+
   # Code is not reloaded between requests.
   config.enable_reloading = false
 

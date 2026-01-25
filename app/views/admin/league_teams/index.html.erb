@@ -1,0 +1,88 @@
+<div class="w-full">
+  <div class="sm:flex sm:items-center">
+    <div class="sm:flex-auto">
+      <h1 class="text-base font-semibold leading-6 text-gray-900">Team Probabilities - <%= @league.name %></h1>
+      <p class="mt-2 text-sm text-gray-700">View and manage team probabilities for this league.</p>
+    </div>
+  </div>
+  <div class="mt-8 flow-root">
+    <div class="-mx-4 -my-2 sm:-mx-6 lg:-mx-8">
+      <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+        <div class="mb-4">
+          <%= form_with url: recalculate_admin_league_league_teams_path(admin_league_id: @league.id), method: :post, local: true do |f| %>
+            <%= f.submit "Recalculate All Teams", class: button_primary_classes %>
+          <% end %>
+        </div>
+        <table class="min-w-full divide-y divide-gray-300">
+          <thead>
+            <tr>
+              <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">
+                <span class="inline-flex items-center gap-1">
+                  <%= admin_league_team_sort_link(column: "team_name", label: "Team", league_id: @league.id) %>
+                  <%= sort_indicator if params[:column] == "team_name" %>
+                </span>
+              </th>
+              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                <span class="inline-flex items-center gap-1">
+                  <%= admin_league_team_sort_link(column: "home_prob_win", label: "Home Win", league_id: @league.id) %>
+                  <%= sort_indicator if params[:column] == "home_prob_win" %>
+                </span>
+              </th>
+              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                <span class="inline-flex items-center gap-1">
+                  <%= admin_league_team_sort_link(column: "home_prob_draw", label: "Home Draw", league_id: @league.id) %>
+                  <%= sort_indicator if params[:column] == "home_prob_draw" %>
+                </span>
+              </th>
+              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                <span class="inline-flex items-center gap-1">
+                  <%= admin_league_team_sort_link(column: "home_prob_loss", label: "Home Loss", league_id: @league.id) %>
+                  <%= sort_indicator if params[:column] == "home_prob_loss" %>
+                </span>
+              </th>
+              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                <span class="inline-flex items-center gap-1">
+                  <%= admin_league_team_sort_link(column: "away_prob_win", label: "Away Win", league_id: @league.id) %>
+                  <%= sort_indicator if params[:column] == "away_prob_win" %>
+                </span>
+              </th>
+              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                <span class="inline-flex items-center gap-1">
+                  <%= admin_league_team_sort_link(column: "away_prob_draw", label: "Away Draw", league_id: @league.id) %>
+                  <%= sort_indicator if params[:column] == "away_prob_draw" %>
+                </span>
+              </th>
+              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+                <span class="inline-flex items-center gap-1">
+                  <%= admin_league_team_sort_link(column: "away_prob_loss", label: "Away Loss", league_id: @league.id) %>
+                  <%= sort_indicator if params[:column] == "away_prob_loss" %>
+                </span>
+              </th>
+              <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Actions</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200">
+            <% @league_teams.each do |league_team| %>
+              <tr>
+                <td class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+                  <%= link_to league_team.team.name, admin_league_league_team_path(admin_league_id: @league.id, id: league_team.id), class: "underline hover:font-semibold" %>
+                </td>
+                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= number_with_precision(league_team.home_prob_win, precision: 4) %></td>
+                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= number_with_precision(league_team.home_prob_draw, precision: 4) %></td>
+                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= number_with_precision(league_team.home_prob_loss, precision: 4) %></td>
+                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= number_with_precision(league_team.away_prob_win, precision: 4) %></td>
+                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= number_with_precision(league_team.away_prob_draw, precision: 4) %></td>
+                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500"><%= number_with_precision(league_team.away_prob_loss, precision: 4) %></td>
+                <td class="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                  <%= form_with url: recalculate_admin_league_league_team_path(admin_league_id: @league.id, id: league_team.id), method: :post, local: true do |f| %>
+                    <%= f.submit "Recalculate", class: button_primary_classes %>
+                  <% end %>
+                </td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

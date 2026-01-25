@@ -31,7 +31,7 @@
 #  fk_rails_...  (team_away_id => teams.id)
 #  fk_rails_...  (team_home_id => teams.id)
 #
-class Match < ApplicationRecord
+class Match < ApplicationRecord # rubocop:disable Metrics/ClassLength
   belongs_to :team_home, class_name: 'Team'
   belongs_to :team_away, class_name: 'Team'
   belongs_to :season
@@ -45,7 +45,10 @@ class Match < ApplicationRecord
   scope :draw, -> { finished.where(result: 'draw') }
   scope :played, -> { where(date: ...Time.zone.now) }
 
+  validates :home_goals, :away_goals, presence: true, if: :finished?
+
   before_save :determine_result, if: :finished?
+  before_save :ensure_league_team_records, if: -> { team_home.present? && team_away.present? && league.present? }
 
   # Need to consider adding a job for doing this computation
   # Rignt now if the computation fails, the next added match will correct it
@@ -53,6 +56,7 @@ class Match < ApplicationRecord
   # avoid multiple jobs for the same team in the queue. There is no need
   # to enqueue a team computation if there is one already at the queue.
   after_commit :compute_points_commit, on: %i[create update destroy]
+  after_commit :update_probabilities_commit, if: :should_update_probabilities?
 
   PROB_WIN = 0.45
   PROB_DRAW = 0.30
@@ -96,7 +100,27 @@ class Match < ApplicationRecord
     }
   end
 
-  def probability # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+  def probability
+    if Rails.application.config.probability.use_ema_calculation
+      probability_ema
+    else
+      probability_legacy
+    end
+  end
+
+  # New EMA-based probability calculation method
+  # Uses MatchProbabilityCalculator with Exponential Moving Average model
+  def probability_ema
+    return @probability unless @probability.nil?
+    return [PROB_WIN, PROB_DRAW, PROB_LOSS] if team_away.nil? || team_home.nil?
+    return [PROB_WIN, PROB_DRAW, PROB_LOSS] if league.nil?
+
+    @probability = MatchProbabilityCalculator.call(match: self)
+  end
+
+  # Legacy probability calculation method
+  # This method will be removed in Phase 7.7 after migration is complete
+  def probability_legacy # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     return @probability unless @probability.nil?
     return [PROB_WIN, PROB_DRAW, PROB_LOSS] if team_away.nil? || team_home.nil?
 
@@ -126,6 +150,11 @@ class Match < ApplicationRecord
 
   private
 
+  def ensure_league_team_records
+    TeamProbabilityInitializer.call(league: league, team: team_home)
+    TeamProbabilityInitializer.call(league: league, team: team_away)
+  end
+
   def compute_points_commit
     Standing.compute(season:, team: team_home)
     Standing.compute(season:, team: team_away)
@@ -140,5 +169,20 @@ class Match < ApplicationRecord
                   else
                     'away'
                   end
+  end
+
+  def should_update_probabilities?
+    return false unless finished?
+    return false if result.blank?
+
+    # Update if status changed to 'Match Finished'
+    # This covers both:
+    # 1. Match created as finished: saved_change_to_status = [nil, 'Match Finished']
+    # 2. Match updated to finished: saved_change_to_status = [old_status, 'Match Finished']
+    saved_change_to_status? && saved_change_to_status[1] == 'Match Finished'
+  end
+
+  def update_probabilities_commit
+    ProbabilityUpdater.call(match: self)
   end
 end
