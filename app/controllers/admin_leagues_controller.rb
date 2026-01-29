@@ -6,19 +6,6 @@ class AdminLeaguesController < AdminController
     apply_sorting if params[:column].present?
   end
 
-  private
-
-  def apply_sorting
-    column = params[:column]
-    direction = params[:direction] || "asc"
-
-    # Validate column to prevent SQL injection
-    valid_columns = %w[id name country reference]
-    return unless valid_columns.include?(column)
-
-    @leagues = @leagues.order(column => direction.to_sym)
-  end
-
   def show
     @league = League.find(params[:id])
     @seasons = @league.seasons.order(year: :desc)
@@ -41,5 +28,18 @@ class AdminLeaguesController < AdminController
 
     flash[:notice] = "imported league #{imported.league.name} season #{imported.year}"
     redirect_to admin_leagues_path
+  end
+
+  private
+
+  def apply_sorting
+    column = params[:column]
+    direction = params[:direction] || "asc"
+
+    # Validate column to prevent SQL injection
+    valid_columns = %w[id name country reference]
+    return unless valid_columns.include?(column)
+
+    @leagues = @leagues.order(column => direction.to_sym)
   end
 end

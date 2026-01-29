@@ -43,9 +43,6 @@
                   <td class="whitespace-nowrap flex items-center gap-2 px-2 py-3 text-sm text-gray-500">
                       <img class="w-5 h-5 object-contain" src="<%= match.team_away.logo %>" alt="">
                       <%= match.team_away.name %> 
-                      <% if match.date.present? && match.date > Time.now %>
-                          TBP
-                      <% end %>
                   </td>
                   <td class="whitespace-nowrap px-2 py-3 text-sm text-gray-500"><%= match.status %></td>
                   <td class="whitespace-nowrap px-2 py-3 text-sm text-gray-500">
