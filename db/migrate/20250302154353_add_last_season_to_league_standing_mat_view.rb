@@ -2,8 +2,7 @@
 
 class AddLastSeasonToLeagueStandingMatView < ActiveRecord::Migration[7.2]
   def up
-    execute <<-SQL.squish
-
+    execute <<~SQL.squish
       DROP MATERIALIZED VIEW IF EXISTS league_standings_matview;
 
       CREATE MATERIALIZED VIEW league_standings_matview AS
@@ -25,7 +24,7 @@ class AddLastSeasonToLeagueStandingMatView < ActiveRecord::Migration[7.2]
   end
 
   def down
-    execute <<-SQL.squish
+    execute <<~SQL.squish
       DROP MATERIALIZED VIEW IF EXISTS league_standings_matview;
 
       CREATE MATERIALIZED VIEW league_standings_matview AS
