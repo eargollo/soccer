@@ -20,7 +20,7 @@ if User.find_by(email: Rails.application.credentials.admin_user.email).nil?
   )
 end
 
-ActiveRecord::Base.connection.execute <<-SQL.squish
+ActiveRecord::Base.connection.execute <<~SQL.squish
   CREATE MATERIALIZED VIEW IF NOT EXISTS league_standings_matview AS
     SELECT  teams.id as team_id,
             seasons.league_id as league_id,

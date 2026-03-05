@@ -2,7 +2,7 @@
 
 class CreateLeagueStandingMatView < ActiveRecord::Migration[7.2]
   def up
-    execute <<-SQL.squish
+    execute <<~SQL.squish
       CREATE MATERIALIZED VIEW league_standings_matview AS
         SELECT  teams.id as team_id,
                 seasons.league_id as league_id,
@@ -21,7 +21,7 @@ class CreateLeagueStandingMatView < ActiveRecord::Migration[7.2]
   end
 
   def down
-    execute <<-SQL.squish
+    execute <<~SQL.squish
       DROP MATERIALIZED VIEW league_standings_matview
     SQL
   end

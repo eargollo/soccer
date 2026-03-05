@@ -9,6 +9,25 @@ require 'openssl'
 
 module Clients
   module ApiFootball
+    class RequestError < StandardError
+      attr_reader :status_code, :response_body
+
+      # @param message [String]
+      # @param status_code [Integer, nil] HTTP status from the response, or nil for connection/network errors
+      # @param response_body [String, nil]
+      def initialize(message:, status_code: nil, response_body: nil)
+        @status_code = status_code
+        @response_body = response_body
+        super(message)
+      end
+
+      def transient?
+        return true if status_code.nil? # connection/network error
+
+        status_code >= 500
+      end
+    end
+
     class Client
       include Clients::Interface
 
@@ -26,10 +45,14 @@ module Clients
       def matches(league_id:, season:) # rubocop:disable Metrics/AbcSize
         url = URI("#{URL}/fixtures?season=#{season}&league=#{league_id}")
 
-        response = @http.request(request(url))
+        response = perform_request(url)
 
         if response.code != "200"
-          raise "Request failed with HTTP status code: #{response.code}\nResponse Body: #{response.body}"
+          raise RequestError.new(
+            message: "Request failed with HTTP status code: #{response.code}",
+            status_code: response.code.to_i,
+            response_body: response.body
+          )
         end
 
         data = JSON.parse(response.read_body)
@@ -52,6 +75,16 @@ module Clients
       end
 
       private
+
+      def perform_request(url)
+        @http.request(request(url))
+      rescue StandardError => e
+        raise RequestError.new(
+          message: "Request failed: #{e.message}",
+          status_code: nil,
+          response_body: e.message
+        )
+      end
 
       # Needs of a match:
       # - date

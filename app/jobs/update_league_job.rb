@@ -1,9 +1,12 @@
+# rubocop:disable Metrics/MethodLength
 # frozen_string_literal: true
 
 class UpdateLeagueJob < ApplicationJob
   queue_as :default
 
-  def perform(id) # rubocop:disable Metrics/AbcSize
+  RETRY_AFTER_API_FAILURE = 10.minutes
+
+  def perform(id) # rubocop:disable Metrics/AbcSize, Metrics/PerceivedComplexity, Metrics/CyclomaticComplexity
     @id = id
     @season = id.nil? ? Season.target_season : Season.find_by(id:)
 
@@ -21,7 +24,28 @@ class UpdateLeagueJob < ApplicationJob
       return
     end
 
-    @season.seed if Time.zone.now > expected_finish_time(next_match_time)
+    begin
+      @season.seed if Time.zone.now > expected_finish_time(next_match_time)
+    rescue Clients::ApiFootball::RequestError => e
+      if e.transient?
+        Rails.logger.error(
+          "UpdateLeagueJob failed during season seed (will retry in #{RETRY_AFTER_API_FAILURE / 60} min): " \
+          "status_code=#{e.status_code.inspect} response_body=#{e.response_body.inspect}"
+        )
+        Honeybadger.notify(
+          e,
+          context: {
+            job: "UpdateLeagueJob",
+            season_id: @season.id,
+            status_code: e.status_code,
+            response_body: e.response_body
+          }
+        )
+        UpdateLeagueJob.set(wait: RETRY_AFTER_API_FAILURE).perform_later(@id)
+        return
+      end
+      raise
+    end
 
     new_next_match_time = @season.matches.scheduled.minimum(:date)
 
@@ -57,3 +81,5 @@ class UpdateLeagueJob < ApplicationJob
     UpdateLeagueJob.set(wait_until: update_time).perform_later(@id)
   end
 end
+
+# rubocop:enable Metrics/MethodLength
