@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_01_18_211523) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_07_120001) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -283,6 +283,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_18_211523) do
     t.bigint "team_id", null: false
     t.datetime "updated_at", null: false
     t.integer "wins"
+    t.index ["season_id", "position"], name: "index_standings_on_season_id_and_position"
     t.index ["season_id"], name: "index_standings_on_season_id"
     t.index ["team_id"], name: "index_standings_on_team_id"
   end
@@ -338,6 +339,18 @@ ActiveRecord::Schema[8.1].define(version: 2026_01_18_211523) do
   add_foreign_key "solid_queue_scheduled_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "standings", "seasons"
   add_foreign_key "standings", "teams"
+
+  create_view "league_position_counts_matview", materialized: true, sql_definition: <<-SQL
+      SELECT seasons.league_id,
+      standings.team_id,
+      standings."position",
+      count(*) AS count
+     FROM (standings
+       JOIN seasons ON ((seasons.id = standings.season_id)))
+    WHERE ((seasons.active = false) AND ((standings."position" >= 1) AND (standings."position" <= 20)))
+    GROUP BY seasons.league_id, standings.team_id, standings."position";
+  SQL
+  add_index "league_position_counts_matview", ["league_id", "team_id", "position"], name: "index_league_position_counts_matview_unique", unique: true
 
   create_view "league_standings", sql_definition: <<-SQL
       SELECT teams.id AS team_id,

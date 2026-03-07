@@ -11,6 +11,13 @@ class AdminLeaguesController < AdminController
     @seasons = @league.seasons.order(year: :desc)
   end
 
+  def refresh_materialized_views
+    @league = League.find(params[:id])
+    LeagueStanding.refresh
+    flash[:notice] = I18n.t("admin.leagues.standings_refreshed")
+    redirect_to admin_league_path(@league)
+  end
+
   def new
     @league = League.new
   end

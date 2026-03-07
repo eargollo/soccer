@@ -29,3 +29,6 @@
 
 en:
   hello: "Hello world"
+  admin:
+    leagues:
+      standings_refreshed: "Standings and position ranking refreshed."

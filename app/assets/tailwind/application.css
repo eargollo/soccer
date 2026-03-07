@@ -19,6 +19,13 @@
   }
 }
 
+/* Opaque backgrounds for sticky columns on position ranking (mobile) */
+@media (max-width: 767px) {
+  .position-ranking-sticky-col { background: white; }
+  .position-ranking-sticky-col-alt { background: #f3f4f6; }
+  .position-ranking-sticky-header { background: #f3f4f6; }
+}
+
 /* Screen reader only class */
 .sr-only {
   position: absolute;

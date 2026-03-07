@@ -16,6 +16,9 @@ Rails.application.routes.draw do # rubocop:disable Metrics/BlockLength
   end
   get 'admin/feature-flags', to: 'admin/feature_flags#index', as: :admin_feature_flags
   resources :admin_leagues, only: %i[index show new create] do
+    member do
+      post :refresh_materialized_views
+    end
     resources :league_teams, only: %i[index show], controller: 'admin/league_teams' do
       collection do
         post :recalculate
@@ -28,7 +31,8 @@ Rails.application.routes.draw do # rubocop:disable Metrics/BlockLength
   resources :admin_seasons, only: %i[update]
   resources :teams, only: %i[index show]
 
-  resources :leagues, only: %i[index show] do
+  resources :leagues, only: %i[index show] do # rubocop:disable Metrics/BlockLength
+    get "position_ranking", on: :member, to: "leagues/position_rankings#show", as: :position_ranking
     resources :seasons, only: %i[index show], controller: "leagues/seasons" do
       resources :matches, only: %i[index], controller: "leagues/seasons/matches"
       collection do
@@ -55,7 +59,7 @@ Rails.application.routes.draw do # rubocop:disable Metrics/BlockLength
         get :list
       end
     end
-  end
+  end # rubocop:enable Metrics/BlockLength
 
   # Keep non-nested routes for backward compatibility (can be removed later)
   resources :seasons, only: %i[index show] do

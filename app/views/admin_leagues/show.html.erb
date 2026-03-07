@@ -1,36 +1,41 @@
 <div class="flex flex-col items-center justify-center w-screen min-h-screen bg-white py-0">
     <h1>League: <%= @league.name %></h1>
     <div class="mb-4">
-      <%= link_to "Team Probabilities", admin_league_league_teams_path(admin_league_id: @league.id), class: button_primary_classes %>
+      <%= button_to "Refresh standings & position ranking",
+          refresh_materialized_views_admin_league_path(@league),
+          method: :post,
+          class: button_primary_classes %>
     </div>
-    <table>
+    <%= turbo_frame_tag "seasons_list" do %>
+      <table>
         <tr>
-            <th>Seasons</th>
-            <th>Refresh</th>
+          <th>Seasons</th>
+          <th>Refresh</th>
         </tr>
         <% @seasons.each do |season| %>
-            <tr>
-                <td><%= season.year %></td>
-                <td>
-                    <%= form_with url: admin_season_path(season.id), method: :patch do |f| %>
-                        <%= f.hidden_field :type, value: 'async' %>
-                        <%= f.submit "Schedule", class: button_primary_classes %>
-                    <% end %>
-                </td>
-                <td>
-                    <%= form_with url: admin_season_path(season.id), method: :patch do |f| %>
-                        <%= f.hidden_field :type, value: 'sync' %>
-                        <%= f.submit "Sync", class: button_primary_classes %>
-                    <% end %>
-                </td>
-                <td>
-                    <%= form_with url: admin_season_path(season.id), method: :patch do |f| %>
-                        <%= f.hidden_field :type, value: 'close' %>
-                        <% title = season.active ? "Close" : "Open" %>
-                        <%= f.submit title, class: button_primary_classes %>
-                    <% end %>
-                </td>
-            </tr>
+          <tr>
+            <td><%= season.year %></td>
+            <td>
+              <%= form_with url: admin_season_path(season.id), method: :patch, data: { turbo_frame: "seasons_list" } do |f| %>
+                <%= f.hidden_field :type, value: 'async' %>
+                <%= f.submit "Schedule", class: button_primary_classes %>
+              <% end %>
+            </td>
+            <td>
+              <%= form_with url: admin_season_path(season.id), method: :patch, data: { turbo_frame: "seasons_list" } do |f| %>
+                <%= f.hidden_field :type, value: 'sync' %>
+                <%= f.submit "Sync", class: button_primary_classes %>
+              <% end %>
+            </td>
+            <td>
+              <%= form_with url: admin_season_path(season.id), method: :patch, data: { turbo_frame: "seasons_list" } do |f| %>
+                <%= f.hidden_field :type, value: 'close' %>
+                <% title = season.active ? "Close" : "Open" %>
+                <%= f.submit title, class: button_primary_classes %>
+              <% end %>
+            </td>
+          </tr>
         <% end %>
-    </table>
+      </table>
+    <% end %>
 </div>

@@ -1,5 +1,9 @@
 <div class="flex flex-col lg:items-center items-start w-screen min-h-screen bg-white py-0">
   <h1><%= @league.name %> - Seasons</h1>
+  <p class="mb-4">
+    <%= link_to "Standings", league_standings_path(@league), class: "underline hover:font-semibold" %>
+    <%= link_to "Position ranking", position_ranking_league_path(@league), class: "underline hover:font-semibold ml-2" %>
+  </p>
   <% @seasons.each do |season| %>
     <p><%= link_to(season.year, league_season_path(@league, season)) %></p>
   <% end %>
