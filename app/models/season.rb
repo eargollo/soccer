@@ -25,6 +25,8 @@ class Season < ApplicationRecord
   has_many :standings, dependent: :destroy
   has_many :simulations, dependent: :destroy
 
+  after_update :refresh_materialized_views_if_active_changed, if: :saved_change_to_active?
+
   class MatchesToPlayError < StandardError
   end
 
@@ -128,5 +130,11 @@ class Season < ApplicationRecord
 
     update_standings_positions
     update!(active: false)
+  end
+
+  private
+
+  def refresh_materialized_views_if_active_changed
+    LeagueStanding.refresh
   end
 end

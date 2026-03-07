@@ -9,11 +9,18 @@ module ApplicationHelper # rubocop:disable Metrics/ModuleLength
     [base_classes, additional_classes].compact_blank.join(" ")
   end
 
-  # Get current league from URL only (no session, no fallback queries)
+  # Get current league from URL only (no session, no fallback queries).
+  # Nested routes use params[:league_id]; member routes (position_ranking, show) use params[:id].
   def current_league
-    return nil if params[:league_id].blank?
+    league_id = params[:league_id].presence
+    league_id ||= params[:id].presence if league_from_id_param?
+    return nil if league_id.blank?
 
-    League.find_by(id: params[:league_id])
+    League.find_by(id: league_id)
+  end
+
+  def league_from_id_param?
+    controller_path == "leagues/position_rankings" || (controller_name == "leagues" && action_name == "show")
   end
 
   # Get all leagues, cached to avoid queries on every page load
@@ -97,6 +104,13 @@ module ApplicationHelper # rubocop:disable Metrics/ModuleLength
       else
         leagues_path
       end
+    when :posicoes
+      # Posições = position ranking (medals board)
+      if league
+        position_ranking_league_path(league)
+      else
+        leagues_path
+      end
     when :temporadas
       if league
         league_seasons_path(league)
@@ -129,7 +143,7 @@ module ApplicationHelper # rubocop:disable Metrics/ModuleLength
   end
 
   # Check if menu item is active based on controller/action
-  def menu_item_active?(menu_item) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity
+  def menu_item_active?(menu_item) # rubocop:disable Metrics/AbcSize, Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     case menu_item.to_sym
     when :classificacao
       # Active when viewing a season page (standings view)
@@ -137,9 +151,16 @@ module ApplicationHelper # rubocop:disable Metrics/ModuleLength
     when :tabela
       # Active when viewing matches (league-scoped or season-scoped)
       controller_name == "matches"
-    when :ranking, :pontos
+    when :ranking
+      # Ranking dropdown active when on Pontos or Posições
+      (controller_name == "standings" && params[:league_id].present?) ||
+        controller_path == "leagues/position_rankings"
+    when :pontos
       # Active when viewing league standings (aggregated points across all seasons)
       controller_name == "standings" && params[:league_id].present?
+    when :posicoes
+      # Active when viewing position ranking (medals board)
+      controller_path == "leagues/position_rankings"
     when :temporadas
       # Active when viewing seasons list (index) or league show page (which shows seasons)
       (controller_name == "seasons" && action_name == "index") ||

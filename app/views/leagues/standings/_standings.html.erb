@@ -1,69 +1,69 @@
 <!-- <h1 class="text-lg text-gray-800 font-medium">2023 Season</h1> -->
 <div class="flex flex-col">
     <div class="-my-2 sm:-mx-6 lg:-mx-8">
-        <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8">
-            <%= turbo_frame_tag "standings", class: "shadow sm:rounded-lg" do %>
-                <table class="min-w-full text-sm text-gray-600">
+        <div class="py-2 align-middle inline-block min-w-full sm:px-6 lg:px-8 max-md:block max-md:w-full max-md:min-w-0">
+            <%= turbo_frame_tag "standings", class: "shadow sm:rounded-lg overflow-x-auto max-md:-mx-4 max-md:px-4 max-md:w-full max-md:max-w-[100vw]" do %>
+                <table class="min-w-full text-sm text-gray-600 max-md:min-w-[55rem]">
                     <thead class="bg-gray-100 text-xs uppercase font-medium">
                         <tr class="">
-                            <th></th>
-                            <th scope="col" class="grid grid-cols-2 px-6 py-3 text-left tracking-wider">
+                            <th class="w-9 border-r border-gray-200 max-md:sticky max-md:left-0 max-md:z-20 position-ranking-sticky-header max-md:shadow-[2px_0_4px_rgba(0,0,0,0.06)]"></th>
+                            <th scope="col" class="grid grid-cols-2 px-6 py-3 text-left tracking-wider border-r border-gray-200 max-md:sticky max-md:left-[2.25rem] max-md:z-20 position-ranking-sticky-header max-md:min-w-[12rem] max-md:pr-4 max-md:shadow-[2px_0_4px_rgba(0,0,0,0.06)]">
                                 <%= league_sort_link(column: "name", label: "Club", league_id: @league.id) %>
                                 <%= sort_indicator if params[:column] == "name" %>
                             </th>
-                            <th scope="col" class="px-6 py-3 text-left tracking-wider">
+                            <th scope="col" class="px-6 py-3 text-left tracking-wider border-r border-gray-200">
                                 <%= league_sort_link(column: "points", label: "Pts", league_id: @league.id) %>
                                 <%= sort_indicator if params[:column] == "points" %>
                             </th>
-                            <th scope="col" class=" px-6 py-3 text-left tracking-wider">
+                            <th scope="col" class="px-6 py-3 text-left tracking-wider border-r border-gray-200">
                                 <%= league_sort_link(column: "matches", label: "MP", league_id: @league.id) %>
                                 <%= sort_indicator if params[:column] == "matches" %>
                             </th>
-                            <th scope="col" class=" px-6 py-3 text-left tracking-wider">
+                            <th scope="col" class="px-6 py-3 text-left tracking-wider border-r border-gray-200">
                                 <%= league_sort_link(column: "wins", label: "W", league_id: @league.id) %>
                                 <%= sort_indicator if params[:column] == "wins" %>
                             </th>
-                            <th scope="col" class=" px-6 py-3 text-left tracking-wider">
+                            <th scope="col" class="px-6 py-3 text-left tracking-wider border-r border-gray-200">
                                 <%= league_sort_link(column: "draws", label: "D", league_id: @league.id) %>
                                 <%= sort_indicator if params[:column] == "draws" %>
                             </th>
-                            <th scope="col" class=" px-6 py-3 text-left tracking-wider">
+                            <th scope="col" class="px-6 py-3 text-left tracking-wider border-r border-gray-200">
                                 <%= league_sort_link(column: "losses", label: "L", league_id: @league.id) %>
                                 <%= sort_indicator if params[:column] == "losses" %>
                             </th>
-                            <th scope="col" class=" px-6 py-3 text-left tracking-wider">
+                            <th scope="col" class="px-6 py-3 text-left tracking-wider border-r border-gray-200">
                                 <%= league_sort_link(column: "wins_rate", label: "W%", league_id: @league.id) %>
                                 <%= sort_indicator if params[:column] == "wins_rate" %>
                             </th>
-                            <th scope="col" class=" px-6 py-3 text-left tracking-wider">
+                            <th scope="col" class="px-6 py-3 text-left tracking-wider border-r border-gray-200">
                                 <%= league_sort_link(column: "draws_rate", label: "D%", league_id: @league.id) %>
                                 <%= sort_indicator if params[:column] == "draws_rate" %>
                             </th>
-                            <th scope="col" class=" px-6 py-3 text-left tracking-wider">
+                            <th scope="col" class="px-6 py-3 text-left tracking-wider border-r border-gray-200">
                                 <%= league_sort_link(column: "losses_rate", label: "L%", league_id: @league.id) %>
                                 <%= sort_indicator if params[:column] == "losses_rate" %>
                             </th>
-                            <th scope="col" class=" px-6 py-3 text-left tracking-wider">
+                            <th scope="col" class="px-6 py-3 text-left tracking-wider border-r border-gray-200">
                                 <%= league_sort_link(column: "goals_pro", label: "GF", league_id: @league.id) %>
                                 <%= sort_indicator if params[:column] == "goals_pro" %>
                             </th>
-                            <th scope="col" class=" px-6 py-3 text-left tracking-wider">
+                            <th scope="col" class="px-6 py-3 text-left tracking-wider border-r border-gray-200">
                                 <%= league_sort_link(column: "goals_against", label: "GA", league_id: @league.id) %>
                                 <%= sort_indicator if params[:column] == "goals_against" %>
                             </th>
-                            <th scope="col" class=" px-6 py-3 text-left tracking-wider">
+                            <th scope="col" class="px-6 py-3 text-left tracking-wider border-r border-gray-200">
                                 <%= league_sort_link(column: "goals_difference", label: "GD", league_id: @league.id) %>
                                 <%= sort_indicator if params[:column] == "goals_difference" %>
                             </th>
-                            <th scope="col" class=" px-6 py-3 text-left tracking-wider">
+                            <th scope="col" class="px-6 py-3 text-left tracking-wider border-r border-gray-200">
                                 <%= league_sort_link(column: "rate", label: "R", league_id: @league.id) %>
                                 <%= sort_indicator if params[:column] == "rate" %>
                             </th>
-                            <th scope="col" class=" px-6 py-3 text-left tracking-wider">
+                            <th scope="col" class="px-6 py-3 text-left tracking-wider border-r border-gray-200">
                                 <%= league_sort_link(column: "seasons", label: "S", league_id: @league.id) %>
                                 <%= sort_indicator if params[:column] == "seasons" %>
                             </th>
-                            <th scope="col" class=" px-6 py-3 text-left tracking-wider">
+                            <th scope="col" class="px-6 py-3 text-left tracking-wider border-r border-gray-200">
                                 <%= league_sort_link(column: "last_season", label: "LS", league_id: @league.id) %>
                                 <%= sort_indicator if params[:column] == "last_season" %>
                             </th>
@@ -71,54 +71,55 @@
                     </thead>
                     <tbody class="bg-gray-100">
                         <% standings.each_with_index do |standing, i| %>
+                            <% sticky_col_class = (i % 2).zero? ? "position-ranking-sticky-col" : "position-ranking-sticky-col-alt" %>
                             <tr class="<%= (i%2)==0 ? "bg-white" : "bg-gray-100" %>">
-                                <td class="pl-4">
+                                <td class="pl-4 pr-2 border-r border-gray-200 max-md:sticky max-md:left-0 max-md:z-10 <%= sticky_col_class %>">
                                     <%= i + 1 %>
                                 </td>
-                                <td class="flex px-6 py-2 whitespace-nowrap">
+                                <td class="flex px-6 py-2 whitespace-nowrap border-r border-gray-200 max-md:sticky max-md:left-[2.25rem] max-md:z-10 max-md:min-w-[12rem] max-md:pr-4 <%= sticky_col_class %> max-md:shadow-[2px_0_4px_rgba(0,0,0,0.06)]">
                                     <img class="w-5 h-5 object-contain" src="<%= standing.team.logo %>" alt="">
                                     <span class="ml-2 <%= @last_season == standing.last_season ? "font-semibold":"font-normal" %>"><%= standing.team.name %></span>
                                 </td>
-                                <td class="px-6 py-2 whitespace-nowrap">
+                                <td class="px-6 py-2 whitespace-nowrap border-r border-gray-200 max-md:pl-3">
                                     <%= standing.points %>
                                 </td>
-                                <td class="px-6 py-2 whitespace-nowrap">
+                                <td class="px-6 py-2 whitespace-nowrap border-r border-gray-200">
                                     <%= standing.matches %>
                                 </td>
-                                <td class="px-6 py-2 whitespace-nowrap">
+                                <td class="px-6 py-2 whitespace-nowrap border-r border-gray-200">
                                     <%= standing.wins %>
                                 </td>
-                                <td class="px-6 py-2 whitespace-nowrap">
+                                <td class="px-6 py-2 whitespace-nowrap border-r border-gray-200">
                                     <%= standing.draws %>
                                 </td>
-                                <td class="px-6 py-2 whitespace-nowrap">
+                                <td class="px-6 py-2 whitespace-nowrap border-r border-gray-200">
                                     <%= standing.losses %>
                                 </td>
-                                <td class="px-6 py-2 whitespace-nowrap">
+                                <td class="px-6 py-2 whitespace-nowrap border-r border-gray-200">
                                     <%= number_with_precision(standing.wins_rate, precision: 2) %>%
                                 </td>
-                                <td class="px-6 py-2 whitespace-nowrap">
+                                <td class="px-6 py-2 whitespace-nowrap border-r border-gray-200">
                                     <%= number_with_precision(standing.draws_rate, precision: 2) %>%
                                 </td>
-                                <td class="px-6 py-2 whitespace-nowrap">
+                                <td class="px-6 py-2 whitespace-nowrap border-r border-gray-200">
                                     <%= number_with_precision(standing.losses_rate, precision: 2) %>%
                                 </td>
-                                <td class="px-6 py-2 whitespace-nowrap">
+                                <td class="px-6 py-2 whitespace-nowrap border-r border-gray-200">
                                     <%= standing.goals_pro %>
                                 </td>
-                                <td class="px-6 py-2 whitespace-nowrap">
+                                <td class="px-6 py-2 whitespace-nowrap border-r border-gray-200">
                                     <%= standing.goals_against %>
                                 </td>
-                                <td class="px-6 py-2 whitespace-nowrap">
+                                <td class="px-6 py-2 whitespace-nowrap border-r border-gray-200">
                                     <%= standing.goals_difference %>
                                 </td>
-                                <td class="px-6 py-2 whitespace-nowrap">
+                                <td class="px-6 py-2 whitespace-nowrap border-r border-gray-200">
                                     <%= number_with_precision(standing.rate, precision: 2) %>%
                                 </td>
-                                <td class="px-6 py-2 whitespace-nowrap">
+                                <td class="px-6 py-2 whitespace-nowrap border-r border-gray-200">
                                     <%= standing.seasons %>
                                 </td>
-                                <td class="px-6 py-2 whitespace-nowrap">
+                                <td class="px-6 py-2 whitespace-nowrap border-r border-gray-200">
                                     <%= standing.last_season %>
                                 </td>
                             </tr>

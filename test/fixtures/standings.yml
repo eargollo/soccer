@@ -39,8 +39,9 @@
 #
 # Indexes
 #
-#  index_standings_on_season_id  (season_id)
-#  index_standings_on_team_id    (team_id)
+#  index_standings_on_season_id               (season_id)
+#  index_standings_on_season_id_and_position  (season_id,position)
+#  index_standings_on_team_id                 (team_id)
 #
 # Foreign Keys
 #

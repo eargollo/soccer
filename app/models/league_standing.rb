@@ -52,6 +52,7 @@ class LeagueStanding < ApplicationRecord
 
   def self.refresh
     ActiveRecord::Base.connection.execute("REFRESH MATERIALIZED VIEW league_standings_matview;")
+    LeaguePositionCount.refresh
     # TODO: Change to
     # Scenic.database.refresh_materialized_view(table_name, concurrently: false, cascade: false)
   end

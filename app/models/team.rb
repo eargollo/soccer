@@ -26,6 +26,7 @@ class Team < ApplicationRecord
   has_many :standings, dependent: :restrict_with_exception
   has_many :simulation_standings, dependent: :restrict_with_exception
   has_many :league_standings, dependent: :restrict_with_exception
+  has_many :league_position_counts, dependent: :restrict_with_exception
   has_many :league_teams, dependent: :destroy
 
   def wins(season: nil) # rubocop:disable Metrics/AbcSize

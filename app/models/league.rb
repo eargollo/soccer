@@ -16,6 +16,7 @@
 class League < ApplicationRecord
   has_many :seasons, dependent: :destroy
   has_many :league_standings, dependent: :destroy
+  has_many :league_position_counts, dependent: :restrict_with_exception
   has_many :matches, through: :seasons
   has_many :league_teams, dependent: :destroy
 

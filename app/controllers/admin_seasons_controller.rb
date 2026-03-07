@@ -27,6 +27,6 @@ class AdminSeasonsController < AdminController
       end
     end
 
-    redirect_to admin_leagues_path
+    redirect_to admin_league_path(season.league)
   end
 end

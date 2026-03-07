@@ -1,5 +1,12 @@
 VERSION=$(shell git describe --tags)
 
+.PHONY: lint
+lint:
+	bundle exec rubocop
+	bundle exec rails zeitwerk:check
+	bundle exec bundler-audit
+	bundle exec brakeman
+
 .PHONY: check
 check:
 	bundle exec rubocop
