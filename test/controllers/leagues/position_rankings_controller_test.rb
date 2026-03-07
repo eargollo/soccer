@@ -16,12 +16,12 @@ module Leagues
     test "show displays league name and position ranking content" do
       get position_ranking_league_path(@league)
       assert_match @league.name, response.body
-      assert_match(/position ranking|medals|finished seasons/i, response.body)
+      assert_match(/Club/, response.body, "Expected Club column header in position ranking table")
     end
 
     test "show displays table or empty message" do
       get position_ranking_league_path(@league)
-      has_table = response.body.include?("<table") && response.body.include?("Pos</th>")
+      has_table = response.body.include?("<table") && response.body.include?("Club</th>")
       has_empty_message = response.body.include?("No finished seasons for this league yet")
       assert has_table || has_empty_message, "Expected table or empty message"
     end
